@@ -1,5 +1,5 @@
-import mqtt from "mqtt";
 import dotenv from "dotenv";
+import mqtt from "mqtt";
 dotenv.config();
 
 const mqttOptions = {
@@ -14,6 +14,17 @@ client.on("connect", (connack) => {
 
   setInterval(() => {
     console.log("## published");
-    client.publish("data/test-01", "test");
+    // client.publish("data/test-01", "test");
+    client.publish(
+      "data/test-01",
+      JSON.stringify({
+        deviceId: "device-01",
+        temp: Math.round(10 * Math.random()),
+        humid: Math.round(10 * Math.random()),
+        lux: Math.round(10 * Math.random()),
+        solid: Math.round(10 * Math.random()),
+        time: Date.now(),
+      }),
+    );
   }, 1000);
 });

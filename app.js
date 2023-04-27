@@ -4,7 +4,7 @@ import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 
-import indexRouter from "./src/controller/routes/index";
+import indexRouter from "./src/routes/index.js";
 
 dotenv.config();
 
@@ -40,4 +40,5 @@ app.use((err, req, res, next) => {
 app.listen(process.env.PORT || 5000, () => {
   console.log(`${process.env.PORT}번 포트로 연결되었습니다.`);
 });
+
 export default app;
