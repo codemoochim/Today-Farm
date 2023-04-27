@@ -2,7 +2,7 @@
   "type": "module",
   "name": "todayfarm",
   "version": "1.0.0",
-  "description": "",
+  "description": "todayfarm server & mqtt broker",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js"
