@@ -1,12 +1,12 @@
 import express from "express";
+import registerCtrl from "../controller/registerCtrl";
 
-const app = express();
+import loginRouter from "./routes/login.js";
+import logoutRouter from "./routes/logout.js";
+const router = express.Router();
 
-const registerRouter = require("./routes/register");
-app.use("/register", registerRouter);
+router.post("/register", registerCtrl);
+router.post("/login", loginRouter);
+router.get("/logout", logoutRouter);
 
-const loginRouter = require("./routes/login");
-app.use("/login", loginRouter);
-
-const logoutRouter = require("./routes/logout");
-app.use("/logout", logoutRouter);
+export default router;

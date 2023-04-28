@@ -4,8 +4,6 @@ import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 
-import indexRouter from "./src/routes/index.js";
-
 dotenv.config();
 
 const app = express();
@@ -23,8 +21,6 @@ app.use(
     orogin: "*",
   }),
 );
-
-app.use("/", indexRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 찾을 수 없음`);
