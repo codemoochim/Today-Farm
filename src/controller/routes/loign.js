@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const router = express.Router();
 
 const connection = require("../db");
 
@@ -40,3 +41,5 @@ app.post("/", async (req, res) => {
     res.status(500).send("Error");
   }
 });
+
+module.exports = router;
