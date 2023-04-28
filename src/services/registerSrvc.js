@@ -1,4 +1,4 @@
-const connection = require("../models/db");
+import connection from "../models/db";
 
 const register = async (email, password, phone, name) => {
   try {
@@ -23,7 +23,7 @@ const register = async (email, password, phone, name) => {
     const result = await connection.query(checkEmailQuery);
     if (result.length > 0) {
       processResult.statusCode = 400;
-      processResult.message = "Email already exists";
+      processResult.message = "Email is not available";
 
       return processResult;
     }
@@ -42,4 +42,5 @@ const register = async (email, password, phone, name) => {
     throw new Error(err);
   }
 };
+
 export default register;

@@ -5,7 +5,7 @@ const registerCtrl = async (req, res, next) => {
     const { email, password, phone, name } = req.body;
     const processResult = await registerSrvc(email, password, phone, name);
     return res.status(processResult.statusCode).send(processResult.message);
-  } catch (error) {
+  } catch (err) {
     next(err);
   }
 };
