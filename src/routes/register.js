@@ -1,8 +1,8 @@
-const express = require("express");
-const bcrypt = require("bcrypt");
-const router = express.Router();
+import express from "express";
+import bcrypt from "bcrypt";
 
-const connection = require("../db");
+const router = express.Router();
+const connection = require("../models/db");
 
 router.post("/", async (req, res) => {
   const { email, password, phone, name } = req.body;
@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
     }
 
     // 중복된 이메일 확인
-    const checkEmailQuery = `SELECT * FROM user WHERE email = '${email}'`;
+    const checkEmailQuery = `select * from user where email = '${email}'`;
     const result = await connection.query(checkEmailQuery);
 
     if (result.length > 0) {
@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     // MySQL에 새 사용자 추가
-    const insertUserQuery = `INSERT INTO user (email, password) VALUES ('${email}', '${hash}')`;
+    const insertUserQuery = `insert into user (email, password) values ('${email}', '${hash}')`;
     await connection.query(insertUserQuery);
 
     res.status(201).send("User created");
@@ -39,4 +39,4 @@ router.post("/", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

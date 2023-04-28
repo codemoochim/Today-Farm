@@ -1,4 +1,5 @@
-const express = require("express");
+import express from "express";
+
 const app = express();
 
 const registerRouter = require("./routes/register");
