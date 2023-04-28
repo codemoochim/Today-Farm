@@ -2,7 +2,7 @@
   "type": "module",
   "name": "todayfarm",
   "version": "1.0.0",
-  "description": "",
+  "description": "todayfarm server & mqtt broker",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js"
@@ -18,7 +18,8 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
-    "mqtt": "^4.3.7"
+    "mqtt": "^4.3.7",
+    "mysql2": "^3.2.4"
   },
   "devDependencies": {
     "eslint": "^8.39.0",
