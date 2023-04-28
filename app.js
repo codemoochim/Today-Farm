@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-
+import connection from "./src/models/db.js";
 dotenv.config();
 
 const app = express();
