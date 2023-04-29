@@ -1,4 +1,4 @@
-import registerSrvc from "../services/registerSrvc";
+import registerSrvc from "../services/registerSrvc.js";
 
 const registerCtrl = async (req, res, next) => {
   try {

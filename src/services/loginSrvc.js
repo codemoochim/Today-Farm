@@ -1,4 +1,4 @@
-import connection from "../models/db";
+import connection from "../models/index.js";
 
 const login = async (email, password) => {
   try {

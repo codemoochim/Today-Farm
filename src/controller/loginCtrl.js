@@ -1,4 +1,4 @@
-import loginSrvc from "../services/loginSrvc";
+import loginSrvc from "../services/loginSrvc.js";
 
 const loginCtrl = async (req, res, next) => {
   try {
