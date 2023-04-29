@@ -3,10 +3,8 @@ import { devicesList, devicesNew } from "../services/devicesSrvc.js";
 // 디바이스 조회
 const getDevices = async (req, res, next) => {
   try {
-    // 로그인 정보로 부트 email 값 받아옴.
-    // const { email } = req.body;
-    const email = "sando@naver.com";
-    const processResult = await devicesList(email);
+    // 로그인 토큰 페이로드 req.user
+    const processResult = await devicesList(req.user);
     return res.status(processResult.statusCode).json({ data: processResult.rows });
   } catch (err) {
     next(err);
@@ -16,10 +14,10 @@ const getDevices = async (req, res, next) => {
 // 디바이스 등록
 const addDevices = async (req, res, next) => {
   try {
+    // 로그인 정보로 토큰 페이로드 req.user
     const { id, name } = req.body;
-    const { email } = res.locals;
-    const processResult = await devicesNew(id, name, email);
-    return res.status(processResult.statusCode).json({ data: processResult.rows });
+    const processResult = await devicesNew(id, name, req.user);
+    return res.status(processResult.statusCode).json({ data: processResult.message });
   } catch (err) {
     next(err);
   }

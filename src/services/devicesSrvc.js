@@ -20,17 +20,23 @@ const devicesNew = async (id, name, email) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
 
-    const [rows] = await DB.execute(`SELECT * from devices where id = ?`, [id]);
+    const [[rows]] = await DB.execute(`SELECT * from devices where id = ?`, [id]);
 
-    // 미할당 디바이스 = 사용자 등록
-    if (rows.email === null) {
-      rows.name = name;
-      rows.email = email;
-    } else {
-      processResult.statusCode = 403;
+    if (!rows) {
+      processResult.statusCode = 400;
+      processResult.message = "DeviceId is wrong";
+      return processResult;
     }
-
-    processResult.rows;
+    if (rows.email !== null) {
+      // 기할당 디바이스 = 사용자 등록
+      processResult.statusCode = 400;
+      processResult.message = "DeviceId is not available";
+      return processResult;
+    }
+    // 미할당 디바이스 = 사용자 등록
+    await DB.execute(`UPDATE devices SET name=?, email=?, date=? WHERE id=?`, [name, email, new Date(), id]);
+    processResult.statusCode = 201;
+    processResult.message = "Device saved";
     return processResult;
   } catch (err) {
     throw new Error(err);
