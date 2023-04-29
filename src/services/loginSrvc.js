@@ -1,4 +1,4 @@
-import connection from "../models/db.js";
+import connection from "../models/index.js";
 
 const login = async (email, password) => {
   try {
@@ -33,7 +33,8 @@ const login = async (email, password) => {
     }
 
     // JWT 발급
-    const token = jwt.sign(
+    // accessToken 발급 -> 짧은 수명
+    const accessToken = jwt.sign(
       {
         email: result[0].email,
         userId: result[0].id,
@@ -41,11 +42,49 @@ const login = async (email, password) => {
       "secret",
       { expiresIn: "1h" },
     );
+    // refreshToken 발급 -> 긴 수명
+    const refreshToken = jwt.sign(
+      {
+        email: result[0].email,
+        userId: result[0].id,
+      },
+      "refresh-secret",
+      { expiresIn: "14d" },
+    );
     processResult.status = 200;
-    return { ...processResult, token };
+    return { ...processResult, accessToken, refreshToken };
   } catch (err) {
     throw new Error(err);
   }
 };
 
-export default login;
+// accessToken 만료 시 재발급
+const refreshAccessToken = async (refreshToken) => {
+  try {
+    const processResult = { statusCode: 200, message: "성공" };
+    // refreshToken 검증
+    const decoded = jwt.verify(refreshToken, "refresh-secret");
+    const sql = `select * from users where id = '${decoded.userId}'`;
+    const result = await connection.query(sql);
+    // refreshToken이 만료된 경우
+    if (result.length === 0) {
+      processResult.statusCode = 400;
+      processResult.message = "Unauthorized";
+
+      return processResult;
+    }
+    const accessToken = jwt.sign(
+      {
+        email: result[0].email,
+        userId: result[0].id,
+      },
+      "secret",
+      { expiresIn: "1h" },
+    );
+    return { ...processResult, accessToken };
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export { login, refreshAccessToken };

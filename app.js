@@ -3,9 +3,11 @@ import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import authRouter from "./src/routes/auth.js";
-
+import connection from "./src/models/index.js";
 dotenv.config();
+
+import authRouter from "./src/routes/auth.js";
+import deviceRouter from "./src/routes/device.js";
 
 const app = express();
 
@@ -23,6 +25,9 @@ app.use(
   }),
 );
 app.use("/", authRouter);
+
+app.use("/", authRouter);
+app.use("/devices", deviceRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 찾을 수 없음`);

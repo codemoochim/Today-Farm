@@ -12,6 +12,7 @@ const dbOptions = {
 
 const connection = mysql.createConnection(dbOptions);
 
+const promiseConnection = connection.promise();
 connection.connect((err) => {
   if (err) {
     console.error("데이터베이스 연결을 실패하였습니다.", err);
@@ -20,4 +21,4 @@ connection.connect((err) => {
   }
 });
 
-export default connection;
+export default promiseConnection;

@@ -1,5 +1,5 @@
-import connection from "../models/db.js";
 import bcrypt from "bcrypt";
+import DB from "../models/index.js";
 
 const register = async (email, password, phone, name) => {
   try {
@@ -19,9 +19,12 @@ const register = async (email, password, phone, name) => {
       return processResult;
     }
     // 중복된 이메일 확인
-    const checkEmailQuery = `select * from user where email = '${email}'`;
-    const result = connection.query(checkEmailQuery);
-    if (result.length > 0) {
+    // const checkEmailQuery = `select * from user where email = '${email}'`;
+    const [rows] = await DB.execute(`select * from user where email = ?`, [email]);
+    // const checkEmailQuery = `select * from user where email = '${email}'`;
+    // const result = await DB.query(checkEmailQuery);
+    console.log(rows);
+    if (rows.length > 0) {
       processResult.statusCode = 400;
       processResult.message = "Email is not available";
 
@@ -31,8 +34,8 @@ const register = async (email, password, phone, name) => {
     const hash = await bcrypt.hash(password, 10);
 
     // MySQL에 새 사용자 추가
-    const insertUserQuery = `insert into user (email, password, phone, name) values ('${email}', '${hash}', '${phone}', '${name})`;
-    connection.query(insertUserQuery);
+    const insertUserQuery = `Insert into user (email, password, name, phone) values ('${email}', '${hash}', '${name}', '${phone}')`;
+    await DB.query(insertUserQuery);
 
     processResult.statusCode = 201;
     processResult.message = "User created";

@@ -9,9 +9,9 @@ class DB {
       database,
       waitForConnections: true,
       connectionLimit: 10,
-      maxIdle: 10,
-      idleTimeout: 60000,
-      queueLimit: 0,
+      maxIdle: 10, // 연결이 유휴 상태로 유지되는 최대 시간
+      idleTimeout: 60000, // 연결이 유휴 상태로 유지되는 시간
+      queueLimit: 0, // 대기열의 최대 길이
     });
     this.promisePool = this.pool.promise();
   }
