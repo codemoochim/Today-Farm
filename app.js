@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import authRouter from "./src/routes/auth.js";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(
     orogin: "*",
   }),
 );
+app.use("/", authRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 찾을 수 없음`);

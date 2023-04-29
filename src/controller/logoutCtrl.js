@@ -1,4 +1,4 @@
-import logoutSrvc from "../services/logoutSrvc";
+import logoutSrvc from "../services/logoutSrvc.js";
 
 const logoutCtrl = async (req, res, next) => {
   try {

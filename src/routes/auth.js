@@ -1,7 +1,7 @@
 import express from "express";
-import registerCtrl from "../controller/registerCtrl";
-import loginCtrl from "../controller/loginCtrl";
-import logoutCtrl from "../controller/logoutCtrl";
+import registerCtrl from "../controller/registerCtrl.js";
+import loginCtrl from "../controller/loginCtrl.js";
+import logoutCtrl from "../controller/logoutCtrl.js";
 
 const router = express.Router();
 
