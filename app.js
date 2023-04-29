@@ -29,6 +29,9 @@ app.use("/", authRouter);
 app.use("/", authRouter);
 app.use("/devices", deviceRouter);
 
+app.use("/", authRouter);
+app.use("/devices", deviceRouter);
+
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 찾을 수 없음`);
   error.status = 404;
