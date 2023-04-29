@@ -18,7 +18,7 @@ client.on("connect", (connack) => {
     client.publish(
       "data/test-01",
       JSON.stringify({
-        deviceId: "device-01",
+        id: "1",
         temp: Math.round(10 * Math.random()),
         humid: Math.round(10 * Math.random()),
         lux: Math.round(10 * Math.random()),

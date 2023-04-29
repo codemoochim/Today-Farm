@@ -12,7 +12,7 @@ mqttClient.setMessageCallback(async (topic, message) => {
       case "data":
         // 디비에 저장
         mysqlDB.insertData({
-          deviceId: messageJson.deviceId,
+          id: messageJson.id,
           temp: messageJson.temp,
           humid: messageJson.humid,
           lux: messageJson.lux,
