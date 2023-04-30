@@ -40,7 +40,7 @@ const login = async (email, password) => {
         userId: result[0].id,
       },
       "secret",
-      { expiresIn: "1h" },
+      { expiresIn: "2h" },
     );
     // refreshToken 발급 -> 긴 수명
     const refreshToken = jwt.sign(
@@ -67,19 +67,19 @@ const refreshAccessToken = async (refreshToken) => {
     const sql = `select * from users where id = '${decoded.userId}'`;
     const result = await connection.query(sql);
     // refreshToken이 만료된 경우
-    if (result.length === 0) {
-      processResult.statusCode = 400;
-      processResult.message = "Unauthorized";
+    // if (result.length === 0) {
+    //   processResult.statusCode = 400;
+    //   processResult.message = "Unauthorized";
 
-      return processResult;
-    }
+    //   return processResult;
+    // }
     const accessToken = jwt.sign(
       {
         email: result[0].email,
         userId: result[0].id,
       },
       "secret",
-      { expiresIn: "1h" },
+      { expiresIn: "2h" },
     );
     return { ...processResult, accessToken };
   } catch (err) {
