@@ -1,5 +1,6 @@
 import connection from "../models/index.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const changePwd = async (currentPwd, newPwd) => {
   try {

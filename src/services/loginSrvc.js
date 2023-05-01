@@ -1,4 +1,5 @@
 import connection from "../models/index.js";
+import jwt from "jsonwebtoken";
 
 const login = async (email, password) => {
   try {
