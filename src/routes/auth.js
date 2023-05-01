@@ -4,6 +4,7 @@ import loginCtrl from "../controller/loginCtrl.js";
 import logoutCtrl from "../controller/logoutCtrl.js";
 import findEmailCtrl from "../controller/findEmailCtrl.js";
 import findPwdCtrl from "../controller/findPwdCtrl.js";
+import changePwdCtrl from "../controller/changePwdCtrl.js";
 
 const router = express.Router();
 
@@ -11,6 +12,7 @@ router.post("/register", registerCtrl);
 router.post("/login", loginCtrl);
 router.get("/logout", logoutCtrl);
 router.post("/email", findEmailCtrl);
-router.post("/password", findPwdCtrl);
+router.post("/pwd", findPwdCtrl);
+router.put("/pwd", changePwdCtrl);
 
 export default router;
