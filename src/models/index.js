@@ -1,4 +1,4 @@
-import mysql from "mysql2";
+import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -10,10 +10,9 @@ const dbOptions = {
   database: process.env.DATABASE,
 };
 
-const connection = mysql.createConnection(dbOptions);
+const pool = mysql.createPool(dbOptions);
 
-const promiseConnection = connection.promise();
-connection.connect((err) => {
+pool.getConnection((err) => {
   if (err) {
     console.error("데이터베이스 연결을 실패하였습니다.", err);
   } else {
@@ -21,4 +20,4 @@ connection.connect((err) => {
   }
 });
 
-export default promiseConnection;
+export default pool;
