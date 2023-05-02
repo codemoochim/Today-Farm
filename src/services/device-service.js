@@ -1,14 +1,12 @@
 import DB from "../models/index.js";
+import { getDeviceList } from "../repository/device-repository.js";
 
 // 디바이스 조회
-const devicesList = async (email) => {
+const deviceList = async (email) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
-    if (!email) {
-    }
-    const [rows] = await DB.execute("SELECT * from devices where email = ?", [email]);
-    processResult.rows = rows;
-    console.log(processResult.rows);
+    const result = await getDeviceList(email);
+    processResult.rows = result;
     return processResult;
   } catch (err) {
     throw new Error(err);
@@ -16,7 +14,7 @@ const devicesList = async (email) => {
 };
 
 // 디바이스 등록
-const devicesNew = async (id, name, email) => {
+const deviceNew = async (id, name, email) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
 
@@ -43,4 +41,7 @@ const devicesNew = async (id, name, email) => {
   }
 };
 
-export { devicesList, devicesNew };
+// 디바이스 삭제
+// 정상적인 유저의 요청이 맞는지 유저-디바이스 정보 확인해야함
+
+export { deviceList, deviceNew };

@@ -22,9 +22,9 @@ class MqttClient {
     // 토픽을 구독하는 코드
     self.#client.subscribe(self.#topics, (error) => {
       if (!error) {
-        console.log("구독이 성공하였습니다.");
+        console.log("MQTT 구독이 성공하였습니다.");
       } else {
-        console.log("구독이 실패하였습니다.");
+        console.log("MQTT 구독이 실패하였습니다.");
       }
     });
 

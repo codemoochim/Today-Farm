@@ -9,22 +9,23 @@ const mqttOptions = {
 
 const client = mqtt.connect(mqttOptions);
 
+const createMessage = () => {
+  return {
+    deviceId: "1",
+    temperature: Math.round(10 * Math.random()),
+    humidity: Math.round(10 * Math.random()),
+    lux: Math.round(10 * Math.random()),
+    solid: Math.round(10 * Math.random()),
+    time: Date.now(),
+  };
+};
+
 client.on("connect", (connack) => {
   console.log("## test publisher connected");
 
   setInterval(() => {
     console.log("## published");
-    // client.publish("data/test-01", "test");
-    client.publish(
-      "data/test-01",
-      JSON.stringify({
-        id: "1",
-        temp: Math.round(10 * Math.random()),
-        humid: Math.round(10 * Math.random()),
-        lux: Math.round(10 * Math.random()),
-        solid: Math.round(10 * Math.random()),
-        time: Date.now(),
-      }),
-    );
+    const message = createMessage();
+    client.publish("data/test-01", JSON.stringify(message));
   }, 1000);
 });
