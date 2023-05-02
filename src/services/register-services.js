@@ -4,6 +4,7 @@ import DB from "../models/index.js";
 const register = async (email, password, phone, name) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
+
     // 필수 값 누락
     if (!email || !password || !phone || !name) {
       processResult.statusCode = 400;
@@ -19,11 +20,15 @@ const register = async (email, password, phone, name) => {
       return processResult;
     }
     // 중복된 이메일 확인
+<<<<<<< HEAD:src/services/registerSrvc.js
     // const checkEmailQuery = `select * from user where email = '${email}'`;
     const [rows] = await DB.execute(`select * from users where email = ?`, [email]);
     // const checkEmailQuery = `select * from user where email = '${email}'`;
     // const result = await DB.query(checkEmailQuery);
     console.log(rows);
+=======
+    const [rows] = await DB.execute(`select * from user where email = ?`, [email]);
+>>>>>>> 42b70daf54b60700b195e22c30e78fbf824343cc:src/services/register-services.js
     if (rows.length > 0) {
       processResult.statusCode = 400;
       processResult.message = "Email is not available";

@@ -2,14 +2,16 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
-import cookieParser from "cookie-parser";
-import connection from "./src/models/index.js";
 dotenv.config();
 
-import authRouter from "./src/routes/auth.js";
-import deviceRouter from "./src/routes/device.js";
+import authRouter from "./src/routes/auth-router.js";
+import deviceRouter from "./src/routes/device-router.js";
+import mqttClientInstance from "./src/index.js";
+import { mqttSubscriber } from "./src/sub/mqtt-subscriber.js";
 
 const app = express();
+mqttClientInstance.connect();
+mqttSubscriber();
 
 app.use(morgan("dev"));
 app.use(express.json());
@@ -18,10 +20,9 @@ app.use(
     extended: false,
   }),
 );
-// app.use(cookieParser(process.env.SECERET_COOKIE))
 app.use(
   cors({
-    orogin: "*",
+    origin: "*",
   }),
 );
 app.use("/", authRouter);
@@ -39,8 +40,9 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.send(err.message);
+  const statusCode = err.status || 500;
+  const errorMessage = err.message;
+  res.status(statusCode).send(errorMessage);
 });
 
 app.listen(process.env.PORT || 5000, () => {

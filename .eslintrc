@@ -29,7 +29,7 @@
   // ESLint 룰을 설정
   "rules": {
     "prettier/prettier": "warn", // prettier에 맞게 룰을 설정
-    "no-unused-vars": "off", // 미사용 변수에 대한 경고 여부
+    "no-unused-vars": "warn", // 미사용 변수에 대한 경고 여부
     "no-console": "off", // 콘솔 사용 가능
     "comma-dangle": ["always-multiline"]
   }

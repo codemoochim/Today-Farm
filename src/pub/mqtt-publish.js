@@ -4,7 +4,7 @@ const mqttClient = new MqttClient(mqttOptions, ["cmd/#"]); // 토픽 설정
 const TOPIC_TYPE_INDEX = 1;
 
 mqttClient.setMessageCallback(async (topic, message) => {
-  console.log(topic, message.toString());
+  // console.log(topic, message.toString());
   const topicType = topic.split("/")[TOPIC_TYPE_INDEX];
   const messageJson = JSON.parse(message);
 
@@ -23,6 +23,6 @@ mqttClient.setMessageCallback(async (topic, message) => {
         break;
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 });
