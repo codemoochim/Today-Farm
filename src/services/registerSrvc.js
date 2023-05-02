@@ -20,7 +20,7 @@ const register = async (email, password, phone, name) => {
     }
     // 중복된 이메일 확인
     // const checkEmailQuery = `select * from user where email = '${email}'`;
-    const [rows] = await DB.execute(`select * from user where email = ?`, [email]);
+    const [rows] = await DB.execute(`select * from users where email = ?`, [email]);
     // const checkEmailQuery = `select * from user where email = '${email}'`;
     // const result = await DB.query(checkEmailQuery);
     console.log(rows);
@@ -34,7 +34,7 @@ const register = async (email, password, phone, name) => {
     const hash = await bcrypt.hash(password, 10);
 
     // MySQL에 새 사용자 추가
-    const insertUserQuery = `Insert into user (email, password, name, phone) values ('${email}', '${hash}', '${name}', '${phone}')`;
+    const insertUserQuery = `Insert into users (email, password, name, phone) values ('${email}', '${hash}', '${name}', '${phone}')`;
     await DB.query(insertUserQuery);
 
     processResult.statusCode = 201;

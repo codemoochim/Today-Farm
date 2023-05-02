@@ -1,4 +1,5 @@
 import connection from "../models/index.js";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const login = async (email, password) => {
@@ -14,6 +15,7 @@ const login = async (email, password) => {
     // MySQL에서 사용자 정보 가져오기
     const sql = `select * from users where email = '${email}'`;
     const result = await connection.query(sql);
+    // console.log(result[0][0].password);
 
     if (result.length === 0) {
       // 이메일이 존재하지 않는 경우
@@ -24,7 +26,7 @@ const login = async (email, password) => {
     }
 
     // 비밀번호 검증
-    const match = await bcrypt.compare(password, result[0].password);
+    const match = await bcrypt.compare(password, result[0][0].password);
     if (!match) {
       // 비밀번호가 일치하지 않는 경우
       processResult.statusCode = 400;
