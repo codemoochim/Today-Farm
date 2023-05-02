@@ -1,33 +1,9 @@
-<<<<<<< HEAD
-import mysql from "mysql2/promise";
-=======
 // src/models/index.js
 import DB from "../repository/mysql-client.js";
->>>>>>> 42b70daf54b60700b195e22c30e78fbf824343cc
 import dotenv from "dotenv";
 dotenv.config();
 
 const dbOptions = {
-<<<<<<< HEAD
-  host: process.env.HOST,
-  user: process.env.NAME,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
-};
-
-const pool = mysql.createPool(dbOptions);
-
-pool.getConnection((err) => {
-  console.log(dbOptions);
-  if (err) {
-    console.error("데이터베이스 연결을 실패하였습니다.", err);
-  } else {
-    console.log("데이터베이스 연결에 성공하였습니다.");
-  }
-});
-
-export default pool;
-=======
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
@@ -69,4 +45,3 @@ const checkConnection = async () => {
 checkConnection();
 
 export default instance;
->>>>>>> 42b70daf54b60700b195e22c30e78fbf824343cc
