@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
-import DB from "../models/index.js";
+import instance from "../models/index.js";
+import { createUserInfoIntoDB } from "../repository/user-repository.js";
 
 const register = async (email, password, phone, name) => {
   try {
@@ -20,15 +21,8 @@ const register = async (email, password, phone, name) => {
       return processResult;
     }
     // 중복된 이메일 확인
-<<<<<<< HEAD:src/services/registerSrvc.js
-    // const checkEmailQuery = `select * from user where email = '${email}'`;
-    const [rows] = await DB.execute(`select * from users where email = ?`, [email]);
-    // const checkEmailQuery = `select * from user where email = '${email}'`;
-    // const result = await DB.query(checkEmailQuery);
-    console.log(rows);
-=======
-    const [rows] = await DB.execute(`select * from user where email = ?`, [email]);
->>>>>>> 42b70daf54b60700b195e22c30e78fbf824343cc:src/services/register-services.js
+    const sql = `SELECT * FROM users WHERE email = ?`;
+    const [rows] = await instance.promisePool.execute(sql, [email]);
     if (rows.length > 0) {
       processResult.statusCode = 400;
       processResult.message = "Email is not available";
@@ -39,9 +33,9 @@ const register = async (email, password, phone, name) => {
     const hash = await bcrypt.hash(password, 10);
 
     // MySQL에 새 사용자 추가
-    const insertUserQuery = `Insert into users (email, password, name, phone) values ('${email}', '${hash}', '${name}', '${phone}')`;
-    await DB.query(insertUserQuery);
-
+    await createUserInfoIntoDB(email, hash, name, phone);
+    // const insertUserQuery = `Insert into users (email, password, name, phone) values ('${email}', '${hash}', '${name}', '${phone}')`;
+    // await DB.query(insertUserQuery);
     processResult.statusCode = 201;
     processResult.message = "User created";
 

@@ -5,23 +5,24 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const userDelete = async (token, password) => {
+const changePwd = async (token, currentPwd, newPwd) => {
   try {
     const processResult = { statusCode: 200, message: "Success" };
     // 로그인 한 유저의 정보를 가져와야함
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decodedToken.userId;
+
     // 필수 값 누락
-    if (!password) {
+    if (!currentPwd || !newPwd) {
       processResult.statusCode = 400;
       processResult.message = "Missing required fields";
 
       return processResult;
     }
     // 비밀번호 확인
-    const getUserPasswordQuery = `select password from user where id = ${userId}`;
+    const getUserPasswordQuery = `SELECT password FROM user WHERE id = ${userId}`;
     const [rows] = await connection.query(getUserPasswordQuery);
-    const isMatch = await bcrypt.compare(password, rows[0].password);
+    const isMatch = await bcrypt.compare(currentPwd, rows[0].password);
 
     if (!isMatch) {
       processResult.statusCode = 400;
@@ -29,11 +30,11 @@ const userDelete = async (token, password) => {
 
       return processResult;
     }
-    // 데이터베이스에서 해당 사용자 정보 삭제
-    const sql = `DELETE FROM user WHERE id = '${userId}'`;
-    await connection.query(sql);
-    processResult.statusCode = 200;
-    processResult.message = "User delete complete";
+    // 새비밀번호로 변경
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    const updatePasswordQuery = `UPDATE user SET password = '${hashedNewPassword}' WHERE id = ${userId}`;
+
+    await connection.query(updatePasswordQuery);
 
     return processResult;
   } catch (err) {
@@ -41,4 +42,4 @@ const userDelete = async (token, password) => {
   }
 };
 
-export default userDelete;
+export default changePwd;

@@ -1,9 +1,9 @@
-import findPwdSrvc from "../services/findPwdSrvc.js";
+import findPwdService from "../services/find-pwd-service.js";
 
 const findPwdCtrl = async (req, res, next) => {
   try {
     const { email, phone } = req.body;
-    const processResult = await findPwdSrvc(email, phone);
+    const processResult = await findPwdService(email, phone);
     return res.status(processResult.status).send(processResult.message);
   } catch (err) {
     next(err);

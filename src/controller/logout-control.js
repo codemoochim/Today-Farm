@@ -1,4 +1,4 @@
-import logoutService from "../services/logout-services.js";
+import logoutService from "../services/logout-service.js";
 
 const logoutControl = async (req, res, next) => {
   try {

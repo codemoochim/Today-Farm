@@ -18,7 +18,7 @@ const deviceNew = async (id, name, email) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
 
-    const [[rows]] = await DB.execute(`SELECT * from devices where id = ?`, [id]);
+    const [[rows]] = await DB.execute(`SELECT * from devices WHERE id = ?`, [id]);
 
     if (!rows) {
       processResult.statusCode = 400;
