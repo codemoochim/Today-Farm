@@ -5,27 +5,28 @@ const findEmail = async (name, phone) => {
     const processResult = { statusCode: 200, message: "성공" };
     // 필수 값 누락
     if (!name || !phone) {
-      processResult.statusCode = 400;
-      processResult.message = "Missing required fields";
-
-      return processResult;
+      return {
+        statusCode: 400,
+        message: "Missing required fields",
+      };
     }
     // MySql에서 이름과 번호를 가진 사용자 정보 가져오기
-    // sql injection에 취약
-    const sql = `select email from users where name='${name}' and phone='${phone}'`;
-    const [rows, fields] = await connection.query(sql);
+    const sql = `select email from users where name=? and phone=?`;
+    const [rows, _] = await connection.promisePool.query(sql, [name, phone]);
+
     // 일치하는 정보가 없음
-    if (result.length === 0) {
+    if (rows.length === 0) {
       processResult.statusCode = 400;
       processResult.message = "No match information";
-
-      return processResult;
-    } else {
+    } else if (rows.length === 1) {
       processResult.statusCode = 200;
       processResult.message = `email: '${rows[0].email}'`;
-
-      return processResult;
+    } else {
+      processResult.statusCode = 500;
+      processResult.message = `사용자가 왜 ${rows.length} 명이나 있을까요?`;
     }
+
+    return processResult;
   } catch (err) {
     throw new Error(err);
   }

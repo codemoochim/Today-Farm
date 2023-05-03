@@ -5,7 +5,7 @@ const changePwdCtrl = async (req, res, next) => {
     const { currentPwd, newPwd } = req.body;
     const { token } = req.cookies.token;
     const processResult = await changePwdService(token, currentPwd, newPwd);
-    return res.status(processResult.status).send(processResult.message);
+    return res.status(processResult.statusCode).send(processResult.message);
   } catch (err) {
     next(err);
   }

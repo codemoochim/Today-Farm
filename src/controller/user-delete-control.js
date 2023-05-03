@@ -5,7 +5,7 @@ const userDeleteCtrl = async (req, res, next) => {
     const { password } = req.body;
     const { token } = req.cookies.token;
     const processResult = await userDeleteService(token, password);
-    return res.status(processResult.status).send(processResult.message);
+    return res.status(processResult.statusCode).send(processResult.message);
   } catch (err) {
     next(err);
   }
