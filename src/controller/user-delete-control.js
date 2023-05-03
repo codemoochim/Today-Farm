@@ -1,10 +1,10 @@
-import userDeleteSrvc from "../services/userDeleteSrvc.js";
+import userDeleteService from "../services/user-delete-service.js";
 
 const userDeleteCtrl = async (req, res, next) => {
   try {
     const { password } = req.body;
     const { token } = req.cookies.token;
-    const processResult = await userDeleteSrvc(token, password);
+    const processResult = await userDeleteService(token, password);
     return res.status(processResult.status).send(processResult.message);
   } catch (err) {
     next(err);

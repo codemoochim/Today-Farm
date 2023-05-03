@@ -1,4 +1,4 @@
-import { login, refreshAccessToken } from "../services/loginSrvc.js";
+import { login, refreshAccessToken } from "../services/login-service.js";
 
 const loginCtrl = async (req, res, next) => {
   try {

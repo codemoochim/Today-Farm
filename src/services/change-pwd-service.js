@@ -20,7 +20,11 @@ const changePwd = async (token, currentPwd, newPwd) => {
       return processResult;
     }
     // 비밀번호 확인
+<<<<<<< HEAD:src/services/changePwdSrvc.js
     const getUserPasswordQuery = `select password from users where id = ${userId}`;
+=======
+    const getUserPasswordQuery = `SELECT password FROM user WHERE id = ${userId}`;
+>>>>>>> a8aeb9f23fd0ae16f5ae0bd7439f7f97e71b52b0:src/services/change-pwd-service.js
     const [rows] = await connection.query(getUserPasswordQuery);
     const isMatch = await bcrypt.compare(currentPwd, rows[0].password);
 
@@ -32,7 +36,11 @@ const changePwd = async (token, currentPwd, newPwd) => {
     }
     // 새비밀번호로 변경
     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+<<<<<<< HEAD:src/services/changePwdSrvc.js
     const updatePasswordQuery = `update users set password = '${hashedNewPassword}' where id = ${userId}`;
+=======
+    const updatePasswordQuery = `UPDATE user SET password = '${hashedNewPassword}' WHERE id = ${userId}`;
+>>>>>>> a8aeb9f23fd0ae16f5ae0bd7439f7f97e71b52b0:src/services/change-pwd-service.js
 
     await connection.query(updatePasswordQuery);
 

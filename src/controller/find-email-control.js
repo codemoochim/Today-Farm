@@ -1,9 +1,9 @@
-import findEmailSrvc from "../services/findEmailSrvc.js";
+import findEmailService from "../services/find-email-service.js";
 
 const findEmailCtrl = async (req, res, next) => {
   try {
     const { name, phone } = req.body;
-    const processResult = await findEmailSrvc(name, phone);
+    const processResult = await findEmailService(name, phone);
     return res.status(processResult.status).send(processResult.message);
   } catch (err) {
     next(err);
