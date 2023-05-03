@@ -3,6 +3,7 @@ import logoutSrvc from "../services/logoutSrvc.js";
 const logoutCtrl = async (req, res, next) => {
   try {
     const processResult = await logoutSrvc();
+    console.log(req.cookies);
     return res.status(processResult.status).send(processResult.message);
   } catch (err) {
     next(err);
