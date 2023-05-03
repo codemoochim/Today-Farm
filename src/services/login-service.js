@@ -13,7 +13,7 @@ const login = async (email, password) => {
       return processResult;
     }
     // MySQL에서 사용자 정보 가져오기
-    const sql = `SELECT * FROM users WHERE email = '${email}'`;
+    const sql = `select * from users where email = '${email}'`;
     const result = await connection.promisePool.query(sql);
     // console.log(result[0][0].password);
 
