@@ -26,6 +26,7 @@ const login = async (email, password) => {
     }
 
     // 비밀번호 검증
+    // result[0] === rows
     const match = await bcrypt.compare(password, result[0][0].password);
     if (!match) {
       // 비밀번호가 일치하지 않는 경우
