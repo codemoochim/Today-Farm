@@ -11,11 +11,7 @@ const findEmail = async (name, phone) => {
       return processResult;
     }
     // MySql에서 이름과 번호를 가진 사용자 정보 가져오기
-<<<<<<< HEAD:src/services/findEmailSrvc.js
     const sql = `select email from users where name='${name}' and phone='${phone}'`;
-=======
-    const sql = `SELECT email FROM users WHERE name='${name}' AND phone='${phone}'`;
->>>>>>> a8aeb9f23fd0ae16f5ae0bd7439f7f97e71b52b0:src/services/find-email-service.js
     const result = await connection.query(sql);
     // 일치하는 정보가 없음
     if (result.length === 0) {

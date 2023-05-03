@@ -19,11 +19,7 @@ const userDelete = async (token, password) => {
       return processResult;
     }
     // 비밀번호 확인
-<<<<<<< HEAD:src/services/userDeleteSrvc.js
     const getUserPasswordQuery = `select password from users where id = ${userId}`;
-=======
-    const getUserPasswordQuery = `SELECT password FROM user WHERE id = ${userId}`;
->>>>>>> a8aeb9f23fd0ae16f5ae0bd7439f7f97e71b52b0:src/services/user-delete-service.js
     const [rows] = await connection.query(getUserPasswordQuery);
     const isMatch = await bcrypt.compare(password, rows[0].password);
 
