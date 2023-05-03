@@ -16,10 +16,11 @@ const getDevice = async (req, res, next) => {
 // 디바이스 등록
 const addDevice = async (req, res, next) => {
   try {
+    const { deviceId, name } = req.body;
     // 로그인 정보로 토큰 페이로드 req.user
-    const { id, name } = req.body;
-    const email = req.user;
-    const processResult = await deviceNew(id, name, email);
+    // const email = req.user;
+    const email = "sando@s.com";
+    const processResult = await deviceNew(deviceId, name, email);
     res.status(processResult.statusCode).json({ data: processResult.message });
   } catch (err) {
     next(err);

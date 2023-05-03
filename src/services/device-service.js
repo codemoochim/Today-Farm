@@ -1,5 +1,5 @@
 import DB from "../models/index.js";
-import { getDeviceList } from "../repository/device-repository.js";
+import { getDeviceList, checkValidDeviceId, assignUserToDevice } from "../repository/device-repository.js";
 
 // 디바이스 조회
 const deviceList = async (email) => {
@@ -14,11 +14,10 @@ const deviceList = async (email) => {
 };
 
 // 디바이스 등록
-const deviceNew = async (id, name, email) => {
+const deviceNew = async (deviceId, name, email) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
-
-    const [[rows]] = await DB.execute(`SELECT * from devices WHERE id = ?`, [id]);
+    const [rows] = await checkValidDeviceId(deviceId);
 
     if (!rows) {
       processResult.statusCode = 400;
@@ -32,7 +31,7 @@ const deviceNew = async (id, name, email) => {
       return processResult;
     }
     // 미할당 디바이스 = 사용자 등록
-    await DB.execute(`UPDATE devices SET name=?, email=?, date=? WHERE id=?`, [name, email, new Date(), id]);
+    await assignUserToDevice(deviceId, name, email);
     processResult.statusCode = 201;
     processResult.message = "Device saved";
     return processResult;
