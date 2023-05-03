@@ -6,7 +6,6 @@ const mqttOptions = {
   host: process.env.MQTT_BROKER_HOST,
   port: process.env.MQTT_BROKER_PORT,
 };
-
 const client = mqtt.connect(mqttOptions);
 
 const createMessage = () => {
@@ -16,7 +15,6 @@ const createMessage = () => {
     humidity: Math.round(10 * Math.random()),
     lux: Math.round(10 * Math.random()),
     solid: Math.round(10 * Math.random()),
-    time: Date.now(),
   };
 };
 
