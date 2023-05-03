@@ -20,7 +20,7 @@ const changePwd = async (token, currentPwd, newPwd) => {
       return processResult;
     }
     // 비밀번호 확인
-    const getUserPasswordQuery = `select password from user where id = ${userId}`;
+    const getUserPasswordQuery = `select password from users where id = ${userId}`;
     const [rows] = await connection.query(getUserPasswordQuery);
     const isMatch = await bcrypt.compare(currentPwd, rows[0].password);
 
@@ -32,7 +32,7 @@ const changePwd = async (token, currentPwd, newPwd) => {
     }
     // 새비밀번호로 변경
     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-    const updatePasswordQuery = `update user set password = '${hashedNewPassword}' where id = ${userId}`;
+    const updatePasswordQuery = `update users set password = '${hashedNewPassword}' where id = ${userId}`;
 
     await connection.query(updatePasswordQuery);
 
