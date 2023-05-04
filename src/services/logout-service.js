@@ -4,7 +4,7 @@ const logout = async (req, res) => {
     console.log(req.cookies);
     res.clearCookie("secret");
     res.clearCookie("refresh-secret");
-    res.redirect("/login");
+    // res.redirect("/login");
     return processResult;
   } catch (err) {
     throw new Error(err);

@@ -18,7 +18,7 @@ const deviceNew = async (id, name, email) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
 
-    const [[rows]] = await DB.execute(`SELECT * from devices WHERE id = ?`, [id]);
+    const [[rows]] = await DB.execute(`select * from devices where id=?`, [id]);
 
     if (!rows) {
       processResult.statusCode = 400;
@@ -32,7 +32,7 @@ const deviceNew = async (id, name, email) => {
       return processResult;
     }
     // 미할당 디바이스 = 사용자 등록
-    await DB.execute(`UPDATE devices SET name=?, email=?, date=? WHERE id=?`, [name, email, new Date(), id]);
+    await DB.execute(`update devices set name=?, email=?, date=? where id=?`, [name, email, new Date(), id]);
     processResult.statusCode = 201;
     processResult.message = "Device saved";
     return processResult;

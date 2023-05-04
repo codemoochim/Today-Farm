@@ -13,8 +13,8 @@ const login = async (email, password) => {
       return processResult;
     }
     // MySQL에서 사용자 정보 가져오기
-    const sql = `select * from users where email = '${email}'`;
-    const result = await connection.promisePool.query(sql);
+    const sql = `select * from users where email=?`;
+    const [rows, _] = await connection.promisePool.query(sql, [email]);
     // console.log(result[0][0].password);
 
     if (result.length === 0) {
@@ -27,7 +27,7 @@ const login = async (email, password) => {
 
     // 비밀번호 검증
     // result[0] === rows
-    const match = await bcrypt.compare(password, result[0][0].password);
+    const match = await bcrypt.compare(password, rows[0].password);
     if (!match) {
       // 비밀번호가 일치하지 않는 경우
       processResult.statusCode = 400;
@@ -68,8 +68,8 @@ const refreshAccessToken = async (refreshToken) => {
     const processResult = { statusCode: 200, message: "성공" };
     // refreshToken 검증
     const decoded = jwt.verify(refreshToken, "refresh-secret");
-    const sql = `SELECT * from users WHERE id = '${decoded.userId}'`;
-    const result = await connection.query(sql);
+    const sql = `select * from users where id=?`;
+    const result = await connection.promisePool.query(sql, [decoded.userId]);
     // refreshToken이 만료된 경우
     // if (result.length === 0) {
     //   processResult.statusCode = 400;
