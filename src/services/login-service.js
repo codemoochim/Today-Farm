@@ -17,7 +17,7 @@ const login = async (email, password) => {
     const [rows, _] = await connection.promisePool.query(sql, [email]);
     // console.log(result[0][0].password);
 
-    if (result.length === 0) {
+    if (rows.length === 0) {
       // 이메일이 존재하지 않는 경우
       processResult.statusCode = 400;
       processResult.message = "Email does not exist";
@@ -40,8 +40,8 @@ const login = async (email, password) => {
     // accessToken 발급 -> 짧은 수명
     const accessToken = jwt.sign(
       {
-        email: result[0].email,
-        userId: result[0].id,
+        email: rows[0].email,
+        userId: rows[0].id,
       },
       "secret",
       { expiresIn: "2h" },
@@ -49,8 +49,8 @@ const login = async (email, password) => {
     // refreshToken 발급 -> 긴 수명
     const refreshToken = jwt.sign(
       {
-        email: result[0].email,
-        userId: result[0].id,
+        email: rows[0].email,
+        userId: rows[0].id,
       },
       "refresh-secret",
       { expiresIn: "14d" },
