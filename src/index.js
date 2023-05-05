@@ -10,7 +10,4 @@ const mqttOptions = {
   port: process.env.MQTT_BROKER_PORT,
 };
 
-const mqttClientInstance = new MqttClient(mqttOptions, ["data/#"]); // 토픽 설정
-// mqttClientInstance.connect(); // 클라이언트 객체 연결
-
-export default mqttClientInstance;
+export const mqttClientInstance = new MqttClient(mqttOptions, ["esp32/topic"]); // 토픽 설정

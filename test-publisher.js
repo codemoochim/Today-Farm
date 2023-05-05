@@ -24,6 +24,8 @@ client.on("connect", (connack) => {
   setInterval(() => {
     console.log("## published");
     const message = createMessage();
-    client.publish("data/test-01", JSON.stringify(message));
+    // client.publish("data/test-01", JSON.stringify(message));
+    client.publish("esp32/topic", JSON.stringify(message));
+    // client.publish("토픽", 메시지);
   }, 1000);
 });

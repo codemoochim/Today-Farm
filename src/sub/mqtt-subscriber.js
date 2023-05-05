@@ -1,4 +1,5 @@
-import mqttClientInstance from "../index.js";
+// import mqttClientInstance from "../index.js";
+import { mqttClientInstance } from "../index.js";
 import { putSensorDataToDB } from "../repository/data-repository.js";
 
 const TOPIC_TYPE_INDEX = 0;
@@ -9,7 +10,7 @@ export const mqttSubscriber = () => {
     const messageJson = JSON.parse(message);
     try {
       switch (topicType) {
-        case "data":
+        case "esp32":
           // 디비에 저장
           await putSensorDataToDB({
             deviceId: messageJson.deviceId,
@@ -24,7 +25,7 @@ export const mqttSubscriber = () => {
           console.log(koreanTime, "센서 데이터가 저장되었습니다.");
           break;
         default:
-          console.log("확인되지 않은 토픽");
+          console.log("확인되지 않은 토픽입니다");
           break;
       }
     } catch (err) {

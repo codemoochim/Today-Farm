@@ -7,7 +7,7 @@ dotenv.config();
 
 import authRouter from "./src/routes/auth-router.js";
 import deviceRouter from "./src/routes/device-router.js";
-import mqttClientInstance from "./src/index.js";
+import { mqttClientInstance } from "./src/index.js";
 import { mqttSubscriber } from "./src/sub/mqtt-subscriber.js";
 
 const app = express();
@@ -28,10 +28,6 @@ app.use(
     origin: "*",
   }),
 );
-app.use("/", authRouter);
-
-app.use("/", authRouter);
-app.use("/devices", deviceRouter);
 
 app.use("/", authRouter);
 app.use("/devices", deviceRouter);

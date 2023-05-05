@@ -3,10 +3,14 @@ import {
   getDeviceListUsingDeviceId,
   assignOwnerToDevice,
   detachUserWithDevice,
+  updateLedStatus,
+  updateMotorStatus,
 } from "../repository/device-repository.js";
 
+import { mqttPublisher } from "../pub/mqtt-publish.js";
+
 // 디바이스 조회
-const deviceList = async (email) => {
+export const deviceList = async (email) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
     const result = await getDeviceListUsingEmail(email);
@@ -18,7 +22,7 @@ const deviceList = async (email) => {
 };
 
 // 디바이스 등록
-const deviceNew = async (deviceId, name, email) => {
+export const deviceNew = async (deviceId, name, email) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
     const checkOwnerFlag = 1;
@@ -46,7 +50,7 @@ const deviceNew = async (deviceId, name, email) => {
 };
 
 // 디바이스 삭제
-const deviceNoMoreUse = async (deviceId, email) => {
+export const deviceNoMoreUse = async (deviceId, email) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
     const checkOwnerFlag = 0;
@@ -71,4 +75,33 @@ const deviceNoMoreUse = async (deviceId, email) => {
     throw new Error(err);
   }
 };
-export { deviceList, deviceNew, deviceNoMoreUse };
+
+// 생장LED 제어
+export const responseLedStatus = async (deviceId, active) => {
+  const processResult = { statusCode: 200, message: "성공" };
+  try {
+    const targetMachine = "led";
+    await mqttPublisher(targetMachine, active);
+
+    const result = await updateLedStatus(deviceId, active);
+    processResult.rows = result;
+    return processResult;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// 모터펌프 제어
+export const responseMotorStatus = async (deviceId, active) => {
+  const processResult = { statusCode: 200, message: "성공" };
+  try {
+    const targetMachine = "motor";
+    await mqttPublisher(targetMachine, active);
+
+    const result = await updateMotorStatus(deviceId, active);
+    processResult.rows = result;
+    return processResult;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
