@@ -28,14 +28,5 @@ class DB {
     });
     this.promisePool = this.pool.promise();
   }
-  // async getConnection() {
-  //   return await this.promisePool.getConnection();
-  // }
-
-  // async insertData({ id, temp, humid, lux, solid, time }) {
-  //   const sql = `INSERT INTO datas (id, temp, humid, lux, solid, time) VALUES (?,?,?,?,?,?)`;
-  //   const [rows] = await this.promisePool.execute(sql, [id, temp, humid, lux, solid, time]);
-  //   return rows;
-  // }
 }
 export default DB;

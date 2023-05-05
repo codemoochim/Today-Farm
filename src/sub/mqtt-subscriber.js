@@ -17,7 +17,6 @@ export const mqttSubscriber = () => {
             humidity: messageJson.humidity,
             lux: messageJson.lux,
             solid: messageJson.solid,
-            time: new Date(messageJson.time),
           });
 
           const currentTime = new Date();

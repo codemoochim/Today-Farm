@@ -1,11 +1,15 @@
-import DB from "../models/index.js";
-import { getDeviceList } from "../repository/device-repository.js";
+import {
+  getDeviceListUsingEmail,
+  getDeviceListUsingDeviceId,
+  assignOwnerToDevice,
+  detachUserWithDevice,
+} from "../repository/device-repository.js";
 
 // 디바이스 조회
 const deviceList = async (email) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
-    const result = await getDeviceList(email);
+    const result = await getDeviceListUsingEmail(email);
     processResult.rows = result;
     return processResult;
   } catch (err) {
@@ -14,25 +18,25 @@ const deviceList = async (email) => {
 };
 
 // 디바이스 등록
-const deviceNew = async (id, name, email) => {
+const deviceNew = async (deviceId, name, email) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
-
-    const [[rows]] = await DB.execute(`select * from devices where id=?`, [id]);
+    const checkOwnerFlag = 1;
+    const [rows] = await getDeviceListUsingDeviceId(deviceId);
 
     if (!rows) {
       processResult.statusCode = 400;
       processResult.message = "DeviceId is wrong";
       return processResult;
     }
-    if (rows.email !== null) {
-      // 기할당 디바이스 = 사용자 등록
+    if (rows.owner === checkOwnerFlag) {
+      // 이미 할당된 디바이스
       processResult.statusCode = 400;
       processResult.message = "DeviceId is not available";
       return processResult;
     }
-    // 미할당 디바이스 = 사용자 등록
-    await DB.execute(`update devices set name=?, email=?, date=? where id=?`, [name, email, new Date(), id]);
+
+    await assignOwnerToDevice(deviceId, name, email, checkOwnerFlag);
     processResult.statusCode = 201;
     processResult.message = "Device saved";
     return processResult;
@@ -42,6 +46,29 @@ const deviceNew = async (id, name, email) => {
 };
 
 // 디바이스 삭제
-// 정상적인 유저의 요청이 맞는지 유저-디바이스 정보 확인해야함
+const deviceNoMoreUse = async (deviceId, email) => {
+  try {
+    const processResult = { statusCode: 200, message: "성공" };
+    const checkOwnerFlag = 0;
+    const [rows] = await getDeviceListUsingDeviceId(deviceId);
+    if (!rows) {
+      processResult.statusCode = 400;
+      processResult.message = "DeviceId is wrong";
+      return processResult;
+    }
+    if (rows.email !== email) {
+      // 이미 할당된 디바이스
+      processResult.statusCode = 400;
+      processResult.message = "DeviceId is not available";
+      return processResult;
+    }
 
-export { deviceList, deviceNew };
+    await detachUserWithDevice(deviceId, checkOwnerFlag);
+    processResult.statusCode = 200;
+    processResult.message = "Device deleted";
+    return processResult;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+export { deviceList, deviceNew, deviceNoMoreUse };
