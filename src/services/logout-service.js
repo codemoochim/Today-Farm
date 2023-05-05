@@ -1,8 +1,10 @@
 const logout = async (req, res) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
-    res.clearCookie("jwt", { httpOnly: true });
-    res.redirect("/login");
+    console.log(req.cookies);
+    res.clearCookie("secret");
+    res.clearCookie("refresh-secret");
+    // res.redirect("/login");
     return processResult;
   } catch (err) {
     throw new Error(err);
@@ -10,3 +12,5 @@ const logout = async (req, res) => {
 };
 
 export default logout;
+
+// { httpOnly: true }

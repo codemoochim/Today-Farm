@@ -4,7 +4,7 @@ import loginCtrl from "../controller/login-control.js";
 import logoutCtrl from "../controller/logout-control.js";
 import findEmailCtrl from "../controller/find-email-control.js";
 import findPwdCtrl from "../controller/find-pwd-control.js";
-import changePwdCtrl from "../controller/changePwdCtrl.js";
+import changePwdCtrl from "../controller/change-pwd-control.js";
 import userDeleteCtrl from "../controller/user-delete-control.js";
 
 const router = express.Router();

@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 dotenv.config();
 
 import authRouter from "./src/routes/auth-router.js";
@@ -20,6 +21,8 @@ app.use(
     extended: false,
   }),
 );
+// app.use(cookieParser(process.env.SECERET_COOKIE))
+app.use(cookieParser());
 app.use(
   cors({
     origin: "*",

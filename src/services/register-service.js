@@ -21,11 +21,19 @@ const register = async (email, password, phone, name) => {
       return processResult;
     }
     // 중복된 이메일 확인
-    const sql = `SELECT * FROM users WHERE email = ?`;
-    const [rows] = await instance.promisePool.execute(sql, [email]);
-    if (rows.length > 0) {
+    const emailCheck = `select * from users where email=?`;
+    const [emailRows] = await instance.promisePool.execute(emailCheck, [email]);
+    if (emailRows.length > 0) {
       processResult.statusCode = 400;
       processResult.message = "Email is not available";
+
+      return processResult;
+    }
+    const phoneCheck = `select * from users where phone=?`;
+    const [phoneRows] = await instance.promisePool.execute(phoneCheck, [phone]);
+    if (phoneRows.length > 0) {
+      processResult.statusCode = 400;
+      processResult.message = "You are already registered";
 
       return processResult;
     }

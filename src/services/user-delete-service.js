@@ -19,8 +19,8 @@ const userDelete = async (token, password) => {
       return processResult;
     }
     // 비밀번호 확인
-    const getUserPasswordQuery = `SELECT password FROM user WHERE id = ${userId}`;
-    const [rows] = await connection.query(getUserPasswordQuery);
+    const getUserPasswordQuery = `select password from users where id=?}`;
+    const [rows] = await connection.promisePool.query(getUserPasswordQuery, [userId]);
     const isMatch = await bcrypt.compare(password, rows[0].password);
 
     if (!isMatch) {
@@ -30,8 +30,8 @@ const userDelete = async (token, password) => {
       return processResult;
     }
     // 데이터베이스에서 해당 사용자 정보 삭제
-    const sql = `DELETE FROM user WHERE id = '${userId}'`;
-    await connection.query(sql);
+    const sql = `delete from users where id=?`;
+    await connection.promisePool.query(sql, [userId]);
     processResult.statusCode = 200;
     processResult.message = "User delete complete";
 
