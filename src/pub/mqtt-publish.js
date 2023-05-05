@@ -1,28 +1,12 @@
-import MqttClient from "./src/utils/mqtt-client";
+import { mqttClientInstance } from "../index.js";
 
-const mqttClient = new MqttClient(mqttOptions, ["cmd/#"]); // 토픽 설정
-const TOPIC_TYPE_INDEX = 1;
-
-mqttClient.setMessageCallback(async (topic, message) => {
-  // console.log(topic, message.toString());
-  const topicType = topic.split("/")[TOPIC_TYPE_INDEX];
-  const messageJson = JSON.parse(message);
-
+export const mqttPublisher = async (targetMachine, active) => {
+  const messageToDevice = parseInt(active) ? "on" : "off";
   try {
-    switch (topicType) {
-      case "cmd":
-        try {
-          await mqttClient.sendCommand(`cmd/${device[0].id}/pump`, {
-            id: device[0].serial_num,
-            command,
-          });
-        } catch (error) {}
-        break;
-      default:
-        console.log("확인되지 않은 토픽");
-        break;
-    }
+    const topicType = targetMachine;
+    const messageJson = JSON.stringify(messageToDevice);
+    await mqttClientInstance.sendCommand(`esp32/${topicType}`, `${messageJson}`);
   } catch (err) {
     console.error(err);
   }
-});
+};

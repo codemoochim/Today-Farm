@@ -17,7 +17,11 @@ const loginCtrl = async (req, res, next) => {
         processResult = refreshResult;
       }
     }
-    return res.status(processResult.statusCode).send(processResult.message);
+    return res
+      .status(processResult.statusCode)
+      .cookie("accessToken", processResult.accessToken)
+      .cookie("refreshToken", processResult.refreshToken)
+      .send(processResult.message);
   } catch (err) {
     next(err);
   }

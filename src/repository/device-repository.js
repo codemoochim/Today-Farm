@@ -27,3 +27,17 @@ export const detachUserWithDevice = async (deviceId, checkOwnerFlag) => {
   await instance.promisePool.execute(sql, [checkOwnerFlag, deviceId]);
   return;
 };
+
+// 생장 LED 제어상태 변경
+export const updateLedStatus = async (deviceId, led) => {
+  const sql = `UPDATE devices SET led=? WHERE deviceId=?`;
+  await instance.promisePool.execute(sql, [led, deviceId]);
+  return;
+};
+
+// 생장 LED 제어상태 변경
+export const updateMotorStatus = async (deviceId, motor) => {
+  const sql = `UPDATE devices SET motor=? WHERE deviceId=?`;
+  await instance.promisePool.execute(sql, [motor, deviceId]);
+  return;
+};

@@ -16,7 +16,7 @@ class MqttClient {
     self.#client = mqtt.connect(self.#options);
 
     self.#client.on("connect", () => {
-      console.log("## conntected");
+      console.log("## connected");
     });
 
     // 토픽을 구독하는 코드
@@ -35,11 +35,11 @@ class MqttClient {
   }
 
   // 작동 제어 명령 발행
-  sendCommand(topic, message) {
+  async sendCommand(topic, message) {
     this.#client.publish(topic, JSON.stringify(message));
   }
 
-  setMessageCallback(cb) {
+  async setMessageCallback(cb) {
     // 메시지 이벤트 콜백을 등록
     this.#client.on("message", cb);
   }
