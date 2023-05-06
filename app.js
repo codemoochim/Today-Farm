@@ -21,7 +21,6 @@ app.use(
     extended: false,
   }),
 );
-// app.use(cookieParser(process.env.SECERET_COOKIE))
 app.use(cookieParser());
 app.use(
   cors({

@@ -56,8 +56,6 @@ const register = async (email, password, phone, name) => {
 
     // MySQL에 새 사용자 추가
     await createUserInfoIntoDB(email, hash, name, phone);
-    // const insertUserQuery = `Insert into users (email, password, name, phone) values ('${email}', '${hash}', '${name}', '${phone}')`;
-    // await DB.query(insertUserQuery);
     processResult.statusCode = 201;
     processResult.message = "User created";
     return processResult;

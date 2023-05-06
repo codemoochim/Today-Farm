@@ -1,6 +1,8 @@
-import connection from "../models/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import connection from "../models/index.js";
+import { minutesToMillisecond } from "../utils/setTimeForSearchData.js";
+import { redisClient } from "../middleware/redis.js";
 
 const login = async (email, password) => {
   try {
@@ -15,8 +17,6 @@ const login = async (email, password) => {
     // MySQL에서 사용자 정보 가져오기
     const sql = `select * from users where email=?`;
     const [rows, _] = await connection.promisePool.query(sql, [email]);
-    // console.log(result[0][0].password);
-
     if (rows.length === 0) {
       // 이메일이 존재하지 않는 경우
       processResult.statusCode = 400;
@@ -36,6 +36,10 @@ const login = async (email, password) => {
       return processResult;
     }
 
+    const tokenExpiresDate = {
+      accessToken: minutesToMillisecond(2) * 60,
+      refreshToken: minutesToMillisecond(3) * 60,
+    };
     // JWT 발급
     // accessToken 발급 -> 짧은 수명
     const accessToken = jwt.sign(
@@ -44,7 +48,7 @@ const login = async (email, password) => {
         userId: rows[0].id,
       },
       "secret",
-      { expiresIn: "2h" },
+      { expiresIn: `${tokenExpiresDate.accessToken}` },
     );
     // refreshToken 발급 -> 긴 수명
     const refreshToken = jwt.sign(
@@ -53,9 +57,18 @@ const login = async (email, password) => {
         userId: rows[0].id,
       },
       "refresh-secret",
-      { expiresIn: "14d" },
+      { expiresIn: `${tokenExpiresDate.refreshToken}` },
     );
+
+    await redisClient.connect();
+    await redisClient.set(refreshToken, rows[0].email, {
+      EX: tokenExpiresDate.refreshToken,
+    });
+    // const value = await redisClient.get(refreshToken);
+    await redisClient.disconnect();
+
     processResult.statusCode = 200;
+
     return { ...processResult, accessToken, refreshToken };
   } catch (err) {
     throw new Error(err);

@@ -1,10 +1,14 @@
+import { minutesToMillisecond } from "../utils/setTimeForSearchData.js";
+import { redisClient } from "../middleware/redis.js";
+
 const logout = async (req, res) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
-    console.log(req.cookies);
-    res.clearCookie("secret");
-    res.clearCookie("refresh-secret");
-    // res.redirect("/login");
+    await redisClient.connect();
+    await redisClient.del(`${req.cookies.refreshToken}`, (err, response) => {
+      if (err) throw err;
+      console.log(response);
+    });
     return processResult;
   } catch (err) {
     throw new Error(err);
@@ -12,5 +16,3 @@ const logout = async (req, res) => {
 };
 
 export default logout;
-
-// { httpOnly: true }
