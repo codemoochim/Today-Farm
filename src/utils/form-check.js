@@ -1,10 +1,9 @@
-export const emailFormCheck = (email = {
-  // const re = /\S+@\S+.\S+/
-  // const emailCheckResult = email.match(regExp)
-  // return;
-});
+export const checkEmailForm = (email) => {
+  const emailFormPattern = /\S+@\S+.\S+/;
+  return emailFormPattern.test(email);
+};
 
-export const phoneFormCheck = (phone = {
-  // const koreanPhoneNumberRegExp = /^01([0|1|6|7|8|9]?)-?[0-9]{3,4}-?[0-9]{4}$/
-  // const phoneCheck
-});
+export const checkPhoneForm = (phone) => {
+  const phonFormPattern = /^\d{3}-\d{3,4}-\d{4}$/;
+  return phonFormPattern.test(phone);
+};

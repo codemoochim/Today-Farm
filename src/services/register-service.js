@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import instance from "../models/index.js";
 import { createUserInfoIntoDB } from "../repository/user-repository.js";
+import { checkEmailForm, checkPhoneForm } from "../utils/form-check.js";
 
 const register = async (email, password, phone, name) => {
   try {
@@ -20,13 +21,26 @@ const register = async (email, password, phone, name) => {
 
       return processResult;
     }
+
+    if (!checkEmailForm(email)) {
+      processResult.statusCode = 400;
+      processResult.message = "Invalid email form";
+
+      return processResult;
+    }
+    if (!checkPhoneForm(phone)) {
+      processResult.statusCode = 400;
+      processResult.message = "Invalid phone form";
+
+      return processResult;
+    }
+
     // 중복된 이메일 확인
     const sql = `SELECT * FROM users WHERE email = ?`;
     const [rows] = await instance.promisePool.execute(sql, [email]);
     if (rows.length > 0) {
       processResult.statusCode = 400;
       processResult.message = "Email is not available";
-
       return processResult;
     }
     // 비밀번호 hashing
@@ -38,7 +52,6 @@ const register = async (email, password, phone, name) => {
     // await DB.query(insertUserQuery);
     processResult.statusCode = 201;
     processResult.message = "User created";
-
     return processResult;
   } catch (err) {
     throw new Error(err);
