@@ -37,8 +37,8 @@ const login = async (email, password) => {
     }
 
     const tokenExpiresDate = {
-      accessToken: minutesToMillisecond(2) * 60,
-      refreshToken: minutesToMillisecond(3) * 60,
+      accessToken: minutesToMillisecond(2),
+      refreshToken: minutesToMillisecond(3),
     };
     // JWT 발급
     // accessToken 발급 -> 짧은 수명
@@ -48,7 +48,7 @@ const login = async (email, password) => {
         userId: rows[0].id,
       },
       "secret",
-      { expiresIn: `${tokenExpiresDate.accessToken}` },
+      { expiresIn: `${tokenExpiresDate.accessToken * 60}` },
     );
     // refreshToken 발급 -> 긴 수명
     const refreshToken = jwt.sign(
@@ -57,15 +57,15 @@ const login = async (email, password) => {
         userId: rows[0].id,
       },
       "refresh-secret",
-      { expiresIn: `${tokenExpiresDate.refreshToken}` },
+      { expiresIn: `${tokenExpiresDate.refreshToken * 60}` },
     );
 
     await redisClient.connect();
     await redisClient.set(refreshToken, rows[0].email, {
-      EX: tokenExpiresDate.refreshToken,
+      // 레디스 expires 옵션 기본단위는 second
+      EX: tokenExpiresDate.refreshToken / 60,
     });
-    // const value = await redisClient.get(refreshToken);
-    await redisClient.disconnect();
+    await redisClient.QUIT();
 
     processResult.statusCode = 200;
 

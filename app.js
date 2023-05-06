@@ -5,10 +5,11 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 dotenv.config();
 
-import authRouter from "./src/routes/auth-router.js";
-import deviceRouter from "./src/routes/device-router.js";
 import { mqttClientInstance } from "./src/index.js";
 import { mqttSubscriber } from "./src/sub/mqtt-subscriber.js";
+import authRouter from "./src/routes/auth-router.js";
+import deviceRouter from "./src/routes/device-router.js";
+import { validateUser } from "./src/middleware/auth-check.js";
 
 const app = express();
 mqttClientInstance.connect();
@@ -29,7 +30,7 @@ app.use(
 );
 
 app.use("/", authRouter);
-app.use("/devices", deviceRouter);
+app.use("/devices", validateUser, deviceRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 찾을 수 없음`);

@@ -10,8 +10,7 @@ import {
 export const getDevice = async (req, res, next) => {
   try {
     // 로그인 토큰 페이로드 req.user
-    // const email = req.user;
-    const { email } = req.body;
+    const email = req.user;
     const processResult = await deviceList(email);
     res.status(processResult.statusCode).json({ data: processResult.rows });
   } catch (err) {
