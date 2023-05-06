@@ -16,7 +16,7 @@ class MqttClient {
     self.#client = mqtt.connect(self.#options);
 
     self.#client.on("connect", () => {
-      console.log("## connected");
+      console.log("Connected on MQTT");
     });
 
     // 토픽을 구독하는 코드
