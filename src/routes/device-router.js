@@ -4,7 +4,8 @@ const router = express.Router();
 import { getDevice, addDevice, removeDevice, controlLED, controlMotor } from "../controller/device-control.js";
 import { responseTemperatureAndHumidity, responseLux, responseSolid } from "../controller/data-control.js";
 
-// endpoint: /devices
+// Path: /devices
+
 router.route("/").get(getDevice).post(addDevice).put(removeDevice);
 router.get("/dht", responseTemperatureAndHumidity);
 router.get("/lux", responseLux);

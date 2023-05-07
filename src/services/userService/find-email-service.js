@@ -1,6 +1,6 @@
-import connection from "../models/index.js";
+import { findEmailByNameAndPhone } from "../../repository/user-repository.js";
 
-const findEmail = async (name, phone) => {
+const findEmailService = async (name, phone) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
     // 필수 값 누락
@@ -11,8 +11,7 @@ const findEmail = async (name, phone) => {
       };
     }
     // MySql에서 이름과 번호를 가진 사용자 정보 가져오기
-    const sql = `select email from users where name=? and phone=?`;
-    const [rows, _] = await connection.promisePool.query(sql, [name, phone]);
+    const rows = await findEmailByNameAndPhone(name, phone);
 
     // 일치하는 정보가 없음
     if (rows.length === 0) {
@@ -32,4 +31,4 @@ const findEmail = async (name, phone) => {
   }
 };
 
-export default findEmail;
+export default findEmailService;

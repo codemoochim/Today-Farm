@@ -1,8 +1,12 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import connection from "../models/index.js";
-import { minutesToMillisecond } from "../utils/setTimeForSearchData.js";
-import { redisClient } from "../middleware/redis.js";
+import dotenv from "dotenv";
+dotenv.config();
+
+import mysqlDB from "../../config/mysql.js";
+import { issuingToken } from "../../utils/token/issuing-token.js";
+import { setTokenIntoRedis } from "../../utils/token/manage-token-with-redis.js";
+import { findUserByEmail } from "../../repository/user-repository.js";
 
 const login = async (email, password) => {
   try {
@@ -15,8 +19,8 @@ const login = async (email, password) => {
       return processResult;
     }
     // MySQL에서 사용자 정보 가져오기
-    const sql = `select * from users where email=?`;
-    const [rows, _] = await connection.promisePool.query(sql, [email]);
+    const rows = await findUserByEmail(email);
+
     if (rows.length === 0) {
       // 이메일이 존재하지 않는 경우
       processResult.statusCode = 400;
@@ -36,39 +40,19 @@ const login = async (email, password) => {
       return processResult;
     }
 
-    const tokenExpiresDate = {
-      accessToken: minutesToMillisecond(2),
-      refreshToken: minutesToMillisecond(3),
-    };
     // JWT 발급
+    const userId = rows[0].id;
+    const secret = process.env.JWT_SECRET;
+    const secretSecond = process.env.JWT_SECRET_SECOND;
+    const shortTime = 60 * 0.2; // 5분
+    const longTime = 60 * 10;
     // accessToken 발급 -> 짧은 수명
-    const accessToken = jwt.sign(
-      {
-        email: rows[0].email,
-        userId: rows[0].id,
-      },
-      "secret",
-      { expiresIn: `${tokenExpiresDate.accessToken * 60}` },
-    );
     // refreshToken 발급 -> 긴 수명
-    const refreshToken = jwt.sign(
-      {
-        email: rows[0].email,
-        userId: rows[0].id,
-      },
-      "refresh-secret",
-      { expiresIn: `${tokenExpiresDate.refreshToken * 60}` },
-    );
-
-    await redisClient.connect();
-    await redisClient.set(refreshToken, rows[0].email, {
-      // 레디스 expires 옵션 기본단위는 second
-      EX: tokenExpiresDate.refreshToken / 60,
-    });
-    await redisClient.QUIT();
+    const accessToken = issuingToken(email, userId, secret, shortTime);
+    const refreshToken = issuingToken(email, userId, secretSecond, longTime);
+    await setTokenIntoRedis(refreshToken, email, longTime);
 
     processResult.statusCode = 200;
-
     return { ...processResult, accessToken, refreshToken };
   } catch (err) {
     throw new Error(err);
@@ -82,7 +66,7 @@ const refreshAccessToken = async (refreshToken) => {
     // refreshToken 검증
     const decoded = jwt.verify(refreshToken, "refresh-secret");
     const sql = `select * from users where id=?`;
-    const result = await connection.promisePool.query(sql, [decoded.userId]);
+    const result = await mysqlDB.promisePool.query(sql, [decoded.userId]);
     // refreshToken이 만료된 경우
     // if (result.length === 0) {
     //   processResult.statusCode = 400;

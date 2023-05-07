@@ -1,6 +1,6 @@
-import findPwdService from "../services/find-pwd-service.js";
+import { findPwdService } from "../../services/userService/index.js";
 
-const findPwdCtrl = async (req, res, next) => {
+const findPwdControl = async (req, res, next) => {
   try {
     const { email, phone } = req.body;
     const processResult = await findPwdService(email, phone);
@@ -10,4 +10,4 @@ const findPwdCtrl = async (req, res, next) => {
   }
 };
 
-export default findPwdCtrl;
+export default findPwdControl;

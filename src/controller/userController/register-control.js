@@ -1,4 +1,4 @@
-import registerService from "../services/register-service.js";
+import { registerService } from "../../services/userService/index.js";
 
 const registerControl = async (req, res, next) => {
   try {

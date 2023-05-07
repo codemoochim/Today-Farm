@@ -1,16 +1,12 @@
-import connection from "../models/index.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-
 dotenv.config();
+import { findPwdByEmail, updateDeletedDate } from "../../repository/user-repository.js";
+import { deleteTokenIntoRedis } from "../../utils/token/manage-token-with-redis.js";
 
-const userDelete = async (token, password) => {
+const userDeleteService = async (email, password, refreshToken) => {
   try {
     const processResult = { statusCode: 200, message: "Success" };
-    // 로그인 한 유저의 정보를 가져와야함
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decodedToken.userId;
     // 필수 값 누락
     if (!password) {
       processResult.statusCode = 400;
@@ -19,19 +15,18 @@ const userDelete = async (token, password) => {
       return processResult;
     }
     // 비밀번호 확인
-    const getUserPasswordQuery = `select password from users where id=?}`;
-    const [rows] = await connection.promisePool.query(getUserPasswordQuery, [userId]);
+    const rows = await findPwdByEmail(email);
     const isMatch = await bcrypt.compare(password, rows[0].password);
 
     if (!isMatch) {
       processResult.statusCode = 400;
       processResult.message = "Current password does not match";
-
       return processResult;
     }
     // 데이터베이스에서 해당 사용자 정보 삭제
-    const sql = `delete from users where id=?`;
-    await connection.promisePool.query(sql, [userId]);
+
+    await updateDeletedDate(email, new Date());
+    await deleteTokenIntoRedis(refreshToken);
     processResult.statusCode = 200;
     processResult.message = "User delete complete";
 
@@ -41,4 +36,4 @@ const userDelete = async (token, password) => {
   }
 };
 
-export default userDelete;
+export default userDeleteService;

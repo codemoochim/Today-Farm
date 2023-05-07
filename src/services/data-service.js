@@ -1,5 +1,5 @@
 import { searchTemperatureAndHumidityData, searchLuxData, searchSolidData } from "../repository/data-repository.js";
-import { minutesToMillisecond, searchTimeFlag } from "../utils/setTimeForSearchData.js";
+import { minutesToMillisecond, searchTimeFlag } from "../utils/time-utils.js";
 
 export const getTemperatureAndHumidity = async (deviceId) => {
   const searchTime = searchTimeFlag(minutesToMillisecond(10));

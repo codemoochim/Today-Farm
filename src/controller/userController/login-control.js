@@ -1,6 +1,6 @@
-import { login, refreshAccessToken } from "../services/login-service.js";
+import { login, refreshAccessToken } from "../../services/userService/index.js";
 
-const loginCtrl = async (req, res, next) => {
+const loginControl = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const processResult = await login(email, password);
@@ -27,4 +27,4 @@ const loginCtrl = async (req, res, next) => {
   }
 };
 
-export default loginCtrl;
+export default loginControl;

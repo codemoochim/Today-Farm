@@ -5,7 +5,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 dotenv.config();
 
-import { mqttClientInstance } from "./src/index.js";
+import { mqttClientInstance } from "./src/config/mqtt.js";
 import { mqttSubscriber } from "./src/sub/mqtt-subscriber.js";
 import authRouter from "./src/routes/auth-router.js";
 import deviceRouter from "./src/routes/device-router.js";
@@ -45,7 +45,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(process.env.PORT || 5000, () => {
-  console.log(`${process.env.PORT}번 포트로 연결되었습니다.`);
+  console.log(`[Express]: ${process.env.PORT}번 포트로 연결되었습니다.`);
 });
 
 export default app;

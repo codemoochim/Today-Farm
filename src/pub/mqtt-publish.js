@@ -1,4 +1,5 @@
-import { mqttClientInstance } from "../index.js";
+// import { mqttClientInstance } from "../index.js";
+import { mqttClientInstance } from "../config/mqtt.js";
 
 export const mqttPublisher = async (targetMachine, active) => {
   const messageToDevice = parseInt(active) ? "on" : "off";
