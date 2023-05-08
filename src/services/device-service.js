@@ -7,7 +7,7 @@ import {
   updateMotorStatus,
 } from "../repository/device-repository.js";
 
-import { mqttPublisher } from "../pub/mqtt-publish.js";
+import { mqttPublisher } from "./mqtt-publish.js";
 
 // 디바이스 조회
 export const deviceList = async (email) => {

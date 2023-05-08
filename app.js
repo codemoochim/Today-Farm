@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 
 import { mqttClientInstance } from "./src/config/mqtt.js";
-import { mqttSubscriber } from "./src/sub/mqtt-subscriber.js";
+import { mqttSubscriber } from "./src/services/mqtt-subscriber.js";
 import authRouter from "./src/routes/auth-router.js";
 import deviceRouter from "./src/routes/device-router.js";
 import { validateUser } from "./src/middleware/auth-check.js";
