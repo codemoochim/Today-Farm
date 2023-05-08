@@ -25,16 +25,17 @@ app.use(
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["localhost:3000", "34.64.88.23"],
+    origin: true,
+    credentials: true,
   }),
 );
 
-app.use("/", authRouter);
-app.use("/devices", validateUser, deviceRouter);
+app.use("/api", authRouter);
+app.use("/api/devices", validateUser, deviceRouter);
 // app.use("/devices", deviceRouter);
 
 app.use((req, res, next) => {
-  const error = new Error(`${req.method} ${req.url} 찾을 수 없음`);
+  const error = new Error(`${req.method} ${req.url} 찾을 수 없는 요청입니다`);
   error.status = 404;
   next(error);
 });

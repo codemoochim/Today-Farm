@@ -1,7 +1,7 @@
 import mysqlDB from "../config/mysql.js";
 
 export const createUserInfoIntoDB = async (email, password, name, phone) => {
-  const sql = `INSERT INTO users (email, password, name, phone) VALUES ?,?,?,?`;
+  const sql = `INSERT INTO users (email, password, name, phone) VALUES (?,?,?,?)`;
   await mysqlDB.promisePool.execute(sql, [email, password, name, phone]);
   return;
 };

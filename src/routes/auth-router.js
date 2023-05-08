@@ -16,6 +16,9 @@ import { validateUser } from "../middleware/auth-check.js";
 
 // Path: /
 
+router.get("/", (req, res) => {
+  res.send("Hello Universe!");
+});
 router.post("/register", registerControl);
 router.post("/login", loginControl);
 router.get("/logout", logoutControl);
