@@ -29,15 +29,15 @@ export const detachUserWithDevice = async (deviceId, checkOwnerFlag) => {
 };
 
 // 생장 LED 제어상태 변경
-export const updateLedStatus = async (deviceId, led) => {
+export const updateLedStatus = async (deviceId, active) => {
   const sql = `UPDATE devices SET led=? WHERE deviceId=?`;
-  await mysqlDB.promisePool.execute(sql, [led, deviceId]);
+  await mysqlDB.promisePool.execute(sql, [active, deviceId]);
   return;
 };
 
 // 생장 LED 제어상태 변경
-export const updateMotorStatus = async (deviceId, motor) => {
-  const sql = `UPDATE devices SET motor=? WHERE deviceId=?`;
-  await mysqlDB.promisePool.execute(sql, [motor, deviceId]);
+export const updatePumpStatus = async (deviceId, pump) => {
+  const sql = `UPDATE devices SET pump=? WHERE deviceId=?`;
+  await mysqlDB.promisePool.execute(sql, [pump, deviceId]);
   return;
 };

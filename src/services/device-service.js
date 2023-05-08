@@ -4,7 +4,7 @@ import {
   assignOwnerToDevice,
   detachUserWithDevice,
   updateLedStatus,
-  updateMotorStatus,
+  updatePumpStatus,
 } from "../repository/device-repository.js";
 
 import { mqttPublisher } from "./mqtt-publish.js";
@@ -80,11 +80,12 @@ export const deviceNoMoreUse = async (deviceId, email) => {
 export const responseLedStatus = async (deviceId, active) => {
   const processResult = { statusCode: 200, message: "성공" };
   try {
-    const targetMachine = "led";
+    const targetMachine = "LED";
     await mqttPublisher(targetMachine, active);
+    console.log("서비스", active);
 
     const result = await updateLedStatus(deviceId, active);
-    processResult.rows = result;
+    processResult.message = result;
     return processResult;
   } catch (err) {
     throw new Error(err);
@@ -92,13 +93,13 @@ export const responseLedStatus = async (deviceId, active) => {
 };
 
 // 모터펌프 제어
-export const responseMotorStatus = async (deviceId, active) => {
+export const responsePumpStatus = async (deviceId, active) => {
   const processResult = { statusCode: 200, message: "성공" };
   try {
-    const targetMachine = "motor";
+    const targetMachine = "PUMP";
     await mqttPublisher(targetMachine, active);
 
-    const result = await updateMotorStatus(deviceId, active);
+    const result = await updatePumpStatus(deviceId, active);
     processResult.rows = result;
     return processResult;
   } catch (err) {

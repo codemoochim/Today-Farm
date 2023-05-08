@@ -3,7 +3,7 @@ import {
   deviceNew,
   deviceNoMoreUse,
   responseLedStatus,
-  responseMotorStatus,
+  responsePumpStatus,
 } from "../services/device-service.js";
 
 // 디바이스 조회
@@ -56,10 +56,10 @@ export const controlLED = async (req, res, next) => {
 };
 
 // 모터펌프 제어
-export const controlMotor = async (req, res, next) => {
+export const controlPump = async (req, res, next) => {
   try {
     const { deviceId, active } = req.query;
-    const processResult = await responseMotorStatus(deviceId, active);
+    const processResult = await responsePumpStatus(deviceId, active);
     res.status(processResult.statusCode).json({ data: processResult.message });
   } catch (err) {
     next(err);
