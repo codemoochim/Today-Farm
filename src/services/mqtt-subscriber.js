@@ -5,9 +5,10 @@ const TOPIC_TYPE_INDEX = 0;
 
 export const mqttSubscriber = () => {
   mqttClientInstance.setMessageCallback(async (topic, message) => {
-    const topicType = topic.split("/")[TOPIC_TYPE_INDEX];
-    const messageJson = JSON.parse(message);
+    if (Buffer.isBuffer(message)) return;
     try {
+      const topicType = topic.split("/")[TOPIC_TYPE_INDEX];
+      const messageJson = JSON.parse(message);
       switch (topicType) {
         case "esp32":
           // 디비에 저장
@@ -29,6 +30,7 @@ export const mqttSubscriber = () => {
       }
     } catch (err) {
       console.log(err);
+      // console.log(err.message);
     }
   });
 };

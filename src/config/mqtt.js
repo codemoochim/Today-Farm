@@ -38,7 +38,13 @@ class MqttClient {
 
   // 작동 제어 명령 발행
   async sendCommand(topic, message) {
-    this.#client.publish(topic, JSON.stringify(message));
+    this.#client.publish(topic, message, (error) => {
+      if (error) {
+        console.error("[MQTT]: 메시지 전송 실패:", error);
+      } else {
+        console.log("[MQTT]: 메시지 전송 성공:", message);
+      }
+    });
   }
 
   async setMessageCallback(cb) {

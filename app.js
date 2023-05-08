@@ -25,12 +25,13 @@ app.use(
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "*",
+    origin: ["localhost:3000", "34.64.88.23"],
   }),
 );
 
 app.use("/", authRouter);
 app.use("/devices", validateUser, deviceRouter);
+// app.use("/devices", deviceRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 찾을 수 없음`);

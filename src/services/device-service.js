@@ -82,7 +82,6 @@ export const responseLedStatus = async (deviceId, active) => {
   try {
     const targetMachine = "LED";
     await mqttPublisher(targetMachine, active);
-    console.log("서비스", active);
 
     const result = await updateLedStatus(deviceId, active);
     processResult.message = result;

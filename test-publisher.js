@@ -25,5 +25,5 @@ client.on("connect", (connack) => {
     console.log("## published");
     const message = createMessage();
     client.publish("esp32/topic", JSON.stringify(message));
-  }, 1000);
+  }, 5000);
 });
