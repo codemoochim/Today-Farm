@@ -12,6 +12,9 @@ const registerService = async (email, password, phone, name) => {
         statusCode: 400,
         message: "Missing required fields",
       };
+    } else if (name.length < 2) {
+      processResult.statusCode = 400;
+      processResult.message = "name is too short";
     } else if (password.length < 6) {
       // 최소 길이 불충족
       processResult.statusCode = 400;
