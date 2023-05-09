@@ -4,6 +4,11 @@ export const checkEmailForm = (email) => {
 };
 
 export const checkPhoneForm = (phone) => {
-  const phonFormPattern = /^\d{3}-\d{3,4}-\d{4}$/;
-  return phonFormPattern.test(phone);
+  const phoneFormPattern = /^\d{3}-\d{3,4}-\d{4}$/;
+  return phoneFormPattern.test(phone);
+};
+
+export const checkPwdForm = (password) => {
+  const phonFormPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]$/;
+  return phonFormPattern.test(password);
 };

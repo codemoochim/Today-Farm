@@ -17,7 +17,7 @@ export const findUserByEmail = async (email) => {
   const [result] = await mysqlDB.promisePool.execute(sql, [email]);
   return result;
 };
-
+// [[{}, {}, {}]]
 export const findUserByPhone = async (phone) => {
   const sql = `SELECT * FROM users WHERE phone=?`;
   const [result] = await mysqlDB.promisePool.execute(sql, [phone]);

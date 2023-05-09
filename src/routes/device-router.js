@@ -7,6 +7,7 @@ import { responseTemperatureAndHumidity, responseLux, responseSolid } from "../c
 // Path: /devices
 
 router.route("/").get(getDevice).post(addDevice).put(removeDevice);
+
 router.get("/dht", responseTemperatureAndHumidity);
 router.get("/lux", responseLux);
 router.get("/solid", responseSolid);

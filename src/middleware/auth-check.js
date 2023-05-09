@@ -6,13 +6,15 @@ import { getTokenFromRedis } from "../utils/token/manage-token-with-redis.js";
 import { issuingToken } from "../utils/token/issuing-token.js";
 
 export const validateUser = async (req, res, next) => {
-  const authHeader = req.headers["Authorization"];
+  const authHeader = req.headers["authorization"];
+
   if (!authHeader) {
     return res.status(401).send("Unauthorized access");
   }
+
   const [authType, accessToken] = authHeader.split(" ");
 
-  if (authType !== "Bearer" || !token) {
+  if (authType !== "Bearer" || !accessToken) {
     return res.status(401).send("Unauthorized access");
   }
   try {
@@ -23,6 +25,7 @@ export const validateUser = async (req, res, next) => {
   } catch (err) {
     if (err.name === "TokenExpiredError") {
       const { refreshToken } = req.cookies;
+
       const dataFromRedis = await getTokenFromRedis(refreshToken);
       const storedToken = dataFromRedis.split(":")[1];
 
@@ -33,7 +36,7 @@ export const validateUser = async (req, res, next) => {
       const secretKey = process.env.JWT_SECRET_SECOND;
       const { email, userId } = jwt.verify(storedToken, secretKey);
 
-      const newAccessToken = issuingToken(email, userId, process.env.JWT_SECRET, 60 * 0.2);
+      const newAccessToken = issuingToken(email, userId, process.env.JWT_SECRET, 60 * 2);
 
       res.locals.token = newAccessToken;
       req.user = email;

@@ -13,6 +13,7 @@ import {
   userDeleteControl,
 } from "../controller/userController/index.js";
 import { validateUser } from "../middleware/auth-check.js";
+import { issuingAccessToken } from "../middleware/silent-refresh.js";
 
 // Path: /
 
@@ -28,10 +29,11 @@ router.post("/pwd", findPwdControl);
 router.put("/pwd", validateUser, changePwdControl);
 
 router.get("/users", validateUser, userInfoControl);
+
 router.patch("/users", validateUser, userEditControl);
 router.put("/users", validateUser, userDeleteControl);
 
-router.post("/silent-refresh", validateUser, (req, res) => {
+router.post("/silent-refresh", issuingAccessToken, (req, res) => {
   res.json({ accessToken: res.locals.token });
 });
 export default router;

@@ -42,7 +42,7 @@ const login = async (email, password) => {
     const userId = rows[0].id;
     const secret = process.env.JWT_SECRET;
     const secretSecond = process.env.JWT_SECRET_SECOND;
-    const shortTime = 60 * 0.1; // 5분
+    const shortTime = 60 * 1; // 5분
     const longTime = 60 * 60;
     // accessToken 발급 -> 짧은 수명
     // refreshToken 발급 -> 긴 수명
