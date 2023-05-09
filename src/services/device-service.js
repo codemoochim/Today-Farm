@@ -80,7 +80,7 @@ export const deviceNoMoreUse = async (deviceId, email) => {
 export const responseLedStatus = async (deviceId, active) => {
   const processResult = { statusCode: 200, message: "성공" };
   try {
-    const targetMachine = "LED";
+    const targetMachine = "led";
     await mqttPublisher(targetMachine, active);
 
     const result = await updateLedStatus(deviceId, active);
@@ -95,7 +95,7 @@ export const responseLedStatus = async (deviceId, active) => {
 export const responsePumpStatus = async (deviceId, active) => {
   const processResult = { statusCode: 200, message: "성공" };
   try {
-    const targetMachine = "PUMP";
+    const targetMachine = "pump";
     await mqttPublisher(targetMachine, active);
 
     const result = await updatePumpStatus(deviceId, active);

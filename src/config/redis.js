@@ -5,14 +5,13 @@ const { username, password, host, port } = config.redis;
 class Redis {
   constructor() {
     this.client = createClient({
-      url: `redis://${username}:${password}@${host}:${port}`,
+      url: `redis://:${password}@${host}:${port}`,
     });
-    this.connect();
+    this.client.connect();
   }
   async connect() {
     this.client.on("connect", () => console.log("[Redis]: connected!"));
     this.client.on("error", (err) => console.error("[Redis]: Client Error", err));
-    this.client.connect();
   }
 }
 

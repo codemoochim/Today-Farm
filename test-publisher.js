@@ -24,6 +24,6 @@ client.on("connect", (connack) => {
   setInterval(() => {
     console.log("## published");
     const message = createMessage();
-    client.publish("esp32/topic", JSON.stringify(message));
+    client.publish("sensor/esp32/data", JSON.stringify(message));
   }, 5000);
 });
