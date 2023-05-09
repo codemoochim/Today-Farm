@@ -29,7 +29,6 @@ app.use(
     credentials: true,
   }),
 );
-
 app.use("/api", authRouter);
 app.use("/api/devices", validateUser, deviceRouter);
 // app.use("/devices", deviceRouter);

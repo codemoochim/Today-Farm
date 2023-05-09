@@ -1,9 +1,7 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-import mysqlDB from "../../config/mysql.js";
 import { issuingToken } from "../../utils/token/issuing-token.js";
 import { setTokenIntoRedis } from "../../utils/token/manage-token-with-redis.js";
 import { findUserByEmail } from "../../repository/user-repository.js";
@@ -44,8 +42,8 @@ const login = async (email, password) => {
     const userId = rows[0].id;
     const secret = process.env.JWT_SECRET;
     const secretSecond = process.env.JWT_SECRET_SECOND;
-    const shortTime = 60 * 0.2; // 5분
-    const longTime = 60 * 10;
+    const shortTime = 60 * 0.1; // 5분
+    const longTime = 60 * 60;
     // accessToken 발급 -> 짧은 수명
     // refreshToken 발급 -> 긴 수명
     const accessToken = issuingToken(email, userId, secret, shortTime);
@@ -58,34 +56,4 @@ const login = async (email, password) => {
     throw new Error(err);
   }
 };
-
-// accessToken 만료 시 재발급
-const refreshAccessToken = async (refreshToken) => {
-  try {
-    const processResult = { statusCode: 200, message: "성공" };
-    // refreshToken 검증
-    const decoded = jwt.verify(refreshToken, "refresh-secret");
-    const sql = `select * from users where id=?`;
-    const result = await mysqlDB.promisePool.query(sql, [decoded.userId]);
-    // refreshToken이 만료된 경우
-    // if (result.length === 0) {
-    //   processResult.statusCode = 400;
-    //   processResult.message = "Unauthorized";
-
-    //   return processResult;
-    // }
-    const accessToken = jwt.sign(
-      {
-        email: result[0].email,
-        userId: result[0].id,
-      },
-      "secret",
-      { expiresIn: "2h" },
-    );
-    return { ...processResult, accessToken };
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-export { login, refreshAccessToken };
+export { login };

@@ -25,7 +25,7 @@ export const deleteTokenIntoRedis = async (token) => {
 export const getTokenFromRedis = async (token) => {
   try {
     const result = await redisInstance.client.get(`${token}`, (err, response) => {
-      if (err) throw err;
+      if (err) return console.error(err, "dpfj");
       console.log(response);
     });
     return result;

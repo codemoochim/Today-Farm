@@ -9,7 +9,6 @@ import {
 // 디바이스 조회
 export const getDevice = async (req, res, next) => {
   try {
-    // 로그인 토큰 페이로드 req.user
     const email = req.user;
     const processResult = await deviceList(email);
     res.status(processResult.statusCode).json({ data: processResult.rows });
