@@ -6,9 +6,15 @@ import { getTokenFromRedis } from "../utils/token/manage-token-with-redis.js";
 import { issuingToken } from "../utils/token/issuing-token.js";
 
 export const validateUser = async (req, res, next) => {
-  const { accessToken } = req.cookies;
-  if (!accessToken) return res.status(401).send("Unauthorized access");
+  const authHeader = req.headers["Authorization"];
+  if (!authHeader) {
+    return res.status(401).send("Unauthorized access");
+  }
+  const [authType, accessToken] = authHeader.split(" ");
 
+  if (authType !== "Bearer" || !token) {
+    return res.status(401).send("Unauthorized access");
+  }
   try {
     const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
     req.user = decoded.email;
@@ -30,7 +36,6 @@ export const validateUser = async (req, res, next) => {
       const newAccessToken = issuingToken(email, userId, process.env.JWT_SECRET, 60 * 0.2);
 
       res.locals.token = newAccessToken;
-      res.cookie("accessToken", newAccessToken);
       req.user = email;
       next();
       return;

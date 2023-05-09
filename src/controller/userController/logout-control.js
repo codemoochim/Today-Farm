@@ -2,10 +2,10 @@ import { logoutService } from "../../services/userService/index.js";
 
 const logoutControl = async (req, res, next) => {
   try {
-    const processResult = await logoutService(req, res);
+    const refreshToken = req.cookies.refreshToken;
+    const processResult = await logoutService(refreshToken);
     return res
       .status(processResult.statusCode)
-      .clearCookie("accessToken", { httpOnly: true })
       .clearCookie("refreshToken", { httpOnly: true })
       .send(processResult.message);
   } catch (err) {

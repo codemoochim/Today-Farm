@@ -8,7 +8,6 @@ const userDeleteControl = async (req, res, next) => {
     const processResult = await userDeleteService(email, password, refreshToken);
     return res
       .status(processResult.statusCode)
-      .clearCookie("accessToken", { httpOnly: true })
       .clearCookie("refreshToken", { httpOnly: true })
       .send(processResult.message);
   } catch (err) {
