@@ -15,4 +15,4 @@ class Redis {
   }
 }
 
-export const redisInstance = new Redis();
+export { Redis };
