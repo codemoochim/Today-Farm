@@ -16,5 +16,5 @@ export const responseSolid = async (req, res) => {
   res.status(processResult.statusCode).json({ data: processResult.result });
 };
 
-// 에러: 현재 로그인 한 사용자가 타인이 등록한 디바이스의 데이터에 접근할 수 있음
+// BUG: 현재 로그인 한 사용자가 타인이 등록한 디바이스의 데이터에 접근할 수 있음
 // req.user 와 요청된 deviceId 의 email과 동일한지 확인해야함
