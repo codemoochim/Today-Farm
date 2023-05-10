@@ -9,6 +9,6 @@ export const checkPhoneForm = (phone) => {
 };
 
 export const checkPwdForm = (password) => {
-  const phonFormPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]$/;
-  return phonFormPattern.test(password);
+  const pwdFormPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]$/;
+  return pwdFormPattern.test(password);
 };

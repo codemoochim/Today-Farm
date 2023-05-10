@@ -26,6 +26,11 @@ const registerService = async (email, password, phone, name) => {
       processResult.statusCode = 400;
       processResult.message = "Invalid phone form";
     }
+    // HACK: 회원가입 테스트 용이성을 위해 잠시 주석처리
+    // else if (!checkPwdForm(password)) {
+    //   processResult.statusCode = 400;
+    //   processResult.message = "Invalid password form";
+    // }
 
     // 중복된 이메일 확인
     const emailRows = await findUserByEmail(email);

@@ -5,7 +5,7 @@ const { username, password, host, port } = config.redis;
 class Redis {
   constructor() {
     this.client = createClient({
-      url: `redis://:${password}@${host}:${port}`,
+      url: `redis://${username}:${password}@${host}:${port}`,
     });
     this.client.connect();
   }
