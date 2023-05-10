@@ -6,8 +6,6 @@ const TOPIC_TYPE_INDEX = 0;
 
 export const mqttSubscriber = () => {
   mqttClientInstance.setMessageCallback(async (topic, message) => {
-    console.log(message.toString());
-    console.log(topic);
     const topicType = topic.split("/")[TOPIC_TYPE_INDEX];
     try {
       if (topicType === "sensor") {
