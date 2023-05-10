@@ -96,6 +96,6 @@ export const isWorkingActuator = async (deviceId) => {
   WHERE deviceId = ?`;
 
   const fields = [deviceId];
-  const [rows] = await mysqlDB.promisePool.execute(sql, fields);
+  const [[rows]] = await mysqlDB.promisePool.execute(sql, fields);
   return rows;
 };

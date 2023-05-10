@@ -31,7 +31,7 @@ app.use(
 );
 app.use("/api", authRouter);
 app.use("/api/devices", validateUser, deviceRouter);
-// app.use("/devices", deviceRouter);
+// app.use("/api/devices", deviceRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 찾을 수 없는 요청입니다`);

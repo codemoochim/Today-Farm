@@ -23,9 +23,9 @@ export const mqttSubscriber = () => {
 
         const currentDeviceStatus = await isWorkingActuator(deviceId);
 
-        if (currentDeviceStatus[0].led !== led) {
+        if (currentDeviceStatus[0]?.led !== led) {
           await updateLedStatus(deviceId, led);
-        } else if (currentDeviceStatus[0].pump !== pump) {
+        } else if (currentDeviceStatus[0]?.pump !== pump) {
           await updatePumpStatus(deviceId, pump);
         }
 
