@@ -30,16 +30,7 @@ class MqttClient {
   }
 
   sendCommand(topic, message) {
-    this.client.publish(
-      topic,
-      message,
-      // (error) => {
-      // if (error) {
-      //   console.error("[MQTT]: 메시지 전송 실패:", error);
-      // } else {
-      //   console.log("[MQTT]: 메시지 전송 성공:", message);
-      // }}
-    );
+    this.client.publish(topic, message);
   }
 
   setMessageCallback(cb) {
@@ -47,4 +38,12 @@ class MqttClient {
   }
 }
 
-export const mqttClientInstance = new MqttClient(mqttOptions, ["sensor/esp32/data", "cmd/esp32/#"]);
+let mqttClientInstance = null;
+
+if (!mqttClientInstance) {
+  mqttClientInstance = new MqttClient(mqttOptions, ["sensor/esp32/data", "cmd/esp32/#"]);
+  mqttClientInstance.connect();
+}
+
+export { mqttClientInstance };
+// export const mqttClientInstance = new MqttClient(mqttOptions, ["sensor/esp32/data", "cmd/esp32/#"]);

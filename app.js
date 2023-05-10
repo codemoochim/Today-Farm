@@ -12,7 +12,7 @@ import deviceRouter from "./src/routes/device-router.js";
 import { validateUser } from "./src/middleware/auth-check.js";
 
 const app = express();
-mqttClientInstance.connect();
+// mqttClientInstance.connect();
 mqttSubscriber();
 
 app.use(morgan("dev"));

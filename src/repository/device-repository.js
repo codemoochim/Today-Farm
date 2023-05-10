@@ -85,3 +85,17 @@ export const updatePumpStatus = async (deviceId, pump) => {
   await mysqlDB.promisePool.execute(sql, fields);
   return;
 };
+
+// 디바이스의 액츄에이터 작동유무
+export const isWorkingActuator = async (deviceId) => {
+  const sql = `SELECT
+    led,
+    pump
+  FROM
+    devices
+  WHERE deviceId = ?`;
+
+  const fields = [deviceId];
+  const [rows] = await mysqlDB.promisePool.execute(sql, fields);
+  return rows;
+};

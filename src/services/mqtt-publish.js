@@ -1,9 +1,9 @@
 import { mqttClientInstance } from "../config/mqtt.js";
 
-export const mqttPublisher = (targetMachine, active) => {
+export const mqttPublisher = async (targetMachine, active) => {
   try {
     const messageToDevice = parseInt(active) ? "on" : "off";
-    mqttClientInstance.sendCommand(`cmd/esp32/${targetMachine}`, messageToDevice);
+    await mqttClientInstance.sendCommand(`cmd/esp32/${targetMachine}`, messageToDevice);
   } catch (err) {
     console.error(err);
   }
