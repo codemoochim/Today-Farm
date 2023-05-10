@@ -20,22 +20,24 @@ import { issuingAccessToken } from "../middleware/silent-refresh.js";
 router.get("/", (req, res) => {
   res.send("Hello Universe!");
 });
+
 router.post("/register", registerControl);
 router.post("/login", loginControl);
 router.get("/logout", logoutControl);
 
 router.post("/email", findEmailControl);
-router.post("/pwd", findPwdControl);
-router.put("/pwd", validateUser, changePwdControl);
+router.route("/pwd").post(findPwdControl).put(validateUser, changePwdControl);
 
-router.get("/users", validateUser, userInfoControl);
-
-router.patch("/users", validateUser, userEditControl);
-router.put("/users", validateUser, userDeleteControl);
+router
+  .route("/users")
+  .get(validateUser, userInfoControl)
+  .patch(validateUser, userEditControl)
+  .put(validateUser, userDeleteControl);
 
 router.post("/silent-refresh", issuingAccessToken, (req, res) => {
   res.json({ accessToken: res.locals.token });
 });
+
 export default router;
 
 // 삭제 되었으면 더이상 회원의 기능을 할 수 없도록 만들어야함

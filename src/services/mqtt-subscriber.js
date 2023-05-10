@@ -1,4 +1,4 @@
-import { mqttClientInstance } from "../config/mqtt.js";
+import { mqttClientInstance } from "../config/mqtt-client.js";
 import { putSensorDataToDB } from "../repository/data-repository.js";
 import { isWorkingActuator, updateLedStatus, updatePumpStatus } from "../repository/device-repository.js";
 

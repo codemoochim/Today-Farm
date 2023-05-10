@@ -1,4 +1,4 @@
-import mysqlDB from "../config/mysql.js";
+import mysqlDB from "../config/mysql-client.js";
 
 export const createUserInfoIntoDB = async (email, password, name, phone) => {
   const sql = `INSERT INTO
@@ -8,8 +8,8 @@ export const createUserInfoIntoDB = async (email, password, name, phone) => {
     (?, ?, ?, ?)`;
 
   const fields = [email, password, name, phone];
-  await mysqlDB.promisePool.execute(sql, fields);
-  return;
+  const result = await mysqlDB.promisePool.execute(sql, fields);
+  return result;
 };
 
 export const findEmailByNameAndPhone = async (name, phone) => {

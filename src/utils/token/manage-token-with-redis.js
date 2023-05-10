@@ -1,6 +1,5 @@
-import { Redis } from "../../config/redis.js";
+import { redisInstance } from "../../config/redis-client.js";
 
-const redisInstance = new Redis();
 export const setTokenIntoRedis = async (token, email, time) => {
   try {
     await redisInstance.client.set(token, `${email}:${token}`, {

@@ -1,4 +1,4 @@
-import mysqlDB from "../config/mysql.js";
+import mysqlDB from "../config/mysql-client.js";
 
 // 사용자 디바이스 출력
 export const getDeviceListUsingEmail = async (email) => {

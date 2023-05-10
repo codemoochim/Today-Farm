@@ -1,4 +1,4 @@
-import { mqttClientInstance } from "../config/mqtt.js";
+import { mqttClientInstance } from "../config/mqtt-client.js";
 
 export const mqttPublisher = async (targetMachine, active) => {
   try {

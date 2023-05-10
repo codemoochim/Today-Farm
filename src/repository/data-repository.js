@@ -1,5 +1,5 @@
 // import mysqlDB from "../models/index.js";
-import mysqlDB from "../config/mysql.js";
+import mysqlDB from "../config/mysql-client.js";
 
 export const searchTemperatureAndHumidityData = async (deviceId, currentTime, pastTime) => {
   const sql = `SELECT

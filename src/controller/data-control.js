@@ -3,17 +3,22 @@ import { getTemperatureAndHumidity, getLux, getSolid } from "../services/data-se
 export const responseTemperatureAndHumidity = async (req, res) => {
   const { deviceId } = req.query;
   const processResult = await getTemperatureAndHumidity(deviceId);
-  res.status(processResult.statusCode).json({ data: processResult.result });
+
+  return res.status(processResult.statusCode).json({ data: processResult.result });
 };
+
 export const responseLux = async (req, res) => {
   const { deviceId } = req.query;
   const processResult = await getLux(deviceId);
-  res.status(processResult.statusCode).json({ data: processResult.result });
+
+  return res.status(processResult.statusCode).json({ data: processResult.result });
 };
+
 export const responseSolid = async (req, res) => {
   const { deviceId } = req.query;
   const processResult = await getSolid(deviceId);
-  res.status(processResult.statusCode).json({ data: processResult.result });
+
+  return res.status(processResult.statusCode).json({ data: processResult.result });
 };
 
 // BUG: 현재 로그인 한 사용자가 타인이 등록한 디바이스의 데이터에 접근할 수 있음

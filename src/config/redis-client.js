@@ -3,18 +3,17 @@ import config from "./db.config.js";
 
 class Redis {
   constructor() {
-    const { username, password, host, port } = config.redis;
+    const { password, host, port } = config.redis;
     this.client = createClient({
+      password: password,
       socket: {
         host,
         port,
-        username,
-        password,
         connectTimeout: 10000,
         reconnectStrategy: (retries) => Math.min(retries * 50, 1000),
       },
     });
-    this.client.connect();
+    // this.client.connect();
   }
 
   async connect() {
@@ -23,4 +22,6 @@ class Redis {
   }
 }
 
-export { Redis };
+const redisInstance = new Redis();
+redisInstance.client.connect();
+export { redisInstance };
