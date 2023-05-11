@@ -64,10 +64,10 @@ const registerService = async (email, password, phone, name) => {
     const userId = rows[0].id;
     const secret = process.env.JWT_SECRET;
     const secretSecond = process.env.JWT_SECRET_SECOND;
-    const accessTokenExpires = 60 * 1; // 5분
+    const accessTokenLimit = 60 * 20; // 5분
     const refreshTokenExpires = 60 * 60;
 
-    const accessToken = issuingToken(email, userId, secret, accessTokenExpires);
+    const accessToken = issuingToken(email, userId, secret, accessTokenLimit);
     const refreshToken = issuingToken(email, userId, secretSecond, refreshTokenExpires);
     await setTokenIntoRedis(refreshToken, email, refreshTokenExpires);
 

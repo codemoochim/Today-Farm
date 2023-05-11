@@ -6,6 +6,12 @@ export const getTemperatureAndHumidity = async (deviceId) => {
   const searchTime = searchTimeFlag(minutesToMillisecond(10));
   const processResult = { statusCode: 200, message: "성공" };
   try {
+    if (!deviceId)
+      return {
+        statusCode: 404,
+        message: "조회할 수 있는 디바이스가 없습니다.",
+      };
+
     const searchData = await searchTemperatureAndHumidityData(deviceId, searchTime.currentTime, searchTime.pastTime);
     const deviceStatus = await isWorkingActuator(deviceId);
 
@@ -31,6 +37,12 @@ export const getLux = async (deviceId) => {
   const searchTime = searchTimeFlag(minutesToMillisecond(10));
   const processResult = { statusCode: 200, message: "성공" };
   try {
+    if (!deviceId)
+      return {
+        statusCode: 404,
+        message: "조회할 수 있는 디바이스가 없습니다.",
+      };
+
     const searchData = await searchLuxData(deviceId, searchTime.currentTime, searchTime.pastTime);
     const deviceStatus = await isWorkingActuator(deviceId);
 
@@ -55,6 +67,12 @@ export const getSolid = async (deviceId) => {
   const searchTime = searchTimeFlag(minutesToMillisecond(10));
   const processResult = { statusCode: 200, message: "성공" };
   try {
+    if (!deviceId)
+      return {
+        statusCode: 404,
+        message: "조회할 수 있는 디바이스가 없습니다.",
+      };
+
     const searchData = await searchSolidData(deviceId, searchTime.currentTime, searchTime.pastTime);
     const deviceStatus = await isWorkingActuator(deviceId);
 
