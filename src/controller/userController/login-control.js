@@ -6,7 +6,7 @@ const loginControl = async (req, res, next) => {
     const processResult = await login(email, password);
     res
       .status(processResult.statusCode)
-      .cookie("refreshToken", processResult.refreshToken, { httpOnly: true })
+      .cookie("refreshToken", processResult.refreshToken, { httpOnly: true, sameSite: "none", secure: true })
       .json({ data: processResult.accessToken, message: processResult.message });
 
     return;

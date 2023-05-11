@@ -6,7 +6,7 @@ const registerControl = async (req, res, next) => {
     const processResult = await registerService(email, password, phone, name);
     res
       .status(processResult.statusCode)
-      .cookie("refreshToken", processResult.refreshToken, { httpOnly: true })
+      .cookie("refreshToken", processResult.refreshToken, { httpOnly: true, sameSite: "none", secure: true })
       .json({ data: processResult.accessToken, message: processResult.message });
 
     return;
