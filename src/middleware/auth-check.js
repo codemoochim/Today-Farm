@@ -27,7 +27,7 @@ export const validateUser = async (req, res, next) => {
       const { refreshToken } = req.cookies;
 
       const dataFromRedis = await getTokenFromRedis(refreshToken);
-      const storedToken = dataFromRedis.split(":")[1];
+      const storedToken = dataFromRedis?.split(":")[1];
 
       if (refreshToken !== storedToken) {
         return res.status(401).send("Unauthorized access");

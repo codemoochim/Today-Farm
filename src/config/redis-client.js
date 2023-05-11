@@ -5,12 +5,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const redisClient = createClient({
-  // url: `redis://${username}:${password}@${host}:${port}`,
-  password,
+  url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+  password: process.env.REDIS_PASSWORD,
   socket: {
-    port,
-    host,
-    connectTimeout: 10000,
+    // port,
+    // host,
+    connectTimeout: 50000,
     reconnectStrategy: (retries) => Math.min(retries * 50, 1000),
   },
 });

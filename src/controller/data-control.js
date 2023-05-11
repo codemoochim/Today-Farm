@@ -3,7 +3,7 @@ import { getTemperatureAndHumidity, getLux, getSolid } from "../services/data-se
 export const responseTemperatureAndHumidity = async (req, res) => {
   const { deviceId } = req.query;
   const processResult = await getTemperatureAndHumidity(deviceId);
-  res.status(processResult.statusCode).json({ data: processResult.message });
+  res.status(processResult.statusCode).json({ data: processResult.message, device: processResult.deviceStatus });
 
   return;
 };
@@ -11,7 +11,7 @@ export const responseTemperatureAndHumidity = async (req, res) => {
 export const responseLux = async (req, res) => {
   const { deviceId } = req.query;
   const processResult = await getLux(deviceId);
-  res.status(processResult.statusCode).json({ data: processResult.message });
+  res.status(processResult.statusCode).json({ data: processResult.message, device: processResult.deviceStatus });
 
   return;
 };
@@ -19,7 +19,7 @@ export const responseLux = async (req, res) => {
 export const responseSolid = async (req, res) => {
   const { deviceId } = req.query;
   const processResult = await getSolid(deviceId);
-  res.status(processResult.statusCode).json({ data: processResult.message });
+  res.status(processResult.statusCode).json({ data: processResult.message, device: processResult.deviceStatus });
 
   return;
 };

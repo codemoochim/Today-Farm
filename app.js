@@ -10,6 +10,7 @@ import { mqttSubscriber } from "./src/services/mqtt-subscriber.js";
 import authRouter from "./src/routes/auth-router.js";
 import deviceRouter from "./src/routes/device-router.js";
 import { validateUser } from "./src/middleware/auth-check.js";
+// import { redisClient } from "./src/config/redis-client.js";
 
 const app = express();
 // mqttClientInstance.connect();

@@ -7,9 +7,13 @@ import { issuingToken } from "../utils/token/issuing-token.js";
 
 export const issuingAccessToken = async (req, res, next) => {
   const { refreshToken } = req.cookies;
+  if (!refreshToken) {
+    res.status(401).send("Unauthorized access");
+    return;
+  }
 
   const dataFromRedis = await getTokenFromRedis(refreshToken);
-  const storedToken = dataFromRedis.split(":")[1];
+  const storedToken = dataFromRedis?.split(":")[1];
 
   if (refreshToken !== storedToken) {
     return res.status(401).send("Unauthorized access");

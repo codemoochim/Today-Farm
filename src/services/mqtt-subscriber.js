@@ -12,8 +12,9 @@ export const mqttSubscriber = () => {
       if (topicType === "sensor") {
         const messageJson = JSON.parse(message);
         const { deviceId, temperature, humidity, lux, solid, led, pump } = messageJson;
-        const requestParams = ["deviceId", "temperature", "humidity", "lux", "solid", "led", "pump"];
-        checkRequiredParams(messageJson, requestParams);
+        if (deviceId === null) {
+          return;
+        }
 
         await putSensorDataToDB({
           deviceId,

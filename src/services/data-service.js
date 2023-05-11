@@ -11,6 +11,7 @@ export const getTemperatureAndHumidity = async (deviceId) => {
 
     if (searchData.length === 0) {
       processResult.message = "조회할 수 있는 데이터가 없습니다";
+      processResult.deviceStatus = deviceStatus;
 
       return processResult;
     }
@@ -35,6 +36,7 @@ export const getLux = async (deviceId) => {
 
     if (searchData.length === 0) {
       processResult.message = "조회할 수 있는 데이터가 없습니다";
+      processResult.deviceStatus = deviceStatus;
 
       return processResult;
     }
@@ -58,6 +60,7 @@ export const getSolid = async (deviceId) => {
 
     if (searchData.length === 0) {
       processResult.message = "조회할 수 있는 데이터가 없습니다";
+      processResult.deviceStatus = deviceStatus;
 
       return processResult;
     }
