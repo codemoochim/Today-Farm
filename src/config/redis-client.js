@@ -1,27 +1,21 @@
-import { createClient } from "redis";
+import { createClient, createCluster } from "redis";
 import config from "./db.config.js";
+const { password, host, port } = config.redis;
+import dotenv from "dotenv";
+dotenv.config();
 
-class Redis {
-  constructor() {
-    const { password, host, port } = config.redis;
-    this.client = createClient({
-      password: password,
-      socket: {
-        host,
-        port,
-        connectTimeout: 10000,
-        reconnectStrategy: (retries) => Math.min(retries * 50, 1000),
-      },
-    });
-    // this.client.connect();
-  }
+const redisClient = createClient({
+  // url: `redis://${username}:${password}@${host}:${port}`,
+  password,
+  socket: {
+    port,
+    host,
+    connectTimeout: 10000,
+    reconnectStrategy: (retries) => Math.min(retries * 50, 1000),
+  },
+});
+await redisClient.connect();
 
-  async connect() {
-    this.client.on("connect", () => console.log("[Redis]: connected!"));
-    this.client.on("error", (err) => console.error("[Redis]: Client Error", err));
-  }
-}
-
-const redisInstance = new Redis();
-redisInstance.client.connect();
-export { redisInstance };
+redisClient.on("connect", () => console.log("[Redis]: connected!"));
+redisClient.on("error", (err) => console.error("[Redis]: Client Error", err));
+export { redisClient };

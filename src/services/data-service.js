@@ -8,12 +8,19 @@ export const getTemperatureAndHumidity = async (deviceId) => {
   try {
     const searchData = await searchTemperatureAndHumidityData(deviceId, searchTime.currentTime, searchTime.pastTime);
     const deviceStatus = await isWorkingActuator(deviceId);
-    const result = {
+
+    if (searchData.length === 0) {
+      processResult.message = "조회할 수 있는 데이터가 없습니다";
+
+      return processResult;
+    }
+
+    const message = {
       searchData,
       deviceStatus,
     };
 
-    return { ...processResult, result };
+    return { ...processResult, message };
   } catch (err) {
     throw new Error(err);
   }
@@ -25,12 +32,18 @@ export const getLux = async (deviceId) => {
   try {
     const searchData = await searchLuxData(deviceId, searchTime.currentTime, searchTime.pastTime);
     const deviceStatus = await isWorkingActuator(deviceId);
-    const result = {
+
+    if (searchData.length === 0) {
+      processResult.message = "조회할 수 있는 데이터가 없습니다";
+
+      return processResult;
+    }
+    const message = {
       searchData,
       deviceStatus,
     };
 
-    return { ...processResult, result };
+    return { ...processResult, message };
   } catch (err) {
     throw new Error(err);
   }
@@ -42,12 +55,19 @@ export const getSolid = async (deviceId) => {
   try {
     const searchData = await searchSolidData(deviceId, searchTime.currentTime, searchTime.pastTime);
     const deviceStatus = await isWorkingActuator(deviceId);
-    const result = {
+
+    if (searchData.length === 0) {
+      processResult.message = "조회할 수 있는 데이터가 없습니다";
+
+      return processResult;
+    }
+
+    const message = {
       searchData,
       deviceStatus,
     };
 
-    return { ...processResult, result };
+    return { ...processResult, message };
   } catch (err) {
     throw new Error(err);
   }

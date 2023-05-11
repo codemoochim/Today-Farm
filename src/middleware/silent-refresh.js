@@ -18,7 +18,7 @@ export const issuingAccessToken = async (req, res, next) => {
   const secretKey = process.env.JWT_SECRET_SECOND;
   const { email, userId } = jwt.verify(storedToken, secretKey);
 
-  const accessTokenExpires = 60 * 10;
+  const accessTokenExpires = 60 * 1;
   const newAccessToken = issuingToken(email, userId, process.env.JWT_SECRET, accessTokenExpires);
 
   res.locals.token = newAccessToken;

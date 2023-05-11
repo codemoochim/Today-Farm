@@ -7,7 +7,6 @@ dotenv.config();
 
 import { mqttClientInstance } from "./src/config/mqtt-client.js";
 import { mqttSubscriber } from "./src/services/mqtt-subscriber.js";
-// import { redisInstance } from "./src/utils/token/manage-token-with-redis.js";
 import authRouter from "./src/routes/auth-router.js";
 import deviceRouter from "./src/routes/device-router.js";
 import { validateUser } from "./src/middleware/auth-check.js";

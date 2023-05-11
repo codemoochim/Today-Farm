@@ -5,8 +5,9 @@ const changePwdControl = async (req, res, next) => {
     const email = req.user;
     const { currentPwd, newPwd } = req.body;
     const processResult = await changePwdService(email, currentPwd, newPwd);
+    res.status(processResult.statusCode).send(processResult.message);
 
-    return res.status(processResult.statusCode).send(processResult.message);
+    return;
   } catch (err) {
     next(err);
   }

@@ -37,7 +37,6 @@ const login = async (email, password) => {
 
       return processResult;
     }
-
     // JWT 발급
     const userId = rows[0].id;
     const secret = process.env.JWT_SECRET;
@@ -56,4 +55,5 @@ const login = async (email, password) => {
     throw new Error(err);
   }
 };
+
 export { login };

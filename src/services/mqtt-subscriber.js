@@ -1,6 +1,7 @@
 import { mqttClientInstance } from "../config/mqtt-client.js";
 import { putSensorDataToDB } from "../repository/data-repository.js";
 import { isWorkingActuator, updateLedStatus, updatePumpStatus } from "../repository/device-repository.js";
+import { checkRequiredParams } from "../utils/check-required-params.js";
 
 const TOPIC_TYPE_INDEX = 0;
 
@@ -11,6 +12,9 @@ export const mqttSubscriber = () => {
       if (topicType === "sensor") {
         const messageJson = JSON.parse(message);
         const { deviceId, temperature, humidity, lux, solid, led, pump } = messageJson;
+        const requestParams = ["deviceId", "temperature", "humidity", "lux", "solid", "led", "pump"];
+        checkRequiredParams(messageJson, requestParams);
+
         await putSensorDataToDB({
           deviceId,
           temperature,

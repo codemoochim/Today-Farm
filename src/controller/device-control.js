@@ -11,8 +11,9 @@ export const getDevice = async (req, res, next) => {
   try {
     const email = req.user;
     const processResult = await deviceList(email);
+    res.status(processResult.statusCode).json({ data: processResult.rows });
 
-    return res.status(processResult.statusCode).json({ data: processResult.rows });
+    return;
   } catch (err) {
     next(err);
   }
@@ -24,8 +25,9 @@ export const addDevice = async (req, res, next) => {
     const { deviceId, name } = req.body;
     const email = req.user;
     const processResult = await deviceNew(deviceId, name, email);
+    res.status(processResult.statusCode).json({ data: processResult.message });
 
-    return res.status(processResult.statusCode).json({ data: processResult.message });
+    return;
   } catch (err) {
     next(err);
   }
@@ -37,8 +39,9 @@ export const removeDevice = async (req, res, next) => {
     const { deviceId } = req.body;
     const email = req.user;
     const processResult = await deviceNoMoreUse(deviceId, email);
+    res.status(processResult.statusCode).json({ data: processResult.message });
 
-    return res.status(processResult.statusCode).json({ data: processResult.message });
+    return;
   } catch (err) {
     next(err);
   }
@@ -49,8 +52,9 @@ export const controlLED = async (req, res, next) => {
   try {
     const { deviceId, active } = req.query;
     const processResult = await responseLedStatus(deviceId, active);
+    res.status(processResult.statusCode).json({ data: processResult.message });
 
-    return res.status(processResult.statusCode).json({ data: processResult.message });
+    return;
   } catch (err) {
     next(err);
   }
@@ -61,8 +65,9 @@ export const controlPump = async (req, res, next) => {
   try {
     const { deviceId, active } = req.query;
     const processResult = await responsePumpStatus(deviceId, active);
+    res.status(processResult.statusCode).json({ data: processResult.message });
 
-    return res.status(processResult.statusCode).json({ data: processResult.message });
+    return;
   } catch (err) {
     next(err);
   }

@@ -1,8 +1,8 @@
-import { redisInstance } from "../../config/redis-client.js";
+import { redisClient } from "../../config/redis-client.js";
 
 export const setTokenIntoRedis = async (token, email, time) => {
   try {
-    await redisInstance.client.set(token, `${email}:${token}`, {
+    await redisClient.set(token, `${email}:${token}`, {
       // 레디스 expires 옵션 기본단위는 second
       EX: `${time}`, // 초단위
     });
@@ -13,7 +13,7 @@ export const setTokenIntoRedis = async (token, email, time) => {
 
 export const deleteTokenIntoRedis = async (token) => {
   try {
-    await redisInstance.client.del(`${token}`, (err, response) => {
+    await redisClient.del(`${token}`, (err, response) => {
       if (err) throw err;
       console.log(response);
     });
@@ -24,7 +24,7 @@ export const deleteTokenIntoRedis = async (token) => {
 
 export const getTokenFromRedis = async (token) => {
   try {
-    const result = await redisInstance.client.get(`${token}`, (err, response) => {
+    const result = await redisClient.get(`${token}`, (err, response) => {
       if (err) return console.error(err);
       console.log(response);
     });
