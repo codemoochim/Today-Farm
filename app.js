@@ -26,7 +26,7 @@ app.use(
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:3000, http://34.64.88.23, https://reactjs.kr"],
+    origin: ["http://localhost:3000", "http://34.64.88.23", "https://reactjs.kr"],
     credentials: true,
   }),
 );

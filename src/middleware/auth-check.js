@@ -12,7 +12,7 @@ export const validateUser = async (req, res, next) => {
     return res.status(401).send("Unauthorized access");
   }
 
-  const [authType, accessToken] = authHeader.split(" ");
+  const [authType, accessToken] = authHeader?.split(" ");
 
   if (authType !== "Bearer" || !accessToken) {
     return res.status(401).send("Unauthorized access");

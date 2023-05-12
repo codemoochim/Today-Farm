@@ -71,3 +71,58 @@ export const putSensorDataToDB = async ({ deviceId, temperature, humidity, lux, 
   const [rows] = await mysqlDB.promisePool.execute(sql, fields);
   return rows;
 };
+
+//
+export const oneTemperatureAndHumidityData = async (deviceId) => {
+  const sql = `SELECT
+    deviceId, 
+    temperature, 
+    humidity
+  FROM
+    data 
+  WHERE
+    deviceId = ?
+  ORDER BY
+    time DESC
+  LIMIT 1`;
+
+  const fields = [deviceId];
+  const [rows] = await mysqlDB.promisePool.execute(sql, fields);
+  return rows;
+};
+
+export const oneLuxData = async (deviceId) => {
+  const sql = `SELECT
+    deviceId, 
+    lux, 
+  FROM
+    data 
+  WHERE
+    deviceId = ?
+  ORDER BY
+    time DESC
+  LIMIT 1
+    ?`;
+
+  const fields = [deviceId];
+  const [rows] = await mysqlDB.promisePool.execute(sql, fields);
+  return rows;
+};
+
+export const oneSolidData = async (deviceId) => {
+  const sql = `SELECT
+    deviceId, 
+    solid,
+  FROM
+    data 
+  WHERE
+    deviceId = ?
+  ORDER BY
+    time DESC
+  LIMIT 1
+    ?`;
+
+  const fields = [deviceId];
+  const [rows] = await mysqlDB.promisePool.execute(sql, fields);
+  return rows;
+};
