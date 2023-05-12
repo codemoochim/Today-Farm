@@ -3,7 +3,9 @@ import mysqlDB from "../config/mysql-client.js";
 // 사용자 디바이스 출력
 export const getDeviceListUsingEmail = async (email) => {
   const sql = `SELECT
-    *
+    deviceId,
+    name,
+    status
   FROM
     devices
   WHERE email = ?`;
@@ -86,11 +88,26 @@ export const updatePumpStatus = async (deviceId, pump) => {
   return;
 };
 
+export const updateDeviceStatus = async (deviceId, status) => {
+  const sql = `
+  UPDATE
+    devices
+  SET
+    status = ?
+  WHERE
+    deviceId = ?`;
+
+  const fields = [status, deviceId];
+  await mysqlDB.promisePool.execute(sql, fields);
+  return;
+};
+
 // 디바이스의 액츄에이터 작동유무
 export const isWorkingActuator = async (deviceId) => {
   const sql = `SELECT
     led,
-    pump
+    pump,
+    status
   FROM
     devices
   WHERE deviceId = ?`;

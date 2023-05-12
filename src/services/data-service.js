@@ -7,7 +7,7 @@ import {
   oneSolidData,
 } from "../repository/data-repository.js";
 import { isWorkingActuator } from "../repository/device-repository.js";
-import { minutesToMillisecond, searchTimeFlag } from "../utils/time-utils.js";
+// import { minutesToMillisecond, searchTimeFlag } from "../utils/time-utils.js";
 
 export const getTemperatureAndHumidity = async (deviceId) => {
   // const searchTime = searchTimeFlag(minutesToMillisecond(10));
@@ -23,7 +23,7 @@ export const getTemperatureAndHumidity = async (deviceId) => {
     // const searchData = await searchTemperatureAndHumidityData(deviceId, searchTime.currentTime, searchTime.pastTime);
     const deviceStatus = await isWorkingActuator(deviceId);
 
-    if (searchData.length === 0) {
+    if (searchData?.length === 0) {
       processResult.message = "조회할 수 있는 데이터가 없습니다";
       processResult.deviceStatus = deviceStatus;
 
@@ -55,7 +55,7 @@ export const getLux = async (deviceId) => {
     // const searchData = await searchLuxData(deviceId, searchTime.currentTime, searchTime.pastTime);
     const deviceStatus = await isWorkingActuator(deviceId);
 
-    if (searchData.length === 0) {
+    if (searchData?.length === 0) {
       processResult.message = "조회할 수 있는 데이터가 없습니다";
       processResult.deviceStatus = deviceStatus;
 
@@ -86,7 +86,7 @@ export const getSolid = async (deviceId) => {
     // const searchData = await searchSolidData(deviceId, searchTime.currentTime, searchTime.pastTime);
     const deviceStatus = await isWorkingActuator(deviceId);
 
-    if (searchData.length === 0) {
+    if (searchData?.length === 0) {
       processResult.message = "조회할 수 있는 데이터가 없습니다";
       processResult.deviceStatus = deviceStatus;
 
