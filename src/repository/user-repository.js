@@ -1,7 +1,8 @@
 import mysqlDB from "../config/mysql-client.js";
 
 export const createUserInfoIntoDB = async (email, password, name, phone) => {
-  const sql = `INSERT INTO
+  const sql = `
+  INSERT INTO
     users
     (email, password, name, phone)
   VALUES
@@ -13,7 +14,8 @@ export const createUserInfoIntoDB = async (email, password, name, phone) => {
 };
 
 export const findEmailByNameAndPhone = async (name, phone) => {
-  const sql = `SELECT
+  const sql = `
+  SELECT
     email
   FROM
     users
@@ -27,7 +29,8 @@ export const findEmailByNameAndPhone = async (name, phone) => {
 };
 
 export const findUserByEmail = async (email) => {
-  const sql = `SELECT
+  const sql = `
+  SELECT
     *
   FROM
     users
@@ -40,7 +43,8 @@ export const findUserByEmail = async (email) => {
 };
 
 export const findUserByPhone = async (phone) => {
-  const sql = `SELECT
+  const sql = `
+  SELECT
     *
   FROM
     users
@@ -53,7 +57,8 @@ export const findUserByPhone = async (phone) => {
 };
 
 export const findPasswordByEmailAndPhone = async (email, phone) => {
-  const sql = `SELECT
+  const sql = `
+  SELECT
     password
   FROM
     users
@@ -67,7 +72,8 @@ export const findPasswordByEmailAndPhone = async (email, phone) => {
 };
 
 export const updatePasswordQuery = async (email, password) => {
-  const sql = `UPDATE
+  const sql = `
+  UPDATE
     users
   SET
     password = ?
@@ -80,7 +86,8 @@ export const updatePasswordQuery = async (email, password) => {
 };
 
 export const findPwdByEmail = async (email) => {
-  const sql = `SELECT
+  const sql = `
+  SELECT
     password
   FROM
     users
@@ -93,7 +100,8 @@ export const findPwdByEmail = async (email) => {
 };
 
 export const updateDeletedDate = async (email, date) => {
-  const sql = `UPDATE 
+  const sql = `
+  UPDATE 
     users
   SET
     deleted_at = ?
@@ -106,7 +114,8 @@ export const updateDeletedDate = async (email, date) => {
 };
 
 export const findNameAndPhoneByEmail = async (email) => {
-  const sql = `SELECT
+  const sql = `
+  SELECT
     name,
     phone,
     email
@@ -121,7 +130,8 @@ export const findNameAndPhoneByEmail = async (email) => {
 };
 
 export const updateNameAndPhone = async (email, name, phone) => {
-  const sql = `UPDATE
+  const sql = `
+  UPDATE
     users
   SET
     name = ?,
@@ -135,7 +145,8 @@ export const updateNameAndPhone = async (email, name, phone) => {
 };
 
 export const updateName = async (email, name) => {
-  const sql = `UPDATE
+  const sql = `
+  UPDATE
     users
   SET
     name = ?

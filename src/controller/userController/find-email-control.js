@@ -1,5 +1,4 @@
 import { findEmailService } from "../../services/userService/index.js";
-import { checkRequiredParams } from "../../utils/check-required-params.js";
 
 const findEmailControl = async (req, res, next) => {
   try {

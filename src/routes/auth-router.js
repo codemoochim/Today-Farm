@@ -39,6 +39,3 @@ router.post("/silent-refresh", issuingAccessToken, (req, res) => {
 });
 
 export default router;
-
-// 삭제 되었으면 더이상 회원의 기능을 할 수 없도록 만들어야함
-// 로그인, 로그아웃, 이메일찾기, 비밀번호찾기변경조회수정탈퇴조회 ~

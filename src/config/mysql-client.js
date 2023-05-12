@@ -1,8 +1,7 @@
 import mysql from "mysql2";
 import config from "./db.config.js";
 
-const { host, user, password, database, port, waitForConnections, connectionLimit, maxIdle, idleTimeout, queueLimit } =
-  config.mysql;
+const { host, user, password, database, port } = config.mysql;
 
 class MySQL {
   constructor() {
@@ -12,11 +11,6 @@ class MySQL {
       password,
       database,
       port,
-      waitForConnections,
-      connectionLimit,
-      maxIdle,
-      idleTimeout,
-      queueLimit,
     });
     this.promisePool = this.pool.promise();
     this.checkConnection();

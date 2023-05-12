@@ -22,8 +22,8 @@ export const getDevice = async (req, res, next) => {
 // 디바이스 등록
 export const addDevice = async (req, res, next) => {
   try {
-    const { deviceId, name } = req.body;
     const email = req.user;
+    const { deviceId, name } = req.body;
     const processResult = await deviceNew(deviceId, name, email);
     res.status(processResult.statusCode).json({ data: processResult.message });
 
@@ -36,8 +36,8 @@ export const addDevice = async (req, res, next) => {
 //  디바이스 삭제
 export const removeDevice = async (req, res, next) => {
   try {
-    const { deviceId } = req.body;
     const email = req.user;
+    const { deviceId } = req.body;
     const processResult = await deviceNoMoreUse(deviceId, email);
     res.status(processResult.statusCode).json({ data: processResult.message });
 

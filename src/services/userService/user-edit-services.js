@@ -18,11 +18,12 @@ export const userEditService = async (email, newName, newPhone) => {
     if (!checkPhoneForm(newPhone)) {
       processResult.statusCode = 400;
       processResult.message = "Invalid phone form";
+
+      return processResult;
     }
 
     const rows = await findNameAndPhoneByEmail(email);
     if (rows.length === 0) {
-      // 이메일이 존재하지 않는 경우
       processResult.statusCode = 400;
       processResult.message = "Email does not exist";
 
@@ -35,7 +36,6 @@ export const userEditService = async (email, newName, newPhone) => {
       return processResult;
     }
 
-    // 전화번호 중복 체크
     const phoneRows = await findUserByPhone(newPhone);
     if (phoneRows.length > 0) {
       processResult.statusCode = 400;

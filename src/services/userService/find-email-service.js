@@ -13,10 +13,8 @@ const findEmailService = async (name, phone) => {
       return processResult;
     }
 
-    // MySql에서 이름과 번호를 가진 사용자 정보 가져오기
     const rows = await findEmailByNameAndPhone(name, phone);
 
-    // 일치하는 정보가 없음
     if (rows.length === 0) {
       processResult.statusCode = 400;
       processResult.message = "No match information";

@@ -1,16 +1,7 @@
-import {
-  searchTemperatureAndHumidityData,
-  searchLuxData,
-  searchSolidData,
-  oneTemperatureAndHumidityData,
-  oneLuxData,
-  oneSolidData,
-} from "../repository/data-repository.js";
+import { oneTemperatureAndHumidityData, oneLuxData, oneSolidData } from "../repository/data-repository.js";
 import { isWorkingActuator } from "../repository/device-repository.js";
-// import { minutesToMillisecond, searchTimeFlag } from "../utils/time-utils.js";
 
 export const getTemperatureAndHumidity = async (deviceId) => {
-  // const searchTime = searchTimeFlag(minutesToMillisecond(10));
   const processResult = { statusCode: 200, message: "성공" };
   try {
     if (!deviceId)
@@ -20,7 +11,6 @@ export const getTemperatureAndHumidity = async (deviceId) => {
       };
 
     const searchData = await oneTemperatureAndHumidityData(deviceId);
-    // const searchData = await searchTemperatureAndHumidityData(deviceId, searchTime.currentTime, searchTime.pastTime);
     const deviceStatus = await isWorkingActuator(deviceId);
 
     if (searchData?.length === 0) {
@@ -42,7 +32,6 @@ export const getTemperatureAndHumidity = async (deviceId) => {
 };
 
 export const getLux = async (deviceId) => {
-  // const searchTime = searchTimeFlag(minutesToMillisecond(10));
   const processResult = { statusCode: 200, message: "성공" };
   try {
     if (!deviceId)
@@ -52,7 +41,6 @@ export const getLux = async (deviceId) => {
       };
 
     const searchData = await oneLuxData(deviceId);
-    // const searchData = await searchLuxData(deviceId, searchTime.currentTime, searchTime.pastTime);
     const deviceStatus = await isWorkingActuator(deviceId);
 
     if (searchData?.length === 0) {
@@ -73,7 +61,6 @@ export const getLux = async (deviceId) => {
 };
 
 export const getSolid = async (deviceId) => {
-  // const searchTime = searchTimeFlag(minutesToMillisecond(10));
   const processResult = { statusCode: 200, message: "성공" };
   try {
     if (!deviceId)
@@ -83,7 +70,6 @@ export const getSolid = async (deviceId) => {
       };
 
     const searchData = await oneSolidData(deviceId);
-    // const searchData = await searchSolidData(deviceId, searchTime.currentTime, searchTime.pastTime);
     const deviceStatus = await isWorkingActuator(deviceId);
 
     if (searchData?.length === 0) {

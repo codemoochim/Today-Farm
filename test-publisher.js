@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import mqtt from "mqtt";
 dotenv.config();
-import { mqttClientInstance } from "./src/config/mqtt.js";
+// import { mqttClientInstance } from "./src/config/mqtt.js";
 
 const mqttOptions = {
   host: process.env.MQTT_BROKER_HOST,

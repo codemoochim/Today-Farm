@@ -15,6 +15,7 @@ export const deviceList = async (email) => {
     const processResult = { statusCode: 200, message: "성공" };
     const result = await getDeviceListUsingEmail(email);
     processResult.rows = result;
+
     return processResult;
   } catch (err) {
     throw new Error(err);
@@ -31,18 +32,20 @@ export const deviceNew = async (deviceId, name, email) => {
     if (!rows) {
       processResult.statusCode = 400;
       processResult.message = "DeviceId is wrong";
+
       return processResult;
     }
     if (rows.owner === checkOwnerFlag) {
-      // 이미 할당된 디바이스
       processResult.statusCode = 400;
       processResult.message = "DeviceId is not available";
+
       return processResult;
     }
 
     await assignOwnerToDevice(deviceId, name, email, checkOwnerFlag);
     processResult.statusCode = 201;
     processResult.message = "Device saved";
+
     return processResult;
   } catch (err) {
     throw new Error(err);
@@ -58,18 +61,20 @@ export const deviceNoMoreUse = async (deviceId, email) => {
     if (!rows) {
       processResult.statusCode = 400;
       processResult.message = "DeviceId is wrong";
+
       return processResult;
     }
     if (rows.email !== email) {
-      // 이미 할당된 디바이스
       processResult.statusCode = 400;
       processResult.message = "DeviceId is not available";
+
       return processResult;
     }
 
     await detachUserWithDevice(deviceId, checkOwnerFlag);
     processResult.statusCode = 200;
     processResult.message = "Device deleted";
+
     return processResult;
   } catch (err) {
     throw new Error(err);
@@ -85,6 +90,7 @@ export const responseLedStatus = async (deviceId, active) => {
 
     const result = await updateLedStatus(deviceId, active);
     processResult.message = result;
+
     return processResult;
   } catch (err) {
     throw new Error(err);
@@ -100,6 +106,7 @@ export const responsePumpStatus = async (deviceId, active) => {
 
     const result = await updatePumpStatus(deviceId, active);
     processResult.rows = result;
+
     return processResult;
   } catch (err) {
     throw new Error(err);

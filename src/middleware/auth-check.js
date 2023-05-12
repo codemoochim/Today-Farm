@@ -36,25 +36,24 @@ export const validateUser = async (req, res, next) => {
       const secretKey = process.env.JWT_SECRET_SECOND;
       const { email, userId } = jwt.verify(storedToken, secretKey);
 
-      const newAccessToken = issuingToken(email, userId, process.env.JWT_SECRET, 60 * 2);
+      const accessTokenLimit = 60 * 20;
+      const newAccessToken = issuingToken(email, userId, process.env.JWT_SECRET, accessTokenLimit);
 
       res.locals.token = newAccessToken;
       req.user = email;
       next();
+
       return;
     } else if (err.name === "JsonWebTokenError") {
       res.status(401).send("Invalid Token");
+
+      return;
     } else if (err.name === "NotBeforeError") {
       res.status(401).send("NotBeforeError");
+
+      return;
     }
     console.error(err);
     res.status(403).send("Forbidden access");
   }
 };
-
-// 최초 로그인시 accessToken을 payload로 응답함.
-// 변수에 accessToken을 넣어둠.
-// acess를 authorization 에더 barer 인코딩으로 넣어서 모든 요청값에 넣는다.
-
-// 1. access payload
-// 2. 리소스 요청 access 재발급

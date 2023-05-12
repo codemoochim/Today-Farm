@@ -11,7 +11,6 @@ export const userInfoService = async (email) => {
     }
     const rows = await findNameAndPhoneByEmail(email);
     if (rows.length === 0) {
-      // 이메일이 존재하지 않는 경우
       processResult.statusCode = 400;
       processResult.message = "Email does not exist";
 

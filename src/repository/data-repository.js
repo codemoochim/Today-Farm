@@ -1,8 +1,8 @@
-// import mysqlDB from "../models/index.js";
 import mysqlDB from "../config/mysql-client.js";
 
 export const searchTemperatureAndHumidityData = async (deviceId, currentTime, pastTime) => {
-  const sql = `SELECT
+  const sql = `
+  SELECT
     deviceId, 
     temperature, 
     humidity, 
@@ -10,9 +10,8 @@ export const searchTemperatureAndHumidityData = async (deviceId, currentTime, pa
   FROM
     data 
   WHERE
-    deviceId = ? AND 
-    time BETWEEN ? AND
-    ?`;
+    deviceId = ? AND time
+  BETWEEN ? AND ?`;
 
   const fields = [deviceId, pastTime, currentTime];
   const [rows] = await mysqlDB.promisePool.execute(sql, fields);
@@ -20,16 +19,16 @@ export const searchTemperatureAndHumidityData = async (deviceId, currentTime, pa
 };
 
 export const searchLuxData = async (deviceId, currentTime, pastTime) => {
-  const sql = `SELECT 
+  const sql = `
+  SELECT 
     deviceId, 
     lux, 
     DATE_FORMAT(CONVERT_TZ(time, '+00:00', '+09:00'), '%Y-%m-%d %H:%i:%s') AS time 
   FROM 
     data 
   WHERE 
-    deviceId = ? AND
-    time BETWEEN ? AND
-    ?`;
+    deviceId = ? AND time 
+  BETWEEN ? AND ?`;
 
   const fields = [deviceId, pastTime, currentTime];
   const [rows] = await mysqlDB.promisePool.execute(sql, fields);
@@ -37,26 +36,26 @@ export const searchLuxData = async (deviceId, currentTime, pastTime) => {
 };
 
 export const searchSolidData = async (deviceId, currentTime, pastTime) => {
-  const sql = `SELECT
+  const sql = `
+  SELECT
     deviceId,
     solid,
     DATE_FORMAT(CONVERT_TZ(time, '+00:00', '+09:00'), '%Y-%m-%d %H:%i:%s') AS time
   FROM
     data
   WHERE
-    deviceId = ? AND
-    time BETWEEN ? AND
-    ?`;
+    deviceId = ? AND time
+  BETWEEN ? AND ?`;
 
   const fields = [deviceId, pastTime, currentTime];
   const [rows] = await mysqlDB.promisePool.execute(sql, fields);
   return rows;
 };
 
-// 테스트로 데이터 집어넣을 떄 사용함
 export const putSensorDataToDB = async ({ deviceId, temperature, humidity, lux, solid }) => {
-  const sql = `INSERT INTO
-  data
+  const sql = `
+  INSERT INTO
+    data
     (
       deviceId,
       temperature,
@@ -72,9 +71,9 @@ export const putSensorDataToDB = async ({ deviceId, temperature, humidity, lux, 
   return rows;
 };
 
-//
 export const oneTemperatureAndHumidityData = async (deviceId) => {
-  const sql = `SELECT
+  const sql = `
+  SELECT
     deviceId, 
     temperature, 
     humidity
@@ -92,17 +91,17 @@ export const oneTemperatureAndHumidityData = async (deviceId) => {
 };
 
 export const oneLuxData = async (deviceId) => {
-  const sql = `SELECT
+  const sql = `
+  SELECT
     deviceId, 
-    lux, 
+    lux
   FROM
     data 
   WHERE
     deviceId = ?
   ORDER BY
     time DESC
-  LIMIT 1
-    ?`;
+  LIMIT 1`;
 
   const fields = [deviceId];
   const [rows] = await mysqlDB.promisePool.execute(sql, fields);
@@ -110,17 +109,17 @@ export const oneLuxData = async (deviceId) => {
 };
 
 export const oneSolidData = async (deviceId) => {
-  const sql = `SELECT
+  const sql = `
+  SELECT
     deviceId, 
-    solid,
+    solid
   FROM
     data 
   WHERE
     deviceId = ?
   ORDER BY
     time DESC
-  LIMIT 1
-    ?`;
+  LIMIT 1`;
 
   const fields = [deviceId];
   const [rows] = await mysqlDB.promisePool.execute(sql, fields);

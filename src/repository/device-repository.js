@@ -2,7 +2,8 @@ import mysqlDB from "../config/mysql-client.js";
 
 // 사용자 디바이스 출력
 export const getDeviceListUsingEmail = async (email) => {
-  const sql = `SELECT
+  const sql = `
+  SELECT
     deviceId,
     name,
     status
@@ -17,7 +18,8 @@ export const getDeviceListUsingEmail = async (email) => {
 
 // 디바이스의 사용자 할당값 출력
 export const getDeviceListUsingDeviceId = async (deviceId) => {
-  const sql = `SELECT
+  const sql = `
+  SELECT
     *
   FROM
     devices
@@ -30,7 +32,8 @@ export const getDeviceListUsingDeviceId = async (deviceId) => {
 
 // 디바이스에 사용자 할당
 export const assignOwnerToDevice = async (deviceId, name, email, checkOwnerFlag) => {
-  const sql = `UPDATE
+  const sql = `
+  UPDATE
     devices
   SET
     name = ?,
@@ -47,7 +50,8 @@ export const assignOwnerToDevice = async (deviceId, name, email, checkOwnerFlag)
 
 // 디바이스에 사용자 비할당
 export const detachUserWithDevice = async (deviceId, checkOwnerFlag) => {
-  const sql = `UPDATE
+  const sql = `
+  UPDATE
     devices
   SET
     owner = ?
@@ -61,7 +65,8 @@ export const detachUserWithDevice = async (deviceId, checkOwnerFlag) => {
 
 // 생장 LED 제어상태 변경
 export const updateLedStatus = async (deviceId, active) => {
-  const sql = `UPDATE
+  const sql = `
+  UPDATE
     devices
   SET
     led = ?
@@ -104,7 +109,8 @@ export const updateDeviceStatus = async (deviceId, status) => {
 
 // 디바이스의 액츄에이터 작동유무
 export const isWorkingActuator = async (deviceId) => {
-  const sql = `SELECT
+  const sql = `
+  SELECT
     led,
     pump,
     status

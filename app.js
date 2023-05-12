@@ -5,15 +5,12 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 dotenv.config();
 
-import { mqttClientInstance } from "./src/config/mqtt-client.js";
 import { mqttSubscriber } from "./src/services/mqtt-subscriber.js";
 import authRouter from "./src/routes/auth-router.js";
 import deviceRouter from "./src/routes/device-router.js";
 import { validateUser } from "./src/middleware/auth-check.js";
-// import { redisClient } from "./src/config/redis-client.js";
 
 const app = express();
-// mqttClientInstance.connect();
 mqttSubscriber();
 
 app.use(morgan("dev"));
@@ -32,7 +29,6 @@ app.use(
 );
 app.use("/api", authRouter);
 app.use("/api/devices", validateUser, deviceRouter);
-// app.use("/api/devices", deviceRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 찾을 수 없는 요청입니다`);

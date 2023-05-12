@@ -46,4 +46,3 @@ if (!mqttClientInstance) {
 }
 
 export { mqttClientInstance };
-// export const mqttClientInstance = new MqttClient(mqttOptions, ["sensor/esp32/data", "cmd/esp32/#"]);
