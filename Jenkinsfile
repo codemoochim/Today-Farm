@@ -38,7 +38,7 @@ pipeline {
             steps {
                 script {
                     echo "Removing Docker container..."
-                    docker rm -f server-team02 || true
+                    sh 'docker rm -f server-team02 || true'
                 }
             }
         }
@@ -46,7 +46,7 @@ pipeline {
             steps {
                 script {
                   echo "Deploy Docker Image..."
-                  docker run -d --name server-team02 -p 5000:5000 ${env.DOCKER_IMAGE}
+                  sh 'docker run -d --name server-team02 -p 5000:5000 ${env.DOCKER_IMAGE}'
                 }
             }
         }
