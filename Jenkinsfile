@@ -5,7 +5,7 @@ pipeline {
                 DOCKER_REPO_NAME = "smart-farm-be"
                 // DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
                 DOCKER_IMAGE_TAG = "latest"
-                DOCKER_IMAGE = "${DOCKER_REGISTRY}/${DOCKER_REPO_NAME}:${DOCKER_IMAGE_TAG}"
+                // DOCKER_IMAGE = "${DOCKER_REGISTRY}/${DOCKER_REPO_NAME}:${DOCKER_IMAGE_TAG}"
                 }
     stages {
         stage ('Checkout') {
@@ -29,7 +29,7 @@ pipeline {
                 script { 
                     echo "Building Docker image..."
                     def dockerfile = 'Dockerfile'
-                    def image = docker.build("${DOCKER_IMAGE}", "-f ${dockerfile} .")
+                    def image = docker.build("smart-farm", "-f ${dockerfile} .")
                 }
             }
         }
@@ -52,9 +52,10 @@ pipeline {
                 script {
                         echo "Pushing Docker image..."
                         withDockerRegistry(credentialsId: 'Docker-hub-sando', url: 'https://registry.hub.docker.com') {
-                            def dockerfile = 'Dockerfile'
-                            sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY}/${DOCKER_REPO_NAME}"
-                            sh "docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}"
+                            sh "docker tag smart-farm codemoochim/smart-farm"
+                            sh "docker push codemoochim/smart-farm"
+                            // sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY}/${DOCKER_REPO_NAME}"
+                            // sh "docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}"
                         }
                 }
             }
