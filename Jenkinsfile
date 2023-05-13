@@ -23,6 +23,7 @@ pipeline {
                     sh 'npm install'
                     // sh 'npm run lint'
                     // sh 'npm run test'
+                    }
             }
         }
         stage ('Build and Push Docker Image') {
