@@ -9,7 +9,7 @@ pipeline {
 
                 }
     stages {
-        stage('Checkout') {
+        stage ('Checkout') {
             steps {
                 checkout scm
                 // git branch: 'main', changelog: false, credentialsId: 'sando', poll: false, url: 'git@kdt-gitlab.elice.io:iot_track/class_01/iot_project/team2/smart-farm-be.git'
@@ -19,12 +19,13 @@ pipeline {
             steps {
                 nodejs(nodeJSInstallationName: 'NodeJS 18.13.0') {
                     echo "Running tests..."
-                    sh 'node -v'sh 'npm install'
+                    sh 'node -v'
+                    sh 'npm install'
                     // sh 'npm run lint'
                     // sh 'npm run test'
             }
         }
-        stage('Build and Push Docker Image') {
+        stage ('Build and Push Docker Image') {
             steps {
                 script {
                     echo "Building and pushing Docker image..."
@@ -34,7 +35,7 @@ pipeline {
                 }
             }
         }
-        stage('Remove Docker Container') {
+        stage ('Remove Docker Container') {
             steps {
                 script {
                     echo "Removing Docker container..."
@@ -42,7 +43,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Docker Image') {
+        stage ('Deploy Docker Image') {
             steps {
                 script {
                     echo "Deploy Docker Image..."
