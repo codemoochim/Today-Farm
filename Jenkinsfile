@@ -23,14 +23,24 @@ pipeline {
                 }
             }
         }
-        stage ('Build and Push Docker Image') {
+        stage ('Build Docker Image') {
+            steps {
+                script { 
+                    echo "Building Docker image..."
+                    def dockerfile = 'Dockerfile'
+                    def image = docker.build("${env.DOCKER_IMAGE}", "-f ${dockerfile} .")
+                    image.push()
+                }
+            }
+        }
+        stage ('Push Docker Image') {
             steps {
                 script { 
                     // withCredentials([usernamePassword(credentialsId: 'Docker-hub-sando', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    echo "Building and pushing Docker image..."
+                    echo "Pushing Docker image..."
                     withDockerRegistry(credentialsId: 'Docker-hub-sando', url: 'https://registry.hub.docker.com') {
                     def dockerfile = 'Dockerfile'
-                    def image = docker.build("${env.DOCKER_IMAGE}", "-f ${dockerfile} .")
+                    def image = docker.image("${env.DOCKER_IMAGE}")
                     image.push()
                     }
                 }
