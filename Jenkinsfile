@@ -12,7 +12,6 @@ pipeline {
         stage ('Checkout') {
             steps {
                 checkout scm
-                // git branch: 'main', changelog: false, credentialsId: 'sando', poll: false, url: 'git@kdt-gitlab.elice.io:iot_track/class_01/iot_project/team2/smart-farm-be.git'
             }
         }
         stage ('Test') {
