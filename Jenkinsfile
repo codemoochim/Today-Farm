@@ -40,8 +40,9 @@ pipeline {
                     echo "Pushing Docker image..."
                     withDockerRegistry(credentialsId: 'Docker-hub-sando', url: 'https://registry.hub.docker.com') {
                     def dockerfile = 'Dockerfile'
-                    def image = docker.image("${env.DOCKER_IMAGE}")
-                    image.push()
+                    // def image = docker.image("${DOCKER_IMAGE}")
+                    // image.push()
+                    sh 'docker push ${DOCKER_IMAGE}'
                     }
                 }
             }
@@ -58,7 +59,7 @@ pipeline {
             steps {
                 script {
                     echo "Deploy Docker Image..."
-                    sh 'docker run -d --name server-team02 -p 5000:5000 ${env.DOCKER_IMAGE}'
+                    sh 'docker run -d --name server-team02 -p 5000:5000 ${DOCKER_IMAGE}'
                 }
             }
         }
