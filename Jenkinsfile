@@ -29,7 +29,6 @@ pipeline {
                     echo "Building Docker image..."
                     def dockerfile = 'Dockerfile'
                     def image = docker.build("${env.DOCKER_IMAGE}", "-f ${dockerfile} .")
-                    image.push()
                 }
             }
         }
