@@ -28,7 +28,7 @@ pipeline {
                 script { 
                     // withCredentials([usernamePassword(credentialsId: 'Docker-hub-sando', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     echo "Building and pushing Docker image..."
-                    withDockerRegistry(credentialsId: 'Docker-hub-sando', url: 'https://www.docker.com/codemoochim/smart-farm-be') {
+                    withDockerRegistry(credentialsId: 'Docker-hub-sando', url: 'https://registry.hub.docker.com') {
                     def dockerfile = 'Dockerfile'
                     def image = docker.build("${env.DOCKER_IMAGE}", "-f ${dockerfile} .")
                     image.push()
