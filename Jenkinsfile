@@ -17,11 +17,11 @@ pipeline {
         }
         stage ('Test') {
             steps {
-              echo "Running tests..."
-              sh 'node -v'
-              sh 'npm install'
-              // sh 'npm run lint'
-              // sh 'npm run test'
+                nodejs(nodeJSInstallationName: 'NodeJS 18.13.0') {
+                    echo "Running tests..."
+                    sh 'node -v'sh 'npm install'
+                    // sh 'npm run lint'
+                    // sh 'npm run test'
             }
         }
         stage('Build and Push Docker Image') {
