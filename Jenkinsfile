@@ -3,9 +3,8 @@ pipeline {
     environment {
                 DOCKER_REGISTRY = "codemoochim"
                 DOCKER_REPO_NAME = "smart-farm-be"
-                DOCKER_IMAGE_NAME = "smart-farm-be"
                 DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
-                DOCKER_IMAGE = "${DOCKER_REGISTRY}/${DOCKER_REPO_NAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                DOCKER_IMAGE = "${DOCKER_REGISTRY}/${DOCKER_REPO_NAME}:${DOCKER_IMAGE_TAG}"
 
                 }
     stages {
