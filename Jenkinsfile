@@ -5,7 +5,6 @@ pipeline {
                 DOCKER_REPO_NAME = "smart-farm-be"
                 DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
                 DOCKER_IMAGE = "${DOCKER_REGISTRY}/${DOCKER_REPO_NAME}:${DOCKER_IMAGE_TAG}"
-
                 }
     stages {
         stage ('Checkout') {
@@ -21,16 +20,19 @@ pipeline {
                     sh 'npm install'
                     // sh 'npm run lint'
                     // sh 'npm run test'
-                    }
+                }
             }
         }
         stage ('Build and Push Docker Image') {
             steps {
-                script {
+                script { 
+                    // withCredentials([usernamePassword(credentialsId: 'Docker-hub-sando', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     echo "Building and pushing Docker image..."
+                    withDockerRegistry(credentialsId: 'Docker-hub-sando', url: 'https://www.docker.com/codemoochim/smart-farm-be') {
                     def dockerfile = 'Dockerfile'
                     def image = docker.build("${env.DOCKER_IMAGE}", "-f ${dockerfile} .")
                     image.push()
+                    }
                 }
             }
         }
