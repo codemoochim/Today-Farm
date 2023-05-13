@@ -45,10 +45,10 @@ pipeline {
         stage('Deploy Docker Image') {
             steps {
                 script {
-                  echo "Deploy Docker Image..."
-                  sh 'docker run -d --name server-team02 -p 5000:5000 ${env.DOCKER_IMAGE}'
+                    echo "Deploy Docker Image..."
+                    sh 'docker run -d --name server-team02 -p 5000:5000 ${env.DOCKER_IMAGE}'
                 }
             }
         }
     }
-}
+}}
