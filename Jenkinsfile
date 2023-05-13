@@ -29,24 +29,37 @@ pipeline {
                 script { 
                     echo "Building Docker image..."
                     def dockerfile = 'Dockerfile'
-                    def image = docker.build("${env.DOCKER_IMAGE}", "-f ${dockerfile} .")
+                    def image = docker.build("${DOCKER_IMAGE}", "-f ${dockerfile} .")
                 }
             }
         }
-        stage ('Push Docker Image') {
+        // stage ('Push Docker Image') {
+        //     steps {
+        //         script { 
+        //             // withCredentials([usernamePassword(credentialsId: 'Docker-hub-sando', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+        //             echo "Pushing Docker image..."
+        //             withDockerRegistry(credentialsId: 'Docker-hub-sando', url: 'https://registry.hub.docker.com') {
+        //             // def image = docker.image("${DOCKER_IMAGE}")
+        //             // image.push()
+        //             sh 'docker push ${DOCKER_IMAGE}'
+        //             }
+        //         }
+        //     }
+        // }
+
+        stage('Push Docker Image') {
             steps {
-                script { 
-                    // withCredentials([usernamePassword(credentialsId: 'Docker-hub-sando', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    echo "Pushing Docker image..."
-                    withDockerRegistry(credentialsId: 'Docker-hub-sando', url: 'https://registry.hub.docker.com') {
-                    def dockerfile = 'Dockerfile'
-                    // def image = docker.image("${DOCKER_IMAGE}")
-                    // image.push()
-                    sh 'docker push ${DOCKER_IMAGE}'
-                    }
+                script {
+                        echo "Pushing Docker image..."
+                        withDockerRegistry(credentialsId: 'Docker-hub-sando', url: 'https://registry.hub.docker.com') {
+                            def dockerfile = 'Dockerfile'
+                            sh "docker tag ${DOCKER_IMAGE} ${DOCKER_REGISTRY}/${DOCKER_REPO_NAME}"
+                            sh "docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}"
+                        }
                 }
             }
         }
+
         stage ('Remove Docker Container') {
             steps {
                 script {
@@ -59,7 +72,7 @@ pipeline {
             steps {
                 script {
                     echo "Deploy Docker Image..."
-                    sh 'docker run -d --name server-team02 -p 5000:5000 ${DOCKER_IMAGE}'
+                    sh 'docker run -d --name server-team02 -p 5000:5000 ${env.DOCKER_IMAGE}'
                 }
             }
         }
