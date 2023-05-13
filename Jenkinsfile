@@ -46,7 +46,7 @@ pipeline {
             steps {
                 script {
                   echo "Deploy Docker Image..."
-                  docker run -d --name server-team02 -p 5000:443 ${env.DOCKER_IMAGE}
+                  docker run -d --name server-team02 -p 5000:5000 ${env.DOCKER_IMAGE}
                 }
             }
         }
