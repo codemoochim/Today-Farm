@@ -29,7 +29,7 @@ pipeline {
                 script {
                     echo "Building and pushing Docker image..."
                     def dockerfile = 'Dockerfile'
-                    def image = docker.build("${DOCKER_IMAGE}", "-f ${dockerfile} .")
+                    def image = docker.build("${env.DOCKER_IMAGE}", "-f ${dockerfile} .")
                     image.push()
                 }
             }
@@ -46,7 +46,7 @@ pipeline {
             steps {
                 script {
                   echo "Deploy Docker Image..."
-                  docker run -d --name server-team02 -p 5000:443 "${DOCKER_IMAGE}"
+                  docker run -d --name server-team02 -p 5000:443 ${env.DOCKER_IMAGE}
                 }
             }
         }
