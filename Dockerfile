@@ -10,6 +10,6 @@ RUN npm install pm2 -g
 
 COPY . .
 
-EXPOSE 3001
+EXPOSE 5000
 
 CMD ["node", "app.js"]
