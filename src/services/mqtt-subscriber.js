@@ -48,8 +48,6 @@ export const mqttSubscriber = () => {
         } else if (currentDeviceStatus[0]?.pump !== pump) {
           await updatePumpStatus(deviceId, pump);
         }
-
-        return;
       }
     } catch (err) {
       console.log(err);

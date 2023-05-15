@@ -1,7 +1,7 @@
 export function checkRequiredParams(body, requestParameters) {
   requestParameters.forEach((params) => {
     const target = body[params];
-    if (target === undefined || target === null || target === "") {
+    if (target === null || target?.length === 0) {
       return false;
     }
   });

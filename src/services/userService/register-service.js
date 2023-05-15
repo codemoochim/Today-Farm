@@ -44,7 +44,7 @@ const registerService = async (email, password, phone, name) => {
     // }
 
     const emailRows = await findUserByEmail(email);
-    if (emailRows.length > 0) {
+    if (emailRows.length > 0 || emailRows[0].deleted_at) {
       processResult.statusCode = 400;
       processResult.message = "Email is not available";
 

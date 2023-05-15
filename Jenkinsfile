@@ -36,7 +36,7 @@ pipeline {
             steps {
                 script {
                     echo "Removing Docker container..."
-                    // sh 'docker rm -f server-team02 || true'
+                    // sh "docker rm -f server-team02 || true"
                 }
             }
         }

@@ -3,12 +3,12 @@ import mysqlDB from "../config/mysql-client.js";
 export const searchTemperatureAndHumidityData = async (deviceId, currentTime, pastTime) => {
   const sql = `
   SELECT
-    deviceId, 
-    temperature, 
-    humidity, 
-    DATE_FORMAT(CONVERT_TZ(time, '+00:00', '+09:00'), '%Y-%m-%d %H:%i:%s') AS time 
+    deviceId,
+    temperature,
+    humidity,
+    DATE_FORMAT(CONVERT_TZ(time, '+00:00', '+09:00'), '%Y-%m-%d %H:%i:%s') AS time
   FROM
-    data 
+    data
   WHERE
     deviceId = ? AND time
   BETWEEN ? AND ?`;
@@ -96,7 +96,7 @@ export const oneLuxData = async (deviceId) => {
     deviceId, 
     lux
   FROM
-    data 
+    data
   WHERE
     deviceId = ?
   ORDER BY

@@ -18,6 +18,13 @@ const loginService = async (email, password) => {
     }
 
     const rows = await findUserByEmail(email);
+    if (rows[0].deleted_at) {
+      processResult.statusCode = 400;
+      processResult.message = "Cannot sign-in";
+
+      return processResult;
+    }
+
     if (rows.length === 0) {
       processResult.statusCode = 400;
       processResult.message = "Email does not exist";
