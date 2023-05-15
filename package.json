@@ -5,7 +5,8 @@
   "description": "todayfarm server & mqtt broker",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "start:dev": "node app.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,7 +20,6 @@
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "mqtt": "^4.3.7",
-    "mysql": "^2.18.1",
     "mysql2": "^3.2.4",
     "redis": "^4.6.6"
   },

@@ -1,6 +1,13 @@
-FROM node:lts
-WORKDIR /backend
-COPY package*.json /backend
-RUN npm install
-CMD ["npm", "start"]
-EXPOSE 5000
+FROM node:18.13.0
+
+WORKDIR /server
+
+COPY package*.json ./
+
+RUN npm install --silent
+
+COPY . .
+
+EXPOSE 3001
+
+CMD ["node", "app.js"]
