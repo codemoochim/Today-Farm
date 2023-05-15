@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     echo "Deploy Docker Image..."
-                    sh "docker run -d --name server-team02 -p 3001:3001 --env-file /home/elice/.env codemoochim/smart-farm-be:${env.BUILD_ID}"
+                    sh "docker run -d --name server-team02 -p 5000:5000 --env-file /home/elice/.env codemoochim/smart-farm-be:${env.BUILD_ID}"
                 }
             }
         }

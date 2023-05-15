@@ -42,7 +42,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).send(errorMessage);
 });
 
-app.listen(process.env.PORT || 3001, () => {
+app.listen(process.env.PORT || 5000, () => {
   console.log(`[Express]: ${process.env.PORT}번 포트로 연결되었습니다.`);
 });
 
