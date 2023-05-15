@@ -5,6 +5,9 @@ pipeline {
             steps {
                 echo "Cloning..."
                 checkout scm
+                // git branch: 'feat/cicd', 
+                // credentialsId: 'sando', 
+                // url: 'git@kdt-gitlab.elice.io:iot_track/class_01/iot_project/team2/smart-farm-be.git'
             }
         }
         stage ('Test') {
@@ -41,7 +44,7 @@ pipeline {
             steps {
                 script {
                     echo "Deploy Docker Image..."
-                    sh 'docker run -d --name server-team02 -p 3001:3001 --env-file /home/elice/.env codemoochim/smart-farm-be:${env.BUILD_ID}'
+                    sh "docker run -d --name server-team02 -p 3001:3001 --env-file /home/elice/.env codemoochim/smart-farm-be:${env.BUILD_ID}"
                 }
             }
         }

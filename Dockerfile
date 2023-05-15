@@ -12,4 +12,4 @@ COPY . .
 
 EXPOSE 3001
 
-CMD  ["node", "app.js"]
+CMD ["pm2-runtime", "start", "app.js", "--watch"]
