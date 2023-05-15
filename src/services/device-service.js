@@ -71,7 +71,7 @@ export const deviceNoMoreUse = async (deviceId, email) => {
       return processResult;
     }
 
-    await detachUserWithDevice(deviceId, checkOwnerFlag);
+    await detachUserWithDevice(deviceId, checkOwnerFlag, new Date());
     processResult.statusCode = 200;
     processResult.message = "Device deleted";
 

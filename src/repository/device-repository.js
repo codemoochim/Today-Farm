@@ -9,7 +9,10 @@ export const getDeviceListUsingEmail = async (email) => {
     status
   FROM
     devices
-  WHERE email = ?`;
+  WHERE
+    email = ? AND
+    NOT owner = 0
+  `;
 
   const fields = [email];
   const [rows] = await mysqlDB.promisePool.execute(sql, fields);
@@ -39,7 +42,8 @@ export const assignOwnerToDevice = async (deviceId, name, email, checkOwnerFlag)
     name = ?,
     email = ?,
     date = ?,
-    owner = ?
+    owner = ?,
+    deleted_at = NULL
   WHERE
     deviceId = ?`;
 
@@ -49,16 +53,17 @@ export const assignOwnerToDevice = async (deviceId, name, email, checkOwnerFlag)
 };
 
 // 디바이스에 사용자 비할당
-export const detachUserWithDevice = async (deviceId, checkOwnerFlag) => {
+export const detachUserWithDevice = async (deviceId, checkOwnerFlag, date) => {
   const sql = `
   UPDATE
     devices
   SET
-    owner = ?
+    owner = ?,
+    deleted_at = ?
   WHERE
     deviceId = ?`;
 
-  const fields = [checkOwnerFlag, deviceId];
+  const fields = [checkOwnerFlag, date, deviceId];
   await mysqlDB.promisePool.execute(sql, fields);
   return;
 };
