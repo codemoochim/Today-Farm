@@ -5,6 +5,7 @@ import {
   detachUserWithDevice,
   updateLedStatus,
   updatePumpStatus,
+  isWorkingActuator,
 } from "../repository/device-repository.js";
 
 import { mqttPublisher } from "./mqtt-publish.js";
@@ -14,7 +15,7 @@ export const deviceList = async (email) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
     const result = await getDeviceListUsingEmail(email);
-    // 디바이스를 조회할 때, 디바이스 ID 에 대한 데이터를 조회해서 그 데이터의 최근 값이 10초 이내 있으면
+    // 디바이스를 조회할 때, 디바이스 ID 에 대한 데이터를 조회해서 그 데이터의 최근 값이 20초 이내 있으면
     // 디바이스가 켜져있는거고 아니면 디바이스가 꺼져있는거임.
     // 사용자의 디바이스가 여러개일 때 이메일로 디바이스 아이디 다 가져온다음에,
     // 그 디바이스 아이디로 각각 데이터를 조회한다음에,
@@ -96,7 +97,15 @@ export const responseLedStatus = async (deviceId, active) => {
     await mqttPublisher(targetMachine, active);
 
     const result = await updateLedStatus(deviceId, active);
-    processResult.message = result;
+    if (!result.changedRows) {
+      processResult.statusCode = 400;
+      processResult.message = "Actuator control failed";
+
+      return processResult;
+    }
+
+    const { led, pump, status } = await isWorkingActuator(deviceId);
+    processResult.message = { led };
 
     return processResult;
   } catch (err) {
@@ -112,7 +121,15 @@ export const responsePumpStatus = async (deviceId, active) => {
     await mqttPublisher(targetMachine, active);
 
     const result = await updatePumpStatus(deviceId, active);
-    processResult.rows = result;
+    if (!result.changedRows) {
+      processResult.statusCode = 400;
+      processResult.message = "Actuator control failed";
+
+      return processResult;
+    }
+
+    const { led, pump, status } = await isWorkingActuator(deviceId);
+    processResult.message = { pump };
 
     return processResult;
   } catch (err) {

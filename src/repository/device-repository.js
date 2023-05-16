@@ -49,8 +49,8 @@ export const assignOwnerToDevice = async (deviceId, name, email, checkOwnerFlag)
     deviceId = ?`;
 
   const fields = [name, email, new Date(), checkOwnerFlag, deviceId];
-  await mysqlDB.promisePool.execute(sql, fields);
-  return;
+  const [rows] = await mysqlDB.promisePool.execute(sql, fields);
+  return rows;
 };
 
 // 디바이스에 사용자 비할당
@@ -65,8 +65,8 @@ export const detachUserWithDevice = async (deviceId, checkOwnerFlag, date) => {
     deviceId = ?`;
 
   const fields = [checkOwnerFlag, date, deviceId];
-  await mysqlDB.promisePool.execute(sql, fields);
-  return;
+  const [rows] = await mysqlDB.promisePool.execute(sql, fields);
+  return rows;
 };
 
 // 생장 LED 제어상태 변경
@@ -80,8 +80,8 @@ export const updateLedStatus = async (deviceId, active) => {
     deviceId = ?`;
 
   const fields = [active, deviceId];
-  await mysqlDB.promisePool.execute(sql, fields);
-  return;
+  const [rows] = await mysqlDB.promisePool.execute(sql, fields);
+  return rows;
 };
 
 // 생장 LED 제어상태 변경
@@ -95,8 +95,8 @@ export const updatePumpStatus = async (deviceId, pump) => {
     deviceId = ?`;
 
   const fields = [pump, deviceId];
-  await mysqlDB.promisePool.execute(sql, fields);
-  return;
+  const [rows] = await mysqlDB.promisePool.execute(sql, fields);
+  return rows;
 };
 
 export const updateDeviceStatus = async (deviceId, status) => {
@@ -109,8 +109,8 @@ export const updateDeviceStatus = async (deviceId, status) => {
     deviceId = ?`;
 
   const fields = [status, deviceId];
-  await mysqlDB.promisePool.execute(sql, fields);
-  return;
+  const [rows] = await mysqlDB.promisePool.execute(sql, fields);
+  return rows;
 };
 
 // 디바이스의 액츄에이터 작동유무
@@ -141,6 +141,6 @@ export const updateDeviceOwnerByEmail = async (email, date) => {
     email = ?`;
 
   const fields = [0, date, email];
-  await mysqlDB.promisePool.execute(sql, fields);
-  return;
+  const [rows] = await mysqlDB.promisePool.execute(sql, fields);
+  return rows;
 };

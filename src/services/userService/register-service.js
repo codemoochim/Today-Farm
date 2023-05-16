@@ -62,14 +62,13 @@ const registerService = async (email, password, phone, name) => {
     const hash = await bcrypt.hash(password, 10);
     const rows = await createUserInfoIntoDB(email, hash, name, phone);
 
-    const userId = rows[0].id;
     const secret = process.env.JWT_SECRET;
     const secretSecond = process.env.JWT_SECRET_SECOND;
     const accessTokenLimit = 60 * 20; // 30분
     const refreshTokenExpires = 60 * 60;
 
-    const accessToken = issuingToken(email, userId, secret, accessTokenLimit);
-    const refreshToken = issuingToken(email, userId, secretSecond, refreshTokenExpires);
+    const accessToken = issuingToken(email, secret, accessTokenLimit);
+    const refreshToken = issuingToken(email, secretSecond, refreshTokenExpires);
     await setTokenIntoRedis(refreshToken, email, refreshTokenExpires);
 
     processResult.statusCode = 201;

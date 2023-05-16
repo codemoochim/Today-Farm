@@ -1,10 +1,9 @@
 import jwt from "jsonwebtoken";
 
-export const issuingToken = (email, userId, secret, time) => {
+export const issuingToken = (email, secret, time) => {
   const token = jwt.sign(
     {
-      email: email,
-      userId: userId,
+      email,
     },
     `${secret}`,
     { expiresIn: `${time}s` }, // 초단위

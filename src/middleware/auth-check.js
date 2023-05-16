@@ -33,24 +33,30 @@ export const validateUser = async (req, res, next) => {
       const storedToken = dataFromRedis?.split(":")[1];
 
       if (refreshToken !== storedToken) {
-        return res.status(401).send("Unauthorized access");
+        res.status(401).send("Unauthorized access");
+
+        return;
       }
-      const secretKey = process.env.JWT_SECRET_SECOND;
-      const { email, userId } = jwt.verify(storedToken, secretKey, (err, decoded) => {
-        if (err) {
-          res.status(401).send("Unauthorized access");
-          return;
-        }
-      });
 
-      const accessTokenLimit = 60 * 20;
-      const newAccessToken = issuingToken(email, userId, process.env.JWT_SECRET, accessTokenLimit);
+      try {
+        const secretKey = process.env.JWT_SECRET_SECOND;
+        const decoded = jwt.verify(storedToken, secretKey);
 
-      res.locals.token = newAccessToken;
-      req.user = email;
-      next();
+        const { email } = decoded;
 
-      return;
+        const accessTokenLimit = 60 * 20;
+        const newAccessToken = issuingToken(email, process.env.JWT_SECRET, accessTokenLimit);
+
+        res.locals.token = newAccessToken;
+        req.user = email;
+        next();
+
+        return;
+      } catch (err) {
+        res.status(401).send("Unauthorized access");
+
+        return;
+      }
     } else if (err.name === "JsonWebTokenError") {
       res.status(401).send("Invalid Token");
 
