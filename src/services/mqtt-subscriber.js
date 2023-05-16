@@ -34,13 +34,7 @@ export const mqttSubscriber = () => {
         }
 
         const roundTemperature = Math.round(temperature);
-        await putSensorDataToDB({
-          deviceId,
-          roundTemperature,
-          humidity,
-          lux,
-          solid,
-        });
+        await putSensorDataToDB(deviceId, roundTemperature, humidity, lux, solid);
         await updateDeviceStatus(deviceId, 1);
       }
     } catch (err) {
