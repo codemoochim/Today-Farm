@@ -2,7 +2,8 @@ import dotenv from "dotenv";
 dotenv.config();
 import bcrypt from "bcrypt";
 import { findPwdByEmail, updateDeletedDate } from "../../repository/user-repository.js";
-import { updateDeviceOwnerByEmail } from "../../repository/device-repository.js";
+import { updateDeviceOwnerByEmail, getDeviceListUsingEmail } from "../../repository/device-repository.js";
+import { initializeDeviceData } from "../../repository/data-repository.js";
 import { deleteTokenIntoRedis } from "../../utils/token/manage-token-with-redis.js";
 
 const userDeleteService = async (email, password, refreshToken) => {
@@ -18,7 +19,6 @@ const userDeleteService = async (email, password, refreshToken) => {
 
     const rows = await findPwdByEmail(email);
     if (rows.length === 0 || rows[0]?.deleted_at) {
-      console.log(11);
       processResult.statusCode = 400;
       processResult.message = "Already deleted";
 
@@ -35,7 +35,14 @@ const userDeleteService = async (email, password, refreshToken) => {
     }
 
     await updateDeletedDate(email, new Date());
+    const deviceList = await getDeviceListUsingEmail(email);
     await updateDeviceOwnerByEmail(email, new Date());
+    if (deviceList[0]?.deviceId) {
+      deviceList.map(async (device) => {
+        const { deviceId } = device;
+        await initializeDeviceData(deviceId);
+      });
+    }
     await deleteTokenIntoRedis(refreshToken);
     processResult.statusCode = 200;
     processResult.message = "User delete complete";

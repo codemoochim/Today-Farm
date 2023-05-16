@@ -49,4 +49,20 @@ pipeline {
             }
         }
     }
+    post {
+        success {
+            slackSend (
+                channel: '#smart-farm-be',  
+                color: "#00ff00",
+                message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})"
+            )
+        }
+        failure {
+            slackSend (
+                channel: '#smart-farm-be',
+                color: '#00ff00',
+                message: '배포 실패'
+            )
+        }
+    }    
 }

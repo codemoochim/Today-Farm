@@ -12,7 +12,7 @@ const loginControl = async (req, res, next) => {
         secure: true,
         maxAge: 2880000,
       })
-      .json({ data: processResult.accessToken, message: processResult.message });
+      .json({ auth: processResult.accessToken, message: processResult.message });
 
     return;
   } catch (err) {

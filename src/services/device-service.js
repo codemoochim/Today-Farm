@@ -7,6 +7,7 @@ import {
   updatePumpStatus,
   isWorkingActuator,
 } from "../repository/device-repository.js";
+import { initializeDeviceData } from "../repository/data-repository.js";
 
 import { mqttPublisher } from "./mqtt-publish.js";
 
@@ -35,6 +36,12 @@ export const deviceNew = async (deviceId, name, email) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
     const checkOwnerFlag = 1;
+    if (!deviceId || !name || !email) {
+      processResult.statusCode = 400;
+      processResult.message = "Missing required fields";
+
+      return processResult;
+    }
     const [rows] = await getDeviceListUsingDeviceId(deviceId);
 
     if (!rows) {
@@ -80,6 +87,8 @@ export const deviceNoMoreUse = async (deviceId, email) => {
     }
 
     await detachUserWithDevice(deviceId, checkOwnerFlag, new Date());
+    await initializeDeviceData(deviceId);
+
     processResult.statusCode = 200;
     processResult.message = "Device deleted";
 

@@ -125,3 +125,15 @@ export const oneSolidData = async (deviceId) => {
   const [rows] = await mysqlDB.promisePool.execute(sql, fields);
   return rows;
 };
+
+export const initializeDeviceData = async (deviceId) => {
+  const sql = `
+  DELETE FROM
+    data 
+  WHERE
+    deviceId = ?`;
+
+  const fields = [deviceId];
+  const [rows] = await mysqlDB.promisePool.execute(sql, fields);
+  return rows;
+};

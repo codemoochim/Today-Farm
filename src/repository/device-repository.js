@@ -85,7 +85,7 @@ export const updateLedStatus = async (deviceId, active) => {
 };
 
 // 생장 LED 제어상태 변경
-export const updatePumpStatus = async (deviceId, pump) => {
+export const updatePumpStatus = async (deviceId, active) => {
   const sql = `
   UPDATE
     devices
@@ -94,7 +94,7 @@ export const updatePumpStatus = async (deviceId, pump) => {
   WHERE
     deviceId = ?`;
 
-  const fields = [pump, deviceId];
+  const fields = [active, deviceId];
   const [rows] = await mysqlDB.promisePool.execute(sql, fields);
   return rows;
 };
@@ -135,12 +135,14 @@ export const updateDeviceOwnerByEmail = async (email, date) => {
   UPDATE
     devices
   SET
-    owner = ?,
+    led = 0,
+    pump = 0,
+    status = 0,
+    owner = 0,
     deleted_at = ?
   WHERE
     email = ?`;
 
-  const fields = [0, date, email];
+  const fields = [date, email];
   const [rows] = await mysqlDB.promisePool.execute(sql, fields);
-  return rows;
 };
