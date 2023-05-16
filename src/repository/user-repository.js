@@ -16,7 +16,8 @@ export const createUserInfoIntoDB = async (email, password, name, phone) => {
 export const findEmailByNameAndPhone = async (name, phone) => {
   const sql = `
   SELECT
-    email
+    email,
+    deleted_at
   FROM
     users
   WHERE
@@ -36,6 +37,9 @@ export const findUserByEmail = async (email) => {
     users
   WHERE
     email = ?`;
+
+  // 탈퇴한 회원 -> deletedAt not null
+  // 기존 회원 -> deletedAt null
 
   const fields = [email];
   const [result] = await mysqlDB.promisePool.execute(sql, fields);
@@ -59,7 +63,8 @@ export const findUserByPhone = async (phone) => {
 export const findPasswordByEmailAndPhone = async (email, phone) => {
   const sql = `
   SELECT
-    password
+    password,
+    deleted_at
   FROM
     users
   WHERE
@@ -88,7 +93,8 @@ export const updatePasswordQuery = async (email, password) => {
 export const findPwdByEmail = async (email) => {
   const sql = `
   SELECT
-    password
+    password,
+    deleted_at
   FROM
     users
   WHERE
@@ -118,7 +124,8 @@ export const findNameAndPhoneByEmail = async (email) => {
   SELECT
     name,
     phone,
-    email
+    email,
+    deleted_at
   FROM
     users
   WHERE

@@ -3,6 +3,7 @@ import { deleteTokenIntoRedis } from "../../utils/token/manage-token-with-redis.
 const logoutService = async (refreshToken) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
+    console.log(refreshToken);
     await deleteTokenIntoRedis(refreshToken);
     return processResult;
   } catch (err) {

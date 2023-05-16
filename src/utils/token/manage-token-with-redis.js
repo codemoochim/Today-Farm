@@ -15,7 +15,6 @@ export const deleteTokenIntoRedis = async (token) => {
   try {
     await redisClient.del(`${token}`, (err, response) => {
       if (err) throw err;
-      console.log(response);
     });
   } catch (err) {
     throw new Error(err);
@@ -25,8 +24,8 @@ export const deleteTokenIntoRedis = async (token) => {
 export const getTokenFromRedis = async (token) => {
   try {
     const result = await redisClient.get(`${token}`, (err, response) => {
-      if (err) return console.error(err);
-      console.log(response);
+      console.log(err);
+      if (err) throw err;
     });
     return result;
   } catch (err) {

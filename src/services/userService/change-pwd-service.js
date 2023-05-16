@@ -17,6 +17,12 @@ const changePwdService = async (email, currentPwd, newPwd) => {
     }
 
     const rows = await findPwdByEmail(email);
+    if (rows[0]?.deleted_at) {
+      processResult.statusCode = 400;
+      processResult.message = "Email is not available";
+
+      return processResult;
+    }
     const matchFlag = await bcrypt.compare(currentPwd, rows[0].password);
 
     if (!matchFlag) {

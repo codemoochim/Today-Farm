@@ -52,7 +52,7 @@ export const searchSolidData = async (deviceId, currentTime, pastTime) => {
   return rows;
 };
 
-export const putSensorDataToDB = async ({ deviceId, temperature, humidity, lux, solid }) => {
+export const putSensorDataToDB = async (deviceId, temperature, humidity, lux, solid) => {
   const sql = `
   INSERT INTO
     data

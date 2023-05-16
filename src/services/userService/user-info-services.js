@@ -5,12 +5,12 @@ export const userInfoService = async (email) => {
     const processResult = { statusCode: 200, message: "성공" };
     if (!email) {
       processResult.statusCode = 400;
-      processResult.message = "Missing required fields";
+      processResult.message = "Login required";
 
       return processResult;
     }
     const rows = await findNameAndPhoneByEmail(email);
-    if (rows.length === 0) {
+    if (rows.length === 0 || rows[0]?.deleted_at) {
       processResult.statusCode = 400;
       processResult.message = "Email does not exist";
 

@@ -26,7 +26,8 @@ export const getDeviceListUsingDeviceId = async (deviceId) => {
     *
   FROM
     devices
-  WHERE deviceId = ?`;
+  WHERE
+    deviceId = ?`;
 
   const fields = [deviceId];
   const [rows] = await mysqlDB.promisePool.execute(sql, fields);
@@ -121,9 +122,25 @@ export const isWorkingActuator = async (deviceId) => {
     status
   FROM
     devices
-  WHERE deviceId = ?`;
+  WHERE
+    deviceId = ?`;
 
   const fields = [deviceId];
   const [[rows]] = await mysqlDB.promisePool.execute(sql, fields);
   return rows;
+};
+
+export const updateDeviceOwnerByEmail = async (email, date) => {
+  const sql = `
+  UPDATE
+    devices
+  SET
+    owner = ?,
+    deleted_at = ?
+  WHERE
+    email = ?`;
+
+  const fields = [0, date, email];
+  await mysqlDB.promisePool.execute(sql, fields);
+  return;
 };

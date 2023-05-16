@@ -1,19 +1,23 @@
 import { findEmailByNameAndPhone } from "../../repository/user-repository.js";
-import { checkRequiredParams } from "../../utils/check-required-params.js";
 
 const findEmailService = async (name, phone) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
 
-    const requestParams = ["name", "phone"];
-    if (!checkRequiredParams({ name, phone }, requestParams)) {
+    if (!name || !phone) {
       processResult.statusCode = 400;
       processResult.message = "Required parameter(s) missing";
 
       return processResult;
     }
-
     const rows = await findEmailByNameAndPhone(name, phone);
+
+    if (rows[0]?.deleted_at) {
+      processResult.statusCode = 400;
+      processResult.message = "No available";
+
+      return processResult;
+    }
 
     if (rows.length === 0) {
       processResult.statusCode = 400;

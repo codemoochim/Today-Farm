@@ -14,6 +14,13 @@ export const deviceList = async (email) => {
   try {
     const processResult = { statusCode: 200, message: "성공" };
     const result = await getDeviceListUsingEmail(email);
+    // 디바이스를 조회할 때, 디바이스 ID 에 대한 데이터를 조회해서 그 데이터의 최근 값이 10초 이내 있으면
+    // 디바이스가 켜져있는거고 아니면 디바이스가 꺼져있는거임.
+    // 사용자의 디바이스가 여러개일 때 이메일로 디바이스 아이디 다 가져온다음에,
+    // 그 디바이스 아이디로 각각 데이터를 조회한다음에,
+    // 데이터의 시간값을 요청시간과 확인하여
+    // 디바이스 상태값을 업데이트하고 응답해준다.
+
     processResult.rows = result;
 
     return processResult;

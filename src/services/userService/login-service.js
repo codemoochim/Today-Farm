@@ -20,7 +20,7 @@ const loginService = async (email, password) => {
     const rows = await findUserByEmail(email);
     if (rows[0].deleted_at) {
       processResult.statusCode = 400;
-      processResult.message = "Cannot sign-in";
+      processResult.message = "Inability to log in";
 
       return processResult;
     }
@@ -43,7 +43,7 @@ const loginService = async (email, password) => {
     const userId = rows[0].id;
     const secret = process.env.JWT_SECRET;
     const secretSecond = process.env.JWT_SECRET_SECOND;
-    const accessTokenLimit = 60 * 20; // 30분
+    const accessTokenLimit = 60 * 20; // 20분
     const refreshTokenExpires = 60 * 60;
 
     const accessToken = issuingToken(email, userId, secret, accessTokenLimit);

@@ -13,6 +13,7 @@ import {
   userDeleteControl,
 } from "../controller/userController/index.js";
 import { validateUser } from "../middleware/auth-check.js";
+import { isLoggedIn } from "../middleware/login-check.js";
 import { issuingAccessToken } from "../middleware/silent-refresh.js";
 
 // Path: /
@@ -22,7 +23,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/register", registerControl);
-router.post("/login", loginControl);
+router.post("/login", isLoggedIn, loginControl);
 router.get("/logout", logoutControl);
 
 router.post("/email", findEmailControl);

@@ -40,11 +40,12 @@ const registerService = async (email, password, phone, name) => {
     // else if (!checkPwdForm(password)) {
     //   processResult.statusCode = 400;
     //   processResult.message = "Invalid password form";
+    //
     // return processResult;
     // }
 
     const emailRows = await findUserByEmail(email);
-    if (emailRows.length > 0 || emailRows[0].deleted_at) {
+    if (emailRows.length > 0 || emailRows[0]?.deleted_at) {
       processResult.statusCode = 400;
       processResult.message = "Email is not available";
 
