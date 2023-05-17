@@ -1,7 +1,11 @@
 import * as mqtt from "mqtt";
+import dotenv from "dotenv";
+dotenv.config();
 
-import config from "./db.config.js";
-const mqttOptions = config.mqtt;
+const mqttOptions = {
+  host: process.env.MQTT_BROKER_HOST,
+  port: process.env.MQTT_BROKER_PORT,
+};
 
 class MqttClient {
   constructor(options, topics) {

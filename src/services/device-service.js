@@ -9,7 +9,7 @@ import {
 } from "../repository/device-repository.js";
 import { initializeDeviceData } from "../repository/data-repository.js";
 
-import { mqttPublisher } from "./mqtt-publish.js";
+import { mqttPublisher } from "./mqtt/mqtt-publish.js";
 
 // 디바이스 조회
 export const deviceList = async (email) => {

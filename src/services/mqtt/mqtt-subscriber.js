@@ -1,11 +1,11 @@
-import { mqttClientInstance } from "../config/mqtt-client.js";
-import { putSensorDataToDB } from "../repository/data-repository.js";
+import { mqttClientInstance } from "../../config/mqtt-client.js";
+import { putSensorDataToDB } from "../../repository/data-repository.js";
 import {
   isWorkingActuator,
   updateDeviceStatus,
   updateLedStatus,
   updatePumpStatus,
-} from "../repository/device-repository.js";
+} from "../../repository/device-repository.js";
 
 export const mqttSubscriber = () => {
   mqttClientInstance.setMessageCallback(async (topic, message) => {

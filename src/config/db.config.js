@@ -9,8 +9,4 @@ export default {
     database: process.env.MYSQL_DATABASE,
     port: process.env.MYSQL_PORT,
   },
-  mqtt: {
-    host: process.env.MQTT_BROKER_HOST,
-    port: process.env.MQTT_BROKER_PORT,
-  },
 };
