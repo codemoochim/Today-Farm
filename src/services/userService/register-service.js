@@ -64,8 +64,8 @@ const registerService = async (email, password, phone, name) => {
 
     const secret = process.env.JWT_SECRET;
     const secretSecond = process.env.JWT_SECRET_SECOND;
-    const accessTokenLimit = 60 * 20; // 30분
-    const refreshTokenExpires = 60 * 60;
+    const accessTokenLimit = 60 * 60 * 2; // 2시간
+    const refreshTokenExpires = 60 * 60 * 24 * 14; // 14일
 
     const accessToken = issuingToken(email, secret, accessTokenLimit);
     const refreshToken = issuingToken(email, secretSecond, refreshTokenExpires);

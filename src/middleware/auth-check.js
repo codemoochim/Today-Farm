@@ -44,7 +44,7 @@ export const validateUser = async (req, res, next) => {
 
         const { email } = decoded;
 
-        const accessTokenLimit = 60 * 20;
+        const accessTokenLimit = 60 * 60 * 2; // 2시간
         const newAccessToken = issuingToken(email, process.env.JWT_SECRET, accessTokenLimit);
 
         res.locals.token = newAccessToken;

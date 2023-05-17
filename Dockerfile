@@ -6,8 +6,6 @@ COPY package*.json ./
 
 RUN npm install --silent
 
-RUN npm install pm2 -g
-
 COPY . .
 
 EXPOSE 5000

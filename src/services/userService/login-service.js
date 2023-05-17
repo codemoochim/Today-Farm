@@ -42,8 +42,8 @@ const loginService = async (email, password) => {
 
     const secret = process.env.JWT_SECRET;
     const secretSecond = process.env.JWT_SECRET_SECOND;
-    const accessTokenLimit = 60 * 20; // 20분
-    const refreshTokenExpires = 60 * 60;
+    const accessTokenLimit = 60 * 60 * 2; // 2시간
+    const refreshTokenExpires = 60 * 60 * 24 * 14; // 14일
 
     const accessToken = issuingToken(email, secret, accessTokenLimit);
     const refreshToken = issuingToken(email, secretSecond, refreshTokenExpires);

@@ -32,3 +32,8 @@ export const getTokenFromRedis = async (token) => {
     throw new Error(err);
   }
 };
+
+// 리프레시 토큰
+// 쿠키 14일(ms) - 레디스 14일(s) - JWT 14일(s)
+// 액세스 토큰
+// JWT 2시간(s)
