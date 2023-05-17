@@ -58,8 +58,13 @@ export const deviceNew = async (deviceId, name, email) => {
     }
 
     await assignOwnerToDevice(deviceId, name, email, checkOwnerFlag);
+    const assignedDevice = await getDeviceListUsingDeviceId(deviceId);
+
     processResult.statusCode = 201;
-    processResult.message = "Device saved";
+    processResult.message = {
+      deviceId: assignedDevice[0].deviceId,
+      name: assignedDevice[0].name,
+    };
 
     return processResult;
   } catch (err) {
@@ -90,7 +95,10 @@ export const deviceNoMoreUse = async (deviceId, email) => {
     await initializeDeviceData(deviceId);
 
     processResult.statusCode = 200;
-    processResult.message = "Device deleted";
+    processResult.message = {
+      deviceId: rows.deviceId,
+      name: rows.name,
+    };
 
     return processResult;
   } catch (err) {

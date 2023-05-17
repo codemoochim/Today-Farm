@@ -16,8 +16,6 @@ import { validateUser } from "../middleware/auth-check.js";
 import { isLoggedIn } from "../middleware/login-check.js";
 import { issuingAccessToken } from "../middleware/silent-refresh.js";
 
-// Path: /
-
 router.get("/", (req, res) => {
   res.send("Hello Universe!");
 });

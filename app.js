@@ -1,9 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
 import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-dotenv.config();
+import swaggerUI from "swagger-ui-express";
+import YAML from "yamljs";
 
 import { mqttSubscriber } from "./src/services/mqtt/mqtt-subscriber.js";
 import authRouter from "./src/routes/auth-router.js";
@@ -12,6 +14,8 @@ import { validateUser } from "./src/middleware/auth-check.js";
 
 const app = express();
 mqttSubscriber();
+
+const swaggerDocument = YAML.load("./swagger.yaml");
 
 app.use(morgan("dev"));
 app.use(express.json());
@@ -29,6 +33,7 @@ app.use(
 );
 app.use("/api", authRouter);
 app.use("/api/devices", validateUser, deviceRouter);
+app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 찾을 수 없는 요청입니다`);

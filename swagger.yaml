@@ -1,0 +1,646 @@
+openapi: 3.0.3
+info:
+  title: Today Farm API
+  description: 오늘농장의 API
+  version: 0.1.0
+servers:
+  - url: http://34.64.88.23
+tags:
+  - name: USER
+    description: 회원과 관련된 기능
+  - name: DEVICE
+    description: 디바이스와 관련된 기능
+paths:
+  /:
+    get:
+      tags:
+        - USER
+      description: 백엔드 연결 확인
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Hello Universe!
+  /register:
+    post:
+      tags:
+        - USER
+      description: 회원가입
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Register"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Register"
+      responses:
+        "201":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: abcdefg
+        "400":
+          description: Invalid Requirements
+  /login:
+    post:
+      tags:
+        - USER
+      description: 로그인
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Login"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: abcdefg
+        "400":
+          description: Bad Request
+  /logout:
+    get:
+      tags:
+        - USER
+      description: 로그아웃
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 성공
+  /email:
+    post:
+      tags:
+        - USER
+      description: 이메일 찾기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Email"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Email"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: sando@naver.com
+        "400":
+          description: Bad Request
+  /pwd:
+    post:
+      tags:
+        - USER
+      description: 비밀번호 찾기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Pwd"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Pwd"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  temporary password:
+                    type: string
+                    example: 12341234
+        "400":
+          description: Bad Request
+    put:
+      tags:
+        - USER
+      description: 비밀번호 찾기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewPwd"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/NewPwd"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 성공
+        "400":
+          description: Bad Request
+  /users:
+    get:
+      tags:
+        - USER
+      description: 회원 정보 조회
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: San Doe
+                  phone:
+                    type: string
+                    example: 010-0000-0000
+                  email:
+                    type: string
+                    example: sando@naver.com
+                  deleted_at:
+                    type: string
+                    example: "2022-12-12"
+        "400":
+          description: Bad Request
+    patch:
+      tags:
+        - USER
+      description: 회원 정보 수정
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserEdit"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/UserEdit"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 성공
+        "400":
+          description: Bad Request
+    put:
+      tags:
+        - USER
+      description: 회원 탈퇴
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: 12341234
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: 12341234
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 성공
+        "400":
+          description: Bad Request
+  /silent-refresh:
+    post:
+      tags:
+        - USER
+      description: 액세스 토큰 재발급
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: abcdefg
+        "401":
+          description: Unauthorized access
+  /devices:
+    get:
+      tags:
+        - DEVICE
+      description: 회원의 디바이스 목록 조회
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    deviceId:
+                      type: integer
+                      example: 100
+                    name:
+                      type: string
+                      example: "상도의 상추"
+                    status:
+                      type: integer
+                      example: 1
+        "400":
+          description: Bad Request
+    post:
+      tags:
+        - DEVICE
+      description: 디바이스 추가
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Device"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Device"
+      responses:
+        "201":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    deviceId:
+                      type: integer
+                      example: 100
+                    name:
+                      type: string
+                      example: 상도의 상추
+        "400":
+          description: Bad Request
+    put:
+      tags:
+        - DEVICE
+      description: 디바이스 삭제
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deviceId:
+                  type: integer
+                  example: 100
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                deviceId:
+                  type: integer
+                  example: 100
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deviceId:
+                    type: integer
+                    example: 100
+                  name:
+                    type: string
+                    example: "상도의 상추"
+        "400":
+          description: Bad Request
+  /devices/dht:
+    get:
+      tags:
+        - DEVICE
+      description: 디바이스 1개의 온습도 데이터 조회
+      parameters:
+        - name: deviceId
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 100
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  searchData:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        deviceId:
+                          type: integer
+                          example: 100
+                        temperature:
+                          type: integer
+                          example: 30
+                        humidity:
+                          type: integer
+                          example: 50
+                  deviceStatus:
+                    $ref: "#/components/schemas/DeviceStatus"
+        "400":
+          description: Bad Request
+  /devices/lux:
+    get:
+      tags:
+        - DEVICE
+      description: 디바이스 1개의 조도 데이터 조회
+      parameters:
+        - name: deviceId
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 100
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  searchData:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        deviceId:
+                          type: integer
+                          example: 100
+                        lux:
+                          type: integer
+                          example: 30
+                  deviceStatus:
+                    $ref: "#/components/schemas/DeviceStatus"
+        "400":
+          description: Bad Request
+    post:
+      tags:
+        - DEVICE
+      description: 디바이스 1개 생장 LED 제어
+      parameters:
+        - name: deviceId
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 100
+        - name: active
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  led:
+                    type: integer
+                    example: 1
+        "400":
+          description: Bad Request
+  /devices/solid:
+    get:
+      tags:
+        - DEVICE
+      description: 디바이스 1개의 토양수분 데이터 조회
+      parameters:
+        - name: deviceId
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 100
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  searchData:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        deviceId:
+                          type: integer
+                          example: 100
+                        solid:
+                          type: integer
+                          example: 30
+                  deviceStatus:
+                    $ref: "#/components/schemas/DeviceStatus"
+        "400":
+          description: Bad Request
+    post:
+      tags:
+        - DEVICE
+      description: 디바이스 1개 모터 펌프 제어
+      parameters:
+        - name: deviceId
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 100
+        - name: active
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pump:
+                    type: integer
+                    example: 1
+        "400":
+          description: Bad Request
+
+components:
+  schemas:
+    Register:
+      type: object
+      required:
+        - email
+        - password
+        - name
+        - phone
+      properties:
+        email:
+          type: string
+          description: 유효성 검사
+          example: sando@naver.com
+        password:
+          type: string
+          description: 유효성 검사
+          example: "12341234"
+        name:
+          type: string
+          description: 2글자 이상
+          example: San Doe
+        phone:
+          type: string
+          example: 010-1234-1234
+    Login:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          description: 유효성 검사
+          example: sando@naver.com
+        password:
+          type: string
+          description: 유효성 검사
+          example: "12341234"
+    Email:
+      type: object
+      required:
+        - name
+        - phone
+      properties:
+        name:
+          type: string
+          example: San Doe
+        phone:
+          type: string
+          example: 010-0000-0000
+    Pwd:
+      type: object
+      required:
+        - email
+        - phone
+      properties:
+        email:
+          type: string
+          example: sando@naver.com
+        phone:
+          type: string
+          example: 010-0000-0000
+    NewPwd:
+      type: object
+      required:
+        - currentPwd
+        - newPwd
+      properties:
+        currentPwd:
+          type: string
+          example: "00000000"
+        newPwd:
+          type: string
+          example: "12341234"
+    UserEdit:
+      type: object
+      required:
+        - name
+        - phone
+      properties:
+        name:
+          type: string
+          example: San Doe
+        phone:
+          type: string
+          example: 010-0000-0000
+    Device:
+      type: object
+      required:
+        - deviceId
+        - name
+      properties:
+        deviceId:
+          type: integer
+          example: 100
+        name:
+          type: string
+          example: 상도의 상추
+    DeviceStatus:
+      type: object
+      properties:
+        led:
+          type: integer
+          example: 1
+        pump:
+          type: integer
+          example: 0
+        status:
+          type: integer
+          example: 1
