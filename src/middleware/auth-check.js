@@ -14,7 +14,7 @@ export const validateUser = async (req, res, next) => {
 
   const [authType, accessToken] = authHeader?.split(" ");
 
-  if (authType !== "Bearer" || authType !== "bearer" || !accessToken) {
+  if (authType !== ("Bearer" || "bearer") || !accessToken) {
     return res.status(401).send("Unauthorized access");
   }
   try {

@@ -1,5 +1,6 @@
 import { oneTemperatureAndHumidityData, oneLuxData, oneSolidData } from "../repository/data-repository.js";
 import { isWorkingActuator } from "../repository/device-repository.js";
+import { convertSolidRawToPercent } from "../utils/convertSolidData.js";
 
 export const getTemperatureAndHumidity = async (deviceId) => {
   const processResult = { statusCode: 200, message: "성공" };
@@ -11,7 +12,6 @@ export const getTemperatureAndHumidity = async (deviceId) => {
       };
 
     const searchData = await oneTemperatureAndHumidityData(deviceId);
-    const deviceStatus = await isWorkingActuator(deviceId);
 
     if (searchData?.length === 0) {
       processResult.message = "조회할 수 있는 데이터가 없습니다";
@@ -19,6 +19,7 @@ export const getTemperatureAndHumidity = async (deviceId) => {
 
       return processResult;
     }
+    const deviceStatus = await isWorkingActuator(deviceId);
 
     const message = {
       searchData,
@@ -41,7 +42,6 @@ export const getLux = async (deviceId) => {
       };
 
     const searchData = await oneLuxData(deviceId);
-    const deviceStatus = await isWorkingActuator(deviceId);
 
     if (searchData?.length === 0) {
       processResult.message = "조회할 수 있는 데이터가 없습니다";
@@ -49,6 +49,7 @@ export const getLux = async (deviceId) => {
 
       return processResult;
     }
+    const deviceStatus = await isWorkingActuator(deviceId);
     const message = {
       searchData,
       deviceStatus,
@@ -70,14 +71,16 @@ export const getSolid = async (deviceId) => {
       };
 
     const searchData = await oneSolidData(deviceId);
-    const deviceStatus = await isWorkingActuator(deviceId);
-
     if (searchData?.length === 0) {
       processResult.message = "조회할 수 있는 데이터가 없습니다";
       processResult.deviceStatus = deviceStatus;
 
       return processResult;
     }
+
+    const solidPercentage = convertSolidRawToPercent(searchData[0]?.solid);
+    searchData[0].solid = solidPercentage;
+    const deviceStatus = await isWorkingActuator(deviceId);
 
     const message = {
       searchData,
