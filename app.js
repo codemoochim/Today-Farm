@@ -18,7 +18,6 @@ mqttSubscriber();
 
 const swaggerDocument = YAML.load("./swagger.yaml");
 
-app.use(morgan("combined"));
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -32,6 +31,13 @@ app.use(
     credentials: true,
   }),
 );
+
+if (process.env.NODE_STATUS === "production") {
+  app.use(morgan("combined"));
+} else {
+  app.use(morgan("dev"));
+}
+
 app.use("/api", authRouter);
 app.use("/api/devices", validateUser, deviceRouter);
 app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
