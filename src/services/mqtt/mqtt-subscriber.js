@@ -20,9 +20,7 @@ export const mqttSubscriber = () => {
         if (deviceId === null) {
           return;
         }
-        // 무조건 데이터가 들어온다는 가정임
-        // 데이터는 들어오는데, 정샂거인 데이터가 들어오는지 확인핵야함
-        // 액츄에이터 작동 여부 업데이트
+
         const currentDeviceStatus = await isWorkingActuator(deviceId);
         if (currentDeviceStatus.length === 0) {
           return;

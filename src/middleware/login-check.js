@@ -11,7 +11,7 @@ export const isLoggedIn = async (req, res, next) => {
   try {
     const [authType, accessToken] = authHeader?.split(" ");
 
-    if (authType === "Bearer" || accessToken) {
+    if (authType === ("Bearer" || "bearer") || accessToken) {
       jwt.verify(accessToken, process.env.JWT_SECRET, (err, decoded) => {
         if (decoded) {
           res.status(401).send("Already logged In");

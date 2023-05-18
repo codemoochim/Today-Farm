@@ -11,13 +11,14 @@ import { mqttSubscriber } from "./src/services/mqtt/mqtt-subscriber.js";
 import authRouter from "./src/routes/auth-router.js";
 import deviceRouter from "./src/routes/device-router.js";
 import { validateUser } from "./src/middleware/auth-check.js";
+import { logger } from "./src/config/logger.js";
 
 const app = express();
 mqttSubscriber();
 
 const swaggerDocument = YAML.load("./swagger.yaml");
 
-app.use(morgan("dev"));
+app.use(morgan("combined"));
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -38,6 +39,8 @@ app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 찾을 수 없는 요청입니다`);
   error.status = 404;
+  logger.info();
+  logger.error(error.message);
   next(error);
 });
 
