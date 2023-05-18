@@ -18,7 +18,7 @@ const loginService = async (email, password) => {
     }
 
     const rows = await findUserByEmail(email);
-    if (rows[0].deleted_at) {
+    if (rows[0]?.deleted_at) {
       processResult.statusCode = 400;
       processResult.message = "Inability to log in";
 

@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const isLoggedIn = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  const authHeader = req.headers["authorization"];
   if (!authHeader) {
     next();
     return;

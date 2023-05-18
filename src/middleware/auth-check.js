@@ -9,18 +9,18 @@ export const validateUser = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
 
   if (!authHeader) {
-    return res.status(401).send("Unauthorized access");
+    res.status(401).send("Unauthorized access");
+    return;
   }
 
-  const [authType, accessToken] = authHeader?.split(" ");
-
-  if (authType !== ("Bearer" || "bearer") || !accessToken) {
-    return res.status(401).send("Unauthorized access");
-  }
   try {
+    const [authType, accessToken] = authHeader?.split(" ");
+
+    if (authType !== ("Bearer" || "bearer") || !accessToken) {
+      return res.status(401).send("Unauthorized access");
+    }
     const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
     req.user = decoded.email;
-
     next();
   } catch (err) {
     const { refreshToken } = req.cookies;
