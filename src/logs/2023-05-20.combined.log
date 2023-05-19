@@ -10,3 +10,33 @@
 
 2023-05-20 06:34:39 [오늘농장] info: [0mPOST /api/login [32m200[0m 495.904 ms - 194[0m
 
+2023-05-20 06:35:57 [오늘농장] info: [0mGET /api/devices [32m200[0m 371.203 ms - 421[0m
+
+2023-05-20 06:36:09 [오늘농장] info: [0mGET /api/devices/dht?deviceId=1 [32m200[0m 68.726 ms - 116[0m
+
+2023-05-20 06:36:12 [오늘농장] info: [0mGET /api/devices/dht?deviceId=2 [32m200[0m 28.091 ms - 67[0m
+
+2023-05-20 06:36:14 [오늘농장] info: [0mGET /api/devices/dht?deviceId=3 [32m200[0m 48.652 ms - 115[0m
+
+2023-05-20 06:36:15 [오늘농장] info: [0mGET /api/devices/dht?deviceId=4 [32m200[0m 32.284 ms - 115[0m
+
+2023-05-20 06:36:16 [오늘농장] info: [0mGET /api/devices/dht?deviceId=2 [32m200[0m 40.438 ms - 67[0m
+
+2023-05-20 06:36:20 [오늘농장] info: [0mGET /api/devices/dht?deviceId=2 [32m200[0m 45.716 ms - 67[0m
+
+2023-05-20 06:36:20 [오늘농장] info: [0mGET /api/devices/dht?deviceId=2 [32m200[0m 15.770 ms - 67[0m
+
+2023-05-20 06:36:23 [오늘농장] info: [0mGET /api/devices/dht?deviceId=5 [32m200[0m 27.815 ms - 115[0m
+
+2023-05-20 06:39:12 [오늘농장] info: [0mGET /api/devices/lux?deviceId=1 [32m200[0m 79.473 ms - 95[0m
+
+2023-05-20 06:39:16 [오늘농장] info: [0mGET /api/devices/solid?deviceId=1 [32m200[0m 147.693 ms - 96[0m
+
+2023-05-20 06:39:45 [오늘농장] info: [0mGET /api/devices/dht?deviceId=1 [32m200[0m 81.217 ms - 116[0m
+
+2023-05-20 06:40:25 [오늘농장] info: 
+2023-05-20 06:40:25 [오늘농장] error: 
+2023-05-20 06:40:25 [오늘농장] info: [0mPOST /api/devices [33m400[0m 43.435 ms - 59[0m
+
+2023-05-20 06:40:29 [오늘농장] info: [0mPOST /api/devices [32m201[0m 88.464 ms - 43[0m
+
