@@ -6,7 +6,8 @@ import { Unauthorized, Forbidden } from "../errors/index.js";
 import { isExistAuthHeader, extractTokenFromHeader, checkRefreshAndIssueAccess } from "../utils/auth/index.js";
 
 export const validateUser = async (req, res, next) => {
-  const authHeader = isExistAuthHeader(req.headers);
+  const authHeader = req.headers["authorization"];
+  // const authHeader = isExistAuthHeader(req.headers);
   if (!authHeader) throw new Unauthorized("No Authorization Headers");
 
   const authType = authHeader?.split(" ")[0];
