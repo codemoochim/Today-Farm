@@ -9,7 +9,12 @@ export const validateUser = async (req, res, next) => {
   const authHeader = isExistAuthHeader(req.headers);
   if (!authHeader) throw new Unauthorized("No Authorization Headers");
 
-  const accessToken = extractTokenFromHeader(authHeader);
+  const authType = authHeader?.split(" ")[0];
+  const accessToken = authHeader?.split(" ")[1];
+  if (authType !== ("Bearer" || "bearer")) {
+    throw new Unauthorized("No Authorization Headers");
+  }
+
   if (!accessToken) throw new Unauthorized("Encoded different Type or No Token");
   try {
     const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
