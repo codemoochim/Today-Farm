@@ -23,20 +23,15 @@ export const validateUser = async (req, res, next) => {
         req.user = decoded.email;
         next();
         return;
-      } else {
-        console.log(err);
+      } else if (err) {
         throw err;
       }
     });
   } catch (err) {
     if (err.name === "TokenExpiredError") {
       const { refreshToken } = req.cookies;
-      console.log(refreshToken);
       try {
         const { newAccessToken, email } = await checkRefreshAndIssueAccess(refreshToken);
-
-        console.log(newAccessToken);
-        console.log(email);
 
         res.locals.token = newAccessToken;
         req.user = email;

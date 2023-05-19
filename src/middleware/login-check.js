@@ -6,7 +6,7 @@ import { Unauthorized } from "../errors/index.js";
 import { isExistAuthHeader, extractTokenFromHeader } from "../utils/auth/index.js";
 
 export const isLoggedIn = async (req, res, next) => {
-  const authHeader = isExistAuthHeader(req.headers);
+  const authHeader = req.headers["authorization"];
   if (!authHeader) {
     next();
     return;

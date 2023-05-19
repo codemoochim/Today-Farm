@@ -38,9 +38,7 @@ export const deleteTokenIntoRedis = async (token) => {
 export const getTokenFromRedis = async (token) => {
   try {
     const result = await redisClient.get(`${token}`, (err, response) => {
-      console.log(response);
-      console.log(err);
-      if (err) throw err;
+      if (err) return console.error(err);
     });
     return result;
   } catch (err) {
@@ -78,10 +76,9 @@ export const checkRefreshAndIssueAccess = async (refreshToken) => {
     if (!refreshTokenFlag) throw new Unauthorized("Does not Match RefreshToken");
 
     const decodedRefresh = jwt.verify(refreshToken, process.env.JWT_SECRET_SECOND);
-
     const { email } = decodedRefresh;
-
-    const newAccessToken = issuingToken(email, process.env.JWT_SECRET, process.env.ACCESS_TOKEN_LIMIT);
+    const accessTokenLimit = 7200; // 2시간
+    const newAccessToken = issuingToken(email, process.env.JWT_SECRET, accessTokenLimit);
     return { newAccessToken, email };
   } catch (err) {
     throw err;

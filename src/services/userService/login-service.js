@@ -32,6 +32,7 @@ const loginService = async (email, password) => {
     const secretSecond = process.env.JWT_SECRET_SECOND;
     const accessTokenLimit = 7200; // 2시간
     const refreshTokenExpires = 1209600; // 14일
+    // const refreshExpiresRedis = 1209600;
 
     const accessToken = issuingToken(email, secret, accessTokenLimit);
     const refreshToken = issuingToken(email, secretSecond, refreshTokenExpires);
