@@ -45,7 +45,7 @@ class MqttClient {
 let mqttClientInstance = null;
 
 if (!mqttClientInstance) {
-  mqttClientInstance = new MqttClient(mqttOptions, ["sensor/esp32/data", "cmd/esp32/#"]);
+  mqttClientInstance = new MqttClient(mqttOptions, ["sensor/esp32/data", "cmd/esp32/#", "actuator/esp32/response"]);
   mqttClientInstance.connect();
 }
 

@@ -5,9 +5,6 @@ pipeline {
             steps {
                 echo "Cloning..."
                 checkout scm
-                // git branch: 'feat/cicd', 
-                // credentialsId: 'sando', 
-                // url: 'git@kdt-gitlab.elice.io:iot_track/class_01/iot_project/team2/smart-farm-be.git'
             }
         }
         stage ('Test') {

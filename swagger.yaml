@@ -91,7 +91,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 성공
+                    example: Success
   /email:
     post:
       tags:
@@ -166,7 +166,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 성공
+                    example: Success
         "400":
           description: Bad Request
   /users:
@@ -218,7 +218,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 성공
+                    example: Success
         "400":
           description: Bad Request
     put:
@@ -251,7 +251,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 성공
+                    example: Success
         "400":
           description: Bad Request
   /silent-refresh:

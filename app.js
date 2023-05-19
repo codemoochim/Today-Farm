@@ -2,11 +2,12 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import cors from "cors";
-import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import swaggerUI from "swagger-ui-express";
 import YAML from "yamljs";
+import { morganMiddleware } from "./src/middleware/custom-morgan.js";
 
+import { BadRequest, Unauthorized, Forbidden, NotFound, ServerError, JwtError } from "./src/errors/index.js";
 import { mqttSubscriber } from "./src/services/mqtt/mqtt-subscriber.js";
 import authRouter from "./src/routes/auth-router.js";
 import deviceRouter from "./src/routes/device-router.js";
@@ -32,28 +33,35 @@ app.use(
   }),
 );
 
-if (process.env.NODE_STATUS === "production") {
-  app.use(morgan("combined"));
-} else {
-  app.use(morgan("dev"));
-}
+app.use(morganMiddleware);
 
 app.use("/api", authRouter);
 app.use("/api/devices", validateUser, deviceRouter);
 app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use((req, res, next) => {
-  const error = new Error(`${req.method} ${req.url} 찾을 수 없는 요청입니다`);
-  error.status = 404;
-  logger.info();
-  logger.error(error.message);
-  next(error);
+  const err = new NotFound(`${req.method} ${req.url} 찾을 수 없는 요청입니다`);
+  next(err);
 });
 
 app.use((err, req, res, next) => {
-  const statusCode = err.status || 500;
-  const errorMessage = err.message;
-  res.status(statusCode).send(errorMessage);
+  logger.info();
+  logger.error(err.message);
+  if (err instanceof BadRequest) {
+    return res.status(err.statusCode).send({ name: err.name, message: err.cause });
+  } else if (err instanceof Unauthorized) {
+    return res.status(err.statusCode).send({ name: err.name, message: err.cause });
+  } else if (err instanceof Forbidden) {
+    return res.status(err.statusCode).send({ name: err.name, message: err.cause });
+  } else if (err instanceof NotFound) {
+    return res.status(err.statusCode).send({ name: err.name, message: err.cause });
+  } else if (err instanceof ServerError) {
+    return res.status(err.statusCode).send({ name: err.name, message: err.cause });
+  } else if (err instanceof JwtError) {
+    return res.status(err.statusCode).send({ name: err.name, message: err.cause });
+  } else {
+    res.status(500).send({ err: err.name, message: err.message });
+  }
 });
 
 app.listen(process.env.PORT || 5000, () => {

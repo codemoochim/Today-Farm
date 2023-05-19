@@ -7,7 +7,7 @@ import {
   updatePumpStatus,
 } from "../../repository/device-repository.js";
 
-export const mqttSubscriber = () => {
+export const mqttSubscriber = async () => {
   mqttClientInstance.setMessageCallback(async (topic, message) => {
     const TOPIC_TYPE_INDEX = 0;
     try {
@@ -36,7 +36,7 @@ export const mqttSubscriber = () => {
         await updateDeviceStatus(deviceId, 1);
       }
     } catch (err) {
-      console.log(err);
+      throw err;
     }
   });
 };

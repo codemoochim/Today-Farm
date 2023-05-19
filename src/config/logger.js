@@ -1,7 +1,12 @@
-import { createLogger, format, transports } from "winston";
+import winston from "winston";
 import winstonDaily from "winston-daily-rotate-file";
 
-const { combine, timestamp, label, json, printf, errors, splat } = format;
+const { combine, timestamp, label, printf } = winston.format;
+const logDir = "./src/logs/";
+
+const logFormat = printf(({ level, message, label, timestamp }) => {
+  return `${timestamp} [${label}] ${level}: ${message}`;
+});
 
 const loggerOptions = {
   level: "info",
@@ -9,25 +14,47 @@ const loggerOptions = {
     timestamp({
       format: "YYYY-MM-DD HH:mm:ss",
     }),
-    errors({ stack: true }),
-    splat(),
-    json(),
+    label({ label: "오늘농장" }),
+    logFormat,
   ),
-  defaultMeta: { service: "smart-farm-be" },
   transports: [
     new winstonDaily({
       level: "info",
       datePattern: "YYYY-MM-DD",
+      dirName: logDir,
       filename: "./src/logs/%DATE%.combined.log",
       maxFiles: "3d",
+      zippedArchive: true,
     }),
     new winstonDaily({
       level: "error",
       datePattern: "YYYY-MM-DD",
+      dirName: logDir + "/error",
       filename: "./src/logs/%DATE%.error.log",
       maxFiles: "3d",
+      zippedArchive: true,
+    }),
+  ],
+  exceptionalHandlers: [
+    new winstonDaily({
+      level: "error",
+      datePattern: "YYYY-MM-DD",
+      dirName: logDir,
+      filename: "./src/logs/%DATE%.exception.log",
+      maxFiles: "3d",
+      zippedArchive: true,
     }),
   ],
 };
 
-export const logger = createLogger(loggerOptions);
+const logger = winston.createLogger(loggerOptions);
+
+if (process.env.NODE_STAGING_ENV !== "production") {
+  logger.add(
+    new winston.transports.Console({
+      formant: winston.format.combine(winston.format.colorize(), winston.format.simple()),
+    }),
+  );
+}
+
+export { logger };

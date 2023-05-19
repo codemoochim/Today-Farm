@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { BadRequest } from "../../errors/index.js";
 import { findPwdByEmail, updatePasswordQuery } from "../../repository/user-repository.js";
 
 const changePwdService = async (email, currentPwd, newPwd) => {
@@ -6,30 +7,21 @@ const changePwdService = async (email, currentPwd, newPwd) => {
     const processResult = { statusCode: 200, message: "Success" };
 
     if (!currentPwd || !newPwd) {
-      processResult.statusCode = 400;
-      processResult.message = "Missing required fields";
-
-      return processResult;
-    } else if (newPwd.length < 6) {
-      processResult.statusCode = 400;
-      processResult.message = "Password is too short";
-      return processResult;
+      throw new BadRequest("Missing required fields");
+    }
+    if (newPwd.length < 6) {
+      throw new BadRequest("Password is too short");
     }
 
     const rows = await findPwdByEmail(email);
-    if (rows[0]?.deleted_at) {
-      processResult.statusCode = 400;
-      processResult.message = "Email is not available";
 
-      return processResult;
+    if (rows[0]?.deleted_at) {
+      throw new BadRequest("Email is not available");
     }
     const matchFlag = await bcrypt.compare(currentPwd, rows[0].password);
 
     if (!matchFlag) {
-      processResult.statusCode = 400;
-      processResult.message = "Current password does not match";
-
-      return processResult;
+      throw new BadRequest("Current password does not match");
     }
 
     const hashedNewPassword = await bcrypt.hash(newPwd, 10);
@@ -37,7 +29,7 @@ const changePwdService = async (email, currentPwd, newPwd) => {
 
     return processResult;
   } catch (err) {
-    throw new Error(err);
+    throw err;
   }
 };
 

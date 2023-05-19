@@ -1,72 +1,41 @@
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
+import jwt from "jsonwebtoken";
 
-import { getTokenFromRedis } from "../utils/token/manage-token-with-redis.js";
-import { issuingToken } from "../utils/token/issuing-token.js";
+import { Unauthorized, Forbidden } from "../errors/index.js";
+import { isExistAuthHeader, extractTokenFromHeader, checkRefreshAndIssueAccess } from "../utils/auth/index.js";
 
 export const validateUser = async (req, res, next) => {
-  const authHeader = req.headers["authorization"];
+  const authHeader = isExistAuthHeader(req.headers);
+  if (!authHeader) throw new Unauthorized("No Authorization Headers");
 
-  if (!authHeader) {
-    res.status(401).send("Unauthorized access");
-    return;
-  }
-
+  const accessToken = extractTokenFromHeader(authHeader);
+  if (!accessToken) throw new Unauthorized("Encoded different Type or No Token");
   try {
-    const [authType, accessToken] = authHeader?.split(" ");
-
-    if (authType !== ("Bearer" || "bearer") || !accessToken) {
-      return res.status(401).send("Unauthorized access");
-    }
     const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
-    req.user = decoded.email;
-    next();
-  } catch (err) {
-    const { refreshToken } = req.cookies;
-    if (!refreshToken) {
-      res.status(401).send("Unauthorized access");
-      return;
+
+    if (decoded) {
+      req.user = decoded.email;
+      next();
     }
+  } catch (err) {
     if (err.name === "TokenExpiredError") {
-      const dataFromRedis = await getTokenFromRedis(refreshToken);
-      const storedToken = dataFromRedis?.split(":")[1];
-
-      if (refreshToken !== storedToken) {
-        res.status(401).send("Unauthorized access");
-
-        return;
-      }
-
+      const { refreshToken } = req.cookies;
       try {
-        const secretKey = process.env.JWT_SECRET_SECOND;
-        const decoded = jwt.verify(storedToken, secretKey);
-
-        const { email } = decoded;
-
-        const accessTokenLimit = 60 * 60 * 2; // 2시간
-        const newAccessToken = issuingToken(email, process.env.JWT_SECRET, accessTokenLimit);
+        const newAccessToken = await checkRefreshAndIssueAccess(refreshToken);
 
         res.locals.token = newAccessToken;
         req.user = email;
         next();
-
-        return;
       } catch (err) {
-        res.status(401).send("Unauthorized access");
-
-        return;
+        next(err);
       }
     } else if (err.name === "JsonWebTokenError") {
-      res.status(401).send("Invalid Token");
-
-      return;
+      next(new Unauthorized("Invalid Token"));
     } else if (err.name === "NotBeforeError") {
-      res.status(401).send("NotBeforeError");
-
-      return;
+      next(new Unauthorized("NotBeforeError"));
+    } else {
+      next(new Forbidden("Forbidden access"));
     }
-    console.error(err);
-    res.status(403).send("Forbidden access");
   }
 };

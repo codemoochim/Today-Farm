@@ -1,49 +1,37 @@
-import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
+import bcrypt from "bcrypt";
 
-import { issuingToken } from "../../utils/token/issuing-token.js";
-import { setTokenIntoRedis } from "../../utils/token/manage-token-with-redis.js";
+import { BadRequest } from "../../errors/index.js";
+import { issuingToken, setTokenIntoRedis } from "../../utils/auth/index.js";
 import { findUserByEmail } from "../../repository/user-repository.js";
 
 const loginService = async (email, password) => {
   try {
-    const processResult = { statusCode: 200, message: "성공" };
+    const processResult = { statusCode: 200, message: "Success" };
 
     if (!email || !password) {
-      processResult.statusCode = 400;
-      processResult.message = "Missing required fields";
-
-      return processResult;
+      throw new BadRequest("Missing required fields");
     }
 
     const rows = await findUserByEmail(email);
     if (rows[0]?.deleted_at) {
-      processResult.statusCode = 400;
-      processResult.message = "Inability to log in";
-
-      return processResult;
+      throw new BadRequest("Inability to log in");
     }
 
     if (rows.length === 0) {
-      processResult.statusCode = 400;
-      processResult.message = "Email does not exist";
-
-      return processResult;
+      throw new BadRequest("Email does not exist");
     }
 
     const matchFlag = await bcrypt.compare(password, rows[0].password);
     if (!matchFlag) {
-      processResult.statusCode = 400;
-      processResult.message = "Password is not correct";
-
-      return processResult;
+      throw new BadRequest("Password is not correct");
     }
 
     const secret = process.env.JWT_SECRET;
     const secretSecond = process.env.JWT_SECRET_SECOND;
-    const accessTokenLimit = 60 * 60 * 2; // 2시간
-    const refreshTokenExpires = 60 * 60 * 24 * 14; // 14일
+    const accessTokenLimit = process.env.ACCESS_TOKEN_LIMIT; // 2시간
+    const refreshTokenExpires = process.env.REFRESH_TOKEN_LIMIT; // 14일
 
     const accessToken = issuingToken(email, secret, accessTokenLimit);
     const refreshToken = issuingToken(email, secretSecond, refreshTokenExpires);
@@ -52,7 +40,7 @@ const loginService = async (email, password) => {
     processResult.statusCode = 200;
     return { ...processResult, accessToken, refreshToken };
   } catch (err) {
-    throw new Error(err);
+    throw err;
   }
 };
 

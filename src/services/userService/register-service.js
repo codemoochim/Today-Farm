@@ -2,61 +2,37 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
 
+import { BadRequest } from "../../errors/index.js";
 import { createUserInfoIntoDB, findUserByEmail, findUserByPhone } from "../../repository/user-repository.js";
 import { checkEmailForm, checkPhoneForm } from "../../utils/form-check.js";
-import { issuingToken } from "../../utils/token/issuing-token.js";
-import { setTokenIntoRedis } from "../../utils/token/manage-token-with-redis.js";
+import { issuingToken, setTokenIntoRedis } from "../../utils/auth/index.js";
 
 const registerService = async (email, password, phone, name) => {
   try {
-    const processResult = { statusCode: 200, message: "성공" };
+    const processResult = { statusCode: 200, message: "Success" };
     if (!email || !password || !phone || !name) {
-      return {
-        statusCode: 400,
-        message: "Missing required fields",
-      };
+      throw new BadRequest("Missing required fields");
     } else if (name.length < 2) {
-      processResult.statusCode = 400;
-      processResult.message = "name is too short";
-
-      return processResult;
+      throw new BadRequest("Name is too short");
     } else if (password.length < 8) {
-      processResult.statusCode = 400;
-      processResult.message = "Password is too short";
-
-      return processResult;
+      throw new BadRequest("Password is too short");
     } else if (!checkEmailForm(email)) {
-      processResult.statusCode = 400;
-      processResult.message = "Invalid email form";
-
-      return processResult;
+      throw new BadRequest("Invalid email form");
     } else if (!checkPhoneForm(phone)) {
-      processResult.statusCode = 400;
-      processResult.message = "Invalid phone form";
-
-      return processResult;
+      throw new BadRequest("Invalid phone form");
     }
     // HACK: 회원가입 테스트 용이성을 위해 잠시 주석처리
     // else if (!checkPwdForm(password)) {
-    //   processResult.statusCode = 400;
-    //   processResult.message = "Invalid password form";
-    //
-    // return processResult;
+    // throw new BadRequest("Invalid password form")
     // }
 
     const emailRows = await findUserByEmail(email);
     if (emailRows.length > 0 || emailRows[0]?.deleted_at) {
-      processResult.statusCode = 400;
-      processResult.message = "Email is not available";
-
-      return processResult;
+      throw new BadRequest("Email is not available");
     }
     const phoneRows = await findUserByPhone(phone);
     if (phoneRows.length > 0) {
-      processResult.statusCode = 400;
-      processResult.message = "You are already registered";
-
-      return processResult;
+      throw new BadRequest("You are already registered");
     }
 
     const hash = await bcrypt.hash(password, 10);
@@ -64,8 +40,8 @@ const registerService = async (email, password, phone, name) => {
 
     const secret = process.env.JWT_SECRET;
     const secretSecond = process.env.JWT_SECRET_SECOND;
-    const accessTokenLimit = 60 * 60 * 2; // 2시간
-    const refreshTokenExpires = 60 * 60 * 24 * 14; // 14일
+    const accessTokenLimit = process.env.ACCESS_TOKEN_LIMIT; // 2시간
+    const refreshTokenExpires = process.env.REFRESH_TOKEN_LIMIT; // 14일
 
     const accessToken = issuingToken(email, secret, accessTokenLimit);
     const refreshToken = issuingToken(email, secretSecond, refreshTokenExpires);
@@ -76,7 +52,7 @@ const registerService = async (email, password, phone, name) => {
 
     return { ...processResult, accessToken, refreshToken };
   } catch (err) {
-    throw new Error(err);
+    throw err;
   }
 };
 

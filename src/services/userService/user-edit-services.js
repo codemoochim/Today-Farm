@@ -1,3 +1,4 @@
+import { BadRequest } from "../../errors/index.js";
 import {
   findNameAndPhoneByEmail,
   findUserByPhone,
@@ -8,29 +9,20 @@ import { checkPhoneForm } from "../../utils/form-check.js";
 
 export const userEditService = async (email, newName, newPhone) => {
   try {
-    const processResult = { statusCode: 200, message: "성공" };
+    const processResult = { statusCode: 200, message: "Success" };
     if (!email || !newName || !newPhone) {
-      processResult.statusCode = 400;
-      processResult.message = "Missing required fields";
-
-      return processResult;
+      throw new BadRequest("Missing required fields");
     }
     if (!checkPhoneForm(newPhone)) {
-      processResult.statusCode = 400;
-      processResult.message = "Invalid phone form";
-
-      return processResult;
+      throw new BadRequest("Invalid phone form");
     }
 
     const rows = await findNameAndPhoneByEmail(email);
     if (rows.length === 0 || rows[0]?.deleted_at) {
-      processResult.statusCode = 400;
-      processResult.message = "Email does not exist";
-
-      return processResult;
+      throw new BadRequest("Email does not exist");
     }
     // 폰, 이름같은경우 재 저장
-    if (rows[0].phone === newPhone && rows[0].name === newName) {
+    if (rows[0]?.phone === newPhone && rows[0]?.name === newName) {
       return processResult;
       // 폰이 같을경우. 이름만 변경
     } else if (rows[0].phone === newPhone) {
@@ -40,16 +32,13 @@ export const userEditService = async (email, newName, newPhone) => {
       // 이름이 같은경우 폰만 변경
       const phoneRows = await findUserByPhone(newPhone);
       if (phoneRows.length > 0) {
-        processResult.statusCode = 400;
-        processResult.message = "You are already registered";
-
-        return processResult;
+        throw new BadRequest("You are already registered");
       }
       await updateNameAndPhone(email, newName, newPhone);
 
       return processResult;
     }
   } catch (err) {
-    throw new Error(err);
+    throw err;
   }
 };

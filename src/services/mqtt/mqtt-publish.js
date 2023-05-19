@@ -4,7 +4,9 @@ export const mqttPublisher = async (targetMachine, active) => {
   try {
     const messageToDevice = parseInt(active) ? "on" : "off";
     await mqttClientInstance.sendCommand(`cmd/esp32/${targetMachine}`, messageToDevice);
+
+    return;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };

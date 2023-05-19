@@ -1,37 +1,30 @@
 import dotenv from "dotenv";
 dotenv.config();
 import bcrypt from "bcrypt";
+
+import { BadRequest } from "../../errors/index.js";
 import { findPwdByEmail, updateDeletedDate } from "../../repository/user-repository.js";
 import { updateDeviceOwnerByEmail, getDeviceListUsingEmail } from "../../repository/device-repository.js";
 import { initializeDeviceData } from "../../repository/data-repository.js";
-import { deleteTokenIntoRedis } from "../../utils/token/manage-token-with-redis.js";
+import { deleteTokenIntoRedis } from "../../utils/auth/index.js";
 
 const userDeleteService = async (email, password, refreshToken) => {
   try {
     const processResult = { statusCode: 200, message: "Success" };
 
     if (!password) {
-      processResult.statusCode = 400;
-      processResult.message = "Missing required fields";
-
-      return processResult;
+      throw new BadRequest("Missing required fields");
     }
 
     const rows = await findPwdByEmail(email);
     if (rows.length === 0 || rows[0]?.deleted_at) {
-      processResult.statusCode = 400;
-      processResult.message = "Already deleted";
-
-      return processResult;
+      throw new BadRequest("Already deleted");
     }
 
-    const matchFlag = await bcrypt.compare(password, rows[0].password);
+    const matchFlag = await bcrypt.compare(password, rows[0]?.password);
 
     if (!matchFlag) {
-      processResult.statusCode = 400;
-      processResult.message = "Current password does not match";
-
-      return processResult;
+      throw new BadRequest("Current password does not match");
     }
 
     await updateDeletedDate(email, new Date());
@@ -49,7 +42,7 @@ const userDeleteService = async (email, password, refreshToken) => {
 
     return processResult;
   } catch (err) {
-    throw new Error(err);
+    throw err;
   }
 };
 

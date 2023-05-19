@@ -1,31 +1,23 @@
 import bcrypt from "bcrypt";
+import { BadRequest } from "../../errors/index.js";
 import { findPasswordByEmailAndPhone, updatePasswordQuery } from "../../repository/user-repository.js";
 
 const findPwdService = async (email, phone) => {
   try {
-    const processResult = { statusCode: 200, message: "성공" };
+    const processResult = { statusCode: 200, message: "Success" };
 
     if (!email || !phone) {
-      processResult.statusCode = 400;
-      processResult.message = "Missing required fields";
-
-      return processResult;
+      throw new BadRequest("Missing required fields");
     }
 
     const rows = await findPasswordByEmailAndPhone(email, phone);
 
     if (rows[0]?.deleted_at) {
-      processResult.statusCode = 400;
-      processResult.message = "Email is not available";
-
-      return processResult;
+      throw new BadRequest("Email is not available");
     }
 
     if (rows.length === 0) {
-      processResult.statusCode = 400;
-      processResult.message = "No match information";
-
-      return processResult;
+      throw new BadRequest("No match information");
     } else {
       const temporaryPassword = Math.floor(10000000 + Math.random() * 900000).toString();
       const hashedTemporaryPassword = await bcrypt.hash(temporaryPassword, 10);
@@ -37,7 +29,7 @@ const findPwdService = async (email, phone) => {
       return processResult;
     }
   } catch (err) {
-    throw new Error(err);
+    throw err;
   }
 };
 

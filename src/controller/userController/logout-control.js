@@ -4,11 +4,12 @@ const logoutControl = async (req, res, next) => {
   try {
     const { refreshToken } = req.cookies;
     const processResult = await logoutService(refreshToken);
+    const maxAge = 1000 * 60 * 60 * 24 * 14; // 14일
     const cookieOptions = {
       httpOnly: true,
       sameSite: "none",
       secure: true,
-      maxAge: 1000 * 60 * 60 * 24 * 14, // 14일
+      maxAge,
     };
     res.status(processResult.statusCode).clearCookie("refreshToken", cookieOptions).send(processResult.message);
 

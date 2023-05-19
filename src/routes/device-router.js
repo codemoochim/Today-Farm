@@ -1,8 +1,15 @@
 import express from "express";
 const router = express.Router();
 
-import { getDevice, addDevice, removeDevice, controlLED, controlPump } from "../controller/device-control.js";
+import {
+  getDevice,
+  addDevice,
+  removeDevice,
+  publishLedControl,
+  publishPumpControl,
+} from "../controller/device-control.js";
 import { responseTemperatureAndHumidity, responseLux, responseSolid } from "../controller/data-control.js";
+import { standByResponseFromDevice, responseCurrentActuatorStatus } from "../middleware/actuator-command-response.js";
 
 // Path: /devices
 
@@ -12,7 +19,7 @@ router.get("/dht", responseTemperatureAndHumidity);
 router.get("/lux", responseLux);
 router.get("/solid", responseSolid);
 
-router.post("/lux", controlLED);
-router.post("/solid", controlPump);
+router.post("/lux", publishLedControl, standByResponseFromDevice, responseCurrentActuatorStatus);
+router.post("/solid", publishPumpControl, standByResponseFromDevice, responseCurrentActuatorStatus);
 
 export default router;

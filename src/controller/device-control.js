@@ -38,6 +38,11 @@ export const removeDevice = async (req, res, next) => {
   try {
     const email = req.user;
     const { deviceId } = req.body;
+    // HACK 웹사이트 시연 용도 공개 디바이스 삭제 불가
+    if (parseInt(deviceId) === 1) {
+      res.status(400).send("삭제할 수 없죠");
+      return;
+    }
     const processResult = await deviceNoMoreUse(deviceId, email);
     res.status(processResult.statusCode).json({ data: processResult.message });
 
@@ -48,11 +53,11 @@ export const removeDevice = async (req, res, next) => {
 };
 
 // 생장LED 제어
-export const controlLED = async (req, res, next) => {
+export const publishLedControl = async (req, res, next) => {
   try {
     const { deviceId, active } = req.query;
-    const processResult = await responseLedStatus(deviceId, active);
-    res.status(processResult.statusCode).json({ data: processResult.message });
+    await responseLedStatus(deviceId, active);
+    next();
 
     return;
   } catch (err) {
@@ -61,11 +66,11 @@ export const controlLED = async (req, res, next) => {
 };
 
 // 모터펌프 제어
-export const controlPump = async (req, res, next) => {
+export const publishPumpControl = async (req, res, next) => {
   try {
     const { deviceId, active } = req.query;
-    const processResult = await responsePumpStatus(deviceId, active);
-    res.status(processResult.statusCode).json({ data: processResult.message });
+    await responsePumpStatus(deviceId, active);
+    next();
 
     return;
   } catch (err) {

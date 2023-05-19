@@ -12,6 +12,8 @@ import {
 import { initializeDeviceData, selectRecentData } from "../repository/data-repository.js";
 
 import { mqttPublisher } from "./mqtt/mqtt-publish.js";
+import { mqttSubscriber } from "./mqtt/mqtt-subscriber.js";
+import { mqttClientInstance } from "../config/mqtt-client.js";
 
 // 디바이스 조회
 export const deviceList = async (email) => {
@@ -102,20 +104,11 @@ export const deviceNoMoreUse = async (deviceId, email) => {
 
 // 생장LED 제어
 export const responseLedStatus = async (deviceId, active) => {
-  const processResult = { statusCode: 200, message: "Success" };
   try {
     const targetMachine = "led";
     await mqttPublisher(targetMachine, active);
 
-    const result = await updateLedStatus(deviceId, active);
-    if (!result.changedRows) {
-      throw new BadRequest("Actuator control failed");
-    }
-
-    const { led, pump, status } = await isWorkingActuator(deviceId);
-    processResult.message = { led };
-
-    return processResult;
+    return;
   } catch (err) {
     throw err;
   }
@@ -123,20 +116,11 @@ export const responseLedStatus = async (deviceId, active) => {
 
 // 모터펌프 제어
 export const responsePumpStatus = async (deviceId, active) => {
-  const processResult = { statusCode: 200, message: "Success" };
   try {
     const targetMachine = "pump";
     await mqttPublisher(targetMachine, active);
 
-    const result = await updatePumpStatus(deviceId, active);
-    if (!result.changedRows) {
-      throw new BadRequest("Actuator control failed");
-    }
-
-    const { led, pump, status } = await isWorkingActuator(deviceId);
-    processResult.message = { pump };
-
-    return processResult;
+    return;
   } catch (err) {
     throw err;
   }

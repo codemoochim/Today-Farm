@@ -1,25 +1,20 @@
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-export const isLoggedIn = async (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  if (!authHeader) {
-    next();
-    return;
-  }
-  try {
-    const [authType, accessToken] = authHeader?.split(" ");
+import { Unauthorized } from "../errors/index.js";
+import { isExistAuthHeader, extractTokenFromHeader } from "../utils/auth/index.js";
 
-    if (authType === ("Bearer" || "bearer") || accessToken) {
-      jwt.verify(accessToken, process.env.JWT_SECRET, (err, decoded) => {
-        if (decoded) {
-          res.status(401).send("Already logged In");
-        } else {
-          next();
-        }
-      });
-    }
+export const isLoggedIn = async (req, res, next) => {
+  const authHeader = isExistAuthHeader(req.headers);
+  if (!authHeader) next();
+
+  const accessToken = extractTokenFromHeader(authHeader);
+  if (!accessToken) next();
+
+  try {
+    const decoded = validateToken(accessToken, process.env.JWT_SECRET);
+    if (decoded) throw new Unauthorized("Already logged In");
+    next();
   } catch (err) {
     next();
   }

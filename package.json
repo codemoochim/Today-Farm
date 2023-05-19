@@ -7,7 +7,7 @@
   "scripts": {
     "start": "nodemon app.js"
   },
-  "author": "",
+  "author": "sando",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
