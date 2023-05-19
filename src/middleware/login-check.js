@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
+import jwt from "jsonwebtoken";
 
 import { Unauthorized } from "../errors/index.js";
 import { isExistAuthHeader, extractTokenFromHeader } from "../utils/auth/index.js";
@@ -18,10 +19,13 @@ export const isLoggedIn = async (req, res, next) => {
   }
 
   try {
-    const decoded = validateToken(accessToken, process.env.JWT_SECRET);
+    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
     if (decoded) throw new Unauthorized("Already logged In");
-    next();
-    return;
+    else {
+      next();
+
+      return;
+    }
   } catch (err) {
     next();
     return;

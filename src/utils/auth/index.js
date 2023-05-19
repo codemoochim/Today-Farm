@@ -76,7 +76,9 @@ export const checkRefreshAndIssueAccess = async (refreshToken) => {
 
     const refreshTokenFlag = await compareRefreshToken(refreshToken);
     if (!refreshTokenFlag) throw new Unauthorized("Does not Match RefreshToken");
-    const decodedRefresh = validateToken(refreshToken, process.env.JWT_SECRET_SECOND);
+
+    const decodedRefresh = jwt.verify(refreshToken, process.env.JWT_SECRET_SECOND);
+
     const { email } = decodedRefresh;
 
     const newAccessToken = issuingToken(email, process.env.JWT_SECRET, process.env.ACCESS_TOKEN_LIMIT);
