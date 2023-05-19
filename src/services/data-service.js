@@ -1,21 +1,20 @@
+import { NotFound } from "../errors/index.js";
 import { oneTemperatureAndHumidityData, oneLuxData, oneSolidData } from "../repository/data-repository.js";
 import { isWorkingActuator } from "../repository/device-repository.js";
 import { convertSolidRawToPercent } from "../utils/convertSolidData.js";
 
 export const getTemperatureAndHumidity = async (deviceId) => {
-  const processResult = { statusCode: 200, message: "성공" };
+  const processResult = { statusCode: 200, message: "Success" };
   try {
-    if (!deviceId)
-      return {
-        statusCode: 404,
-        message: "조회할 수 있는 디바이스가 없습니다.",
-      };
+    if (!deviceId) {
+      throw new NotFound("No devices available");
+    }
 
     const searchData = await oneTemperatureAndHumidityData(deviceId);
     const deviceStatus = await isWorkingActuator(deviceId);
 
     if (searchData?.length === 0) {
-      processResult.message = "조회할 수 있는 데이터가 없습니다";
+      processResult.message = "No data available";
       processResult.deviceStatus = deviceStatus;
 
       return processResult;
@@ -28,24 +27,22 @@ export const getTemperatureAndHumidity = async (deviceId) => {
 
     return { ...processResult, message };
   } catch (err) {
-    throw new Error(err);
+    throw err;
   }
 };
 
 export const getLux = async (deviceId) => {
-  const processResult = { statusCode: 200, message: "성공" };
+  const processResult = { statusCode: 200, message: "Success" };
   try {
-    if (!deviceId)
-      return {
-        statusCode: 404,
-        message: "조회할 수 있는 디바이스가 없습니다.",
-      };
+    if (!deviceId) {
+      throw new NotFound("No devices available");
+    }
 
     const searchData = await oneLuxData(deviceId);
     const deviceStatus = await isWorkingActuator(deviceId);
 
     if (searchData?.length === 0) {
-      processResult.message = "조회할 수 있는 데이터가 없습니다";
+      processResult.message = "No data available";
       processResult.deviceStatus = deviceStatus;
 
       return processResult;
@@ -57,23 +54,21 @@ export const getLux = async (deviceId) => {
 
     return { ...processResult, message };
   } catch (err) {
-    throw new Error(err);
+    throw err;
   }
 };
 
 export const getSolid = async (deviceId) => {
-  const processResult = { statusCode: 200, message: "성공" };
+  const processResult = { statusCode: 200, message: "Success" };
   try {
-    if (!deviceId)
-      return {
-        statusCode: 404,
-        message: "조회할 수 있는 디바이스가 없습니다.",
-      };
+    if (!deviceId) {
+      throw new NotFound("No devices available");
+    }
 
     const searchData = await oneSolidData(deviceId);
     const deviceStatus = await isWorkingActuator(deviceId);
     if (searchData?.length === 0) {
-      processResult.message = "조회할 수 있는 데이터가 없습니다";
+      processResult.message = "No data available";
       processResult.deviceStatus = deviceStatus;
 
       return processResult;
@@ -89,6 +84,6 @@ export const getSolid = async (deviceId) => {
 
     return { ...processResult, message };
   } catch (err) {
-    throw new Error(err);
+    throw err;
   }
 };

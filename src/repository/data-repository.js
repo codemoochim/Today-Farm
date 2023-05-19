@@ -137,3 +137,22 @@ export const initializeDeviceData = async (deviceId) => {
   const [rows] = await mysqlDB.promisePool.execute(sql, fields);
   return rows;
 };
+
+export const selectRecentData = async (deviceId) => {
+  const sql = `
+  SELECT
+    deviceId,
+    time
+  FROM
+    data
+  WHERE
+    deviceId = ?
+  ORDER BY
+    time
+  DESC
+  LIMIT 1`;
+
+  const fields = [deviceId];
+  const [rows] = await mysqlDB.promisePool.execute(sql, fields);
+  return rows;
+};
