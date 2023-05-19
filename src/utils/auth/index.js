@@ -82,7 +82,7 @@ export const checkRefreshAndIssueAccess = async (refreshToken) => {
     const { email } = decodedRefresh;
 
     const newAccessToken = issuingToken(email, process.env.JWT_SECRET, process.env.ACCESS_TOKEN_LIMIT);
-    return newAccessToken;
+    return { newAccessToken, email };
   } catch (err) {
     throw err;
   }

@@ -8,7 +8,7 @@ import { issuingToken, checkRefreshAndIssueAccess } from "../utils/auth/index.js
 export const issuingAccessToken = async (req, res, next) => {
   const { refreshToken } = req.cookies;
   try {
-    const newAccessToken = checkRefreshAndIssueAccess(refreshToken);
+    const { newAccessToken, email } = checkRefreshAndIssueAccess(refreshToken);
 
     res.locals.token = newAccessToken;
     req.user = email;
