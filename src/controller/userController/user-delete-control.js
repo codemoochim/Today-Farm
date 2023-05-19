@@ -10,12 +10,11 @@ const userDeleteControl = async (req, res, next) => {
     const { refreshToken } = req.cookies;
     const { password } = req.body;
     const processResult = await userDeleteService(email, password, refreshToken);
-    const maxAge = 1000 * 60 * 60 * 24 * 14; // 14일
     const cookieOptions = {
       httpOnly: true,
       sameSite: "none",
       secure: true,
-      maxAge,
+      maxAge: 1000 * 60 * 60 * 24 * 14, // 14일
     };
     res.status(processResult.statusCode).clearCookie("refreshToken", cookieOptions).send(processResult.message);
 

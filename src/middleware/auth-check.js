@@ -18,12 +18,20 @@ export const validateUser = async (req, res, next) => {
 
   if (!accessToken) throw new Unauthorized("Encoded different Type or No Token");
   try {
-    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
-
-    if (decoded) {
-      req.user = decoded.email;
-      next();
-    }
+    jwt.verify(
+      accessToken,
+      process.env.JWT_SECRET,
+      (err,
+      (decoded) => {
+        if (decoded) {
+          req.user = decoded.email;
+          next();
+          return;
+        } else {
+          throw err;
+        }
+      }),
+    );
   } catch (err) {
     if (err.name === "TokenExpiredError") {
       const { refreshToken } = req.cookies;

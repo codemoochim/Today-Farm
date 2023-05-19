@@ -4,12 +4,11 @@ const loginControl = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const processResult = await loginService(email, password);
-    const maxAge = 1000 * 60 * 60 * 24 * 14; // 14일
     const cookieOptions = {
       httpOnly: true,
       sameSite: "none",
       secure: true,
-      maxAge,
+      maxAge: 1000 * 60 * 60 * 24 * 14, // 14일
     };
     res
       .status(processResult.statusCode)

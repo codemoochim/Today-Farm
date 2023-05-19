@@ -4,12 +4,11 @@ const registerControl = async (req, res, next) => {
   try {
     const { email, password, phone, name } = req.body;
     const processResult = await registerService(email, password, phone, name);
-    const maxAge = 1000 * 60 * 60 * 24 * 14; // 14일
     const cookieOptions = {
       httpOnly: true,
       sameSite: "none",
       secure: true,
-      maxAge,
+      maxAge: 1000 * 60 * 60 * 24 * 14, // 14일
     };
     res
       .status(processResult.statusCode)
