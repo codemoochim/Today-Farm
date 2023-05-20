@@ -3,7 +3,6 @@ dotenv.config();
 import jwt from "jsonwebtoken";
 
 import { Unauthorized } from "../errors/index.js";
-import { isExistAuthHeader, extractTokenFromHeader } from "../utils/auth/index.js";
 
 export const isLoggedIn = async (req, res, next) => {
   const authHeader = req.headers["authorization"];

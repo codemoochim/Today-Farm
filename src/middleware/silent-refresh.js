@@ -1,9 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
-import jwt from "jsonwebtoken";
 
-import { Unauthorized } from "../errors/index.js";
-import { issuingToken, checkRefreshAndIssueAccess } from "../utils/auth/index.js";
+import { checkRefreshAndIssueAccess } from "../utils/auth/index.js";
 
 export const issuingAccessToken = async (req, res, next) => {
   const { refreshToken } = req.cookies;
